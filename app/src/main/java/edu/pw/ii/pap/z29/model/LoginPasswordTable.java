@@ -6,6 +6,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.Optional;
 
+import edu.pw.ii.pap.z29.model.primitives.LoginPassword;
+import edu.pw.ii.pap.z29.model.primitives.Password;
+
 
 public class LoginPasswordTable {
     private Connection conn;

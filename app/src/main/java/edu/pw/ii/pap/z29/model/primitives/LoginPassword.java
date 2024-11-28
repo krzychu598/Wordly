@@ -1,4 +1,4 @@
-package edu.pw.ii.pap.z29.model;
+package edu.pw.ii.pap.z29.model.primitives;
 
 import lombok.Data;
 import lombok.NonNull;

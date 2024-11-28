@@ -5,6 +5,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import edu.pw.ii.pap.z29.Database;
+import edu.pw.ii.pap.z29.model.primitives.User;
+import edu.pw.ii.pap.z29.model.primitives.Username;
 
 import static org.junit.jupiter.api.Assertions.*;
 

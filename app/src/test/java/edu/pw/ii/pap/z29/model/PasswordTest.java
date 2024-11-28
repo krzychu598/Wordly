@@ -1,6 +1,9 @@
 package edu.pw.ii.pap.z29.model;
 
 import org.junit.jupiter.api.Test;
+
+import edu.pw.ii.pap.z29.model.primitives.Password;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class PasswordTest {
