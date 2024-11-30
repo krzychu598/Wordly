@@ -14,11 +14,11 @@ public class UsersTable {
     private Connection conn;
     private static final UserRecord record = new UserRecord();
 
-    UsersTable(Connection conn) {
+    public UsersTable(Connection conn) {
         this.conn = conn;
     }
 
-    int create(User user) throws SQLException {
+    public int create(User user) throws SQLException {
         var stmt_str = "INSERT INTO users VALUES (DEFAULT, ?)";
         int user_id = 0;
         try (var stmt = conn.prepareStatement(stmt_str, new String[]{"user_id"}))
@@ -33,7 +33,7 @@ public class UsersTable {
         return user_id;
     }
 
-    Optional<User> read(int user_id) throws SQLException {
+    public Optional<User> read(int user_id) throws SQLException {
         var query_str = new String("SELECT user_id, username FROM users WHERE user_id = ?");
         var user_opt = Optional.<User>empty();
         try (var query = conn.prepareStatement(query_str))
@@ -50,7 +50,7 @@ public class UsersTable {
         return user_opt;
     }
 
-    Optional<User> read(Username username) throws SQLException {
+    public Optional<User> read(Username username) throws SQLException {
         var query_str = new String("SELECT user_id, username FROM users WHERE username = ?");
         var user_opt = Optional.<User>empty();
         try (var query = conn.prepareStatement(query_str)) {
@@ -67,7 +67,7 @@ public class UsersTable {
         return user_opt;
     }
 
-    boolean update(int user_id, User user) throws SQLException {
+    public boolean update(int user_id, User user) throws SQLException {
         var stmt_str = "UPDATE users SET username = ? WHERE user_id = ?";
         boolean did_update = false;
         try (var stmt = conn.prepareStatement(stmt_str)) {
@@ -78,7 +78,7 @@ public class UsersTable {
         return did_update;
     }
 
-    boolean delete(int user_id) throws SQLException {
+    public boolean delete(int user_id) throws SQLException {
         var update_str = new StringBuilder("DELETE FROM users WHERE user_id = ?");
         boolean did_delete;
         try (var update = conn.prepareStatement(update_str.toString())) {

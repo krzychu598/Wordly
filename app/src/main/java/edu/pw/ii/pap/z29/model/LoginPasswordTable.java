@@ -14,11 +14,11 @@ public class LoginPasswordTable {
     private Connection conn;
     private static final LoginPasswordRecord record = new LoginPasswordRecord();
 
-    LoginPasswordTable(Connection conn) {
+    public LoginPasswordTable(Connection conn) {
         this.conn = conn;
     }
 
-    void create(LoginPassword login_password) throws SQLException {
+    public void create(LoginPassword login_password) throws SQLException {
         var stmt_str = "INSERT INTO login_password VALUES(?, ?)";
         try (var stmt = conn.prepareStatement(stmt_str)) {
             record.serialize(login_password, stmt);
@@ -26,7 +26,7 @@ public class LoginPasswordTable {
         }
     }
 
-    Optional<LoginPassword> read(int user_id) throws SQLException {
+    public Optional<LoginPassword> read(int user_id) throws SQLException {
         var stmt_str = "SELECT user_id, passwd FROM login_password WHERE user_id = ?";
         var login_password_opt = Optional.<LoginPassword>empty();
         try(var stmt = conn.prepareStatement(stmt_str)) {
@@ -43,7 +43,7 @@ public class LoginPasswordTable {
         return login_password_opt;
     }
 
-    boolean update(LoginPassword login_password) throws SQLException {
+    public boolean update(LoginPassword login_password) throws SQLException {
         var stmt_str = "UPDATE login_password SET passwd = ? WHERE user_id = ?";
         boolean did_update = false;
         try (var stmt = conn.prepareStatement(stmt_str)) {
@@ -54,7 +54,7 @@ public class LoginPasswordTable {
         return did_update;
     }
 
-    boolean delete(int user_id) throws SQLException {
+    public boolean delete(int user_id) throws SQLException {
         var stmt_str = "DELETE FROM login_password WHERE user_id = ?";
         boolean did_delete;
         try (var stmt = conn.prepareStatement(stmt_str.toString())) {

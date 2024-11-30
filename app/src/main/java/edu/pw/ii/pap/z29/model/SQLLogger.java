@@ -3,7 +3,7 @@ package edu.pw.ii.pap.z29.model;
 import java.sql.SQLException;
 
 public class SQLLogger {
-    void log(SQLException ex) {
+    public void log(SQLException ex) {
         for (Throwable e : ex) {
             if (e instanceof SQLException) {
                 e.printStackTrace(System.err);
