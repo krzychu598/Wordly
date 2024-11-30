@@ -9,19 +9,24 @@ import edu.pw.ii.pap.z29.controller.MainController;
 public class GUI {
 
     private MainController mainController;
+    private LoginFrame loginFrame;
 
     public GUI(MainController mainController) {
         this.mainController = mainController;
     }
 
     private void createAndShowGUI() {
-        final var frame = new LoginFrame(mainController);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        loginFrame = new LoginFrame(mainController);
+        loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // frame.pack();
-        frame.setVisible(true);
+        loginFrame.setVisible(true);
     }
 
     public void run() {
         SwingUtilities.invokeLater(() -> createAndShowGUI());
+    }
+
+    public LoginFrame getLoginFrame() {
+        return loginFrame;
     }
 }
