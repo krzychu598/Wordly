@@ -7,13 +7,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import java.io.IOException;
-import java.lang.RuntimeException;
 import java.lang.StringIndexOutOfBoundsException;
 import edu.pw.ii.pap.z29.exception.WordNotFoundException;
 import edu.pw.ii.pap.z29.exception.InvalidLengthException;
 
 
-public class ApiController {
+public final class ApiController {
     
     static String urlRand = "https://random-word-api.herokuapp.com/word?length=%d";
     static String urlDef = "https://api.dictionaryapi.dev/api/v2/entries/en/%s";
@@ -24,7 +23,7 @@ public class ApiController {
      * @param length    length of a random word
      * @return          random word as a String
      */
-    static public String randomWord(int length)
+    static public String getRandomWord(int length)
     {  
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
@@ -36,13 +35,13 @@ public class ApiController {
             String responseBody = response.body();
             responseBody = responseBody.substring(2, responseBody.length()-2);
             if(!ApiController.isInDictionary(responseBody)){
-                throw new WordNotFoundException("Word is not to be found in the dictionary");
+                throw new WordNotFoundException();
             }
             return responseBody;
         } catch (StringIndexOutOfBoundsException e){
             throw new InvalidLengthException(Integer.toString(length));
         } catch (IOException | InterruptedException | WordNotFoundException e){
-            return ApiController.randomWord(length);
+            return ApiController.getRandomWord(length);
         }
 
 
@@ -52,7 +51,7 @@ public class ApiController {
      * @param word  a word of which definition is required
      * @return      definition of the word
      */
-    static public String definition(String word)
+    static public String getDefinition(String word)
     {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
@@ -61,13 +60,16 @@ public class ApiController {
 
         try{
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            if(response.statusCode() == 404){
+                throw new WordNotFoundException();
+            }
             String responseBody = response.body();
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode root = objectMapper.readTree(responseBody);
             String definition = root.get(0).path("meanings").get(0).path("definitions").get(0).path("definition").asText();
             return definition;
         } catch (IOException | InterruptedException e){
-            return ApiController.definition(word);
+            return ApiController.getDefinition(word);
         }
     }
     /**
