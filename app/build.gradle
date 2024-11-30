@@ -27,6 +27,9 @@ dependencies {
 
     // Oracle Database's driver, used by Java's JDBC framework.
     implementation libs.ojdbc11
+
+    // library for extracting data from api responses
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.18.1'
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
