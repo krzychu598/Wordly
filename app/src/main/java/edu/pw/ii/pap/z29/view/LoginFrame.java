@@ -11,8 +11,8 @@ import edu.pw.ii.pap.z29.controller.MainController;
 
 
 public class LoginFrame extends JFrame {
-    public static final Color MAIN_COLOR = Color.decode("#578CB5");
-    public static final Color TEXT_COLOR = Color.decode("#000000");
+    public static final Color MAIN_COLOR = Color.decode("#101820");
+    public static final Color TEXT_COLOR = Color.decode("#FEE715");
     JLabel loginLabel;
     JTextField usernameField;
     JPasswordField passwordField;
@@ -23,6 +23,7 @@ public class LoginFrame extends JFrame {
         this.mainController = mainController;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new GridBagLayout());
+        getContentPane().setBackground(MAIN_COLOR);
         addGuiParts();
         pack();
         setVisible(true);
@@ -32,9 +33,9 @@ public class LoginFrame extends JFrame {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
 
-        loginLabel = new JLabel("login");
+        loginLabel = new JLabel("The Wordle game");
         loginLabel.setForeground(TEXT_COLOR);
-        loginLabel.setFont(new Font("Dialog", Font.BOLD, 24));
+        loginLabel.setFont(new Font("Dialog", Font.BOLD, 40));
         loginLabel.setHorizontalAlignment(SwingConstants.CENTER);
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -83,6 +84,8 @@ public class LoginFrame extends JFrame {
         // LOGIN BUTTON
         JButton loginButton = new JButton("Login");
         loginButton.setFont(new Font("Dialog", Font.BOLD, 25));
+        loginButton.setBackground(TEXT_COLOR);
+        loginButton.setForeground(MAIN_COLOR);
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -101,6 +104,27 @@ public class LoginFrame extends JFrame {
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
         add(loginButton, gbc);
+
+    //REGISTER BUTTON
+
+        JLabel registerLabel = new JLabel("Don't have account? Register");
+        registerLabel.setForeground(TEXT_COLOR);
+        registerLabel.setHorizontalAlignment(SwingConstants.CENTER);
+
+        registerLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                LoginFrame.this.dispose();
+
+                new RegisterFrame().setVisible(true);
+            }
+        });
+
+        gbc.gridx = 0;
+        gbc.gridy = 6;
+        gbc.gridwidth = 2;
+        add(registerLabel, gbc);
     }
+    
 
 }
