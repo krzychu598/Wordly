@@ -10,14 +10,22 @@ import java.io.IOException;
 import java.lang.RuntimeException;
 import java.lang.StringIndexOutOfBoundsException;
 import edu.pw.ii.pap.z29.exception.WordNotFoundException;
+import edu.pw.ii.pap.z29.exception.InvalidLengthException;
+
 
 public class ApiController {
     
     static String urlRand = "https://random-word-api.herokuapp.com/word?length=%d";
     static String urlDef = "https://api.dictionaryapi.dev/api/v2/entries/en/%s";
 
-    static public String randomWord(int length) throws RuntimeException
-    {   
+    /**
+     * randomWord returns a random word that can be found in the dictionary api 
+     * using radom word api 
+     * @param length    length of a random word
+     * @return          random word as a String
+     */
+    static public String randomWord(int length)
+    {  
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(String.format(urlRand, length)))
@@ -27,18 +35,23 @@ public class ApiController {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             String responseBody = response.body();
             responseBody = responseBody.substring(2, responseBody.length()-2);
-            if(!ApiController.check(responseBody)){
+            if(!ApiController.isInDictionary(responseBody)){
                 throw new WordNotFoundException("Word is not to be found in the dictionary");
             }
             return responseBody;
-        } catch (IOException | InterruptedException | StringIndexOutOfBoundsException e){
-            return "";
-        } catch (WordNotFoundException e){
+        } catch (StringIndexOutOfBoundsException e){
+            throw new InvalidLengthException(Integer.toString(length));
+        } catch (IOException | InterruptedException | WordNotFoundException e){
             return ApiController.randomWord(length);
         }
 
 
     }
+    /**
+     * returns the definition of a word
+     * @param word  a word of which definition is required
+     * @return      definition of the word
+     */
     static public String definition(String word)
     {
         HttpClient client = HttpClient.newHttpClient();
@@ -53,12 +66,16 @@ public class ApiController {
             JsonNode root = objectMapper.readTree(responseBody);
             String definition = root.get(0).path("meanings").get(0).path("definitions").get(0).path("definition").asText();
             return definition;
-        } catch (Exception e){
-            return "";
+        } catch (IOException | InterruptedException e){
+            return ApiController.definition(word);
         }
     }
-
-    static public boolean check(String word)
+    /**
+     * checks if a word is in the dictionary
+     * @param word  a word to be checked
+     * @return      true or false
+     */
+    static public boolean isInDictionary(String word)
     {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
@@ -67,11 +84,10 @@ public class ApiController {
         try{
            if(client.send(request, HttpResponse.BodyHandlers.ofString()).statusCode() == 200){
             return true;
-           } else{
-            throw(new RuntimeException("Word not found in the dictionary"));
            }
-        } catch (Exception e){
-            return false;
+           return false;
+        } catch (IOException | InterruptedException e){
+            return ApiController.isInDictionary(word);
         }
     }
 }
