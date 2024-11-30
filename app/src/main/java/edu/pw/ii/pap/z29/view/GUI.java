@@ -8,7 +8,7 @@ public class GUI {
     private void createAndShowGUI() {
         final var frame = new LoginFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
+        // frame.pack();
         frame.setVisible(true);
     }
 
