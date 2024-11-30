@@ -10,6 +10,7 @@ public class GUI {
 
     private MainController mainController;
     private LoginFrame loginFrame;
+    private ProfileFrame profileFrame;
 
     public GUI(MainController mainController) {
         this.mainController = mainController;
@@ -20,6 +21,13 @@ public class GUI {
         loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // frame.pack();
         loginFrame.setVisible(true);
+
+
+        //uncomment to test profileFrame
+/*         profileFrame = new ProfileFrame(mainController);
+        profileFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // frame.pack();
+        profileFrame.setVisible(true); */
     }
 
     public void run() {
