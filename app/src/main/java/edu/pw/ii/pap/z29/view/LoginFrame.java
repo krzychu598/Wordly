@@ -24,13 +24,13 @@ public class LoginFrame extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new GridBagLayout());
         addGuiParts();
-        pack(); // Adjust the frame size to fit all the content
+        pack();
         setVisible(true);
     }
 
     private void addGuiParts() {
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10); // Add some padding
+        gbc.insets = new Insets(10, 10, 10, 10);
 
         loginLabel = new JLabel("login");
         loginLabel.setForeground(TEXT_COLOR);
@@ -99,7 +99,7 @@ public class LoginFrame extends JFrame {
         gbc.gridx = 0;
         gbc.gridy = 5;
         gbc.gridwidth = 2;
-        gbc.anchor = GridBagConstraints.CENTER; // Center the button
+        gbc.anchor = GridBagConstraints.CENTER;
         add(loginButton, gbc);
     }
 
