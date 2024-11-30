@@ -86,17 +86,11 @@ public class LoginFrame extends JFrame {
         loginButton.setFont(new Font("Dialog", Font.BOLD, 25));
         loginButton.setBackground(TEXT_COLOR);
         loginButton.setForeground(MAIN_COLOR);
-        loginButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        loginButton.addActionListener(
+            (ActionEvent e) -> {
                 String username = usernameField.getText();
                 String password = new String(passwordField.getPassword());
-                if (mainController.checkLogin(username, password)) {
-                    JOptionPane.showMessageDialog(LoginFrame.this, "Welcome!");
-                } else {
-                    JOptionPane.showMessageDialog(LoginFrame.this, "Try again!");
-                }
-            }
+                mainController.getLoginController().checkLogin(username, password);
         });
 
         gbc.gridx = 0;
