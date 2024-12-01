@@ -22,7 +22,6 @@ public class LoginFrame extends JFrame {
         super("Login");
         this.mainController = mainController;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new BorderLayout());
         getContentPane().setBackground(BLACK);
         getContentPane().setLayout(new GridBagLayout());
         addGuiParts();

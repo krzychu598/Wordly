@@ -11,6 +11,7 @@ public class GUI {
     private MainController mainController;
     private LoginFrame loginFrame;
     private ProfileFrame profileFrame;
+    private MainFrame mainFrame;
 
     public GUI(MainController mainController) {
         this.mainController = mainController;
