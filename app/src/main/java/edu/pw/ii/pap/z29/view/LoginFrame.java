@@ -110,7 +110,7 @@ public class LoginFrame extends JFrame {
             public void mouseClicked(MouseEvent e) {
                 LoginFrame.this.dispose();
 
-                new RegisterFrame().setVisible(true);
+                new RegisterFrame(mainController).setVisible(true);
             }
         });
 
