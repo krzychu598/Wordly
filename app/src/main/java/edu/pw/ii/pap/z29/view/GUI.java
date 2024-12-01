@@ -12,13 +12,14 @@ public class GUI {
     private LoginFrame loginFrame;
     private ProfileFrame profileFrame;
     private MainFrame mainFrame;
+    private RegisterFrame registerFrame;
 
     public GUI(MainController mainController) {
         this.mainController = mainController;
     }
 
     private void createAndShowGUI() {
-        loginFrame = new LoginFrame(mainController);
+        loginFrame = new LoginFrame(this);
         loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         loginFrame.setVisible(true);
 
@@ -34,7 +35,21 @@ public class GUI {
         SwingUtilities.invokeLater(() -> createAndShowGUI());
     }
 
+    public MainController getMainController() {
+        return mainController;
+    }
+
     public LoginFrame getLoginFrame() {
         return loginFrame;
+    }
+
+    public void disposeOfLoginFrame() {
+        loginFrame.dispose();
+        loginFrame = null;
+    }
+    
+    public void showRegisterFrame() {
+        registerFrame = new RegisterFrame();
+        registerFrame.setVisible(true);
     }
 }

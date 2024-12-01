@@ -16,11 +16,11 @@ public class LoginFrame extends JFrame {
     JLabel titleLabel;
     JTextField usernameField;
     JPasswordField passwordField;
-    MainController mainController;
+    GUI gui;
 
-    public LoginFrame(MainController mainController) {
+    public LoginFrame(GUI gui) {
         super("Login");
-        this.mainController = mainController;
+        this.gui = gui;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         getContentPane().setBackground(BLACK);
         getContentPane().setLayout(new GridBagLayout());
@@ -73,7 +73,7 @@ public class LoginFrame extends JFrame {
             (ActionEvent e) -> {
                 String username = usernamePanel.field.getText();
                 String password = new String(passwordField.getPassword());
-                mainController.getLoginController().checkLogin(username, password);
+                gui.getMainController().getLoginController().checkLogin(username, password);
             });
         buttonPanel.add(loginButton);
         centralPanel.add(buttonPanel);
@@ -90,11 +90,8 @@ public class LoginFrame extends JFrame {
         JLabel registerLabel = new JLabel("Don't have an account? Register");
         registerLabel.setForeground(TEXT_COLOR);
         registerLabel.addMouseListener(new MouseAdapter() {
-            @Override
             public void mouseClicked(MouseEvent e) {
-                LoginFrame.this.dispose();
-                
-                new RegisterFrame().setVisible(true);
+                gui.getMainController().getLoginController().wantToRegister();
             }
         });
         registerLabel.setAlignmentX(CENTER_ALIGNMENT);
