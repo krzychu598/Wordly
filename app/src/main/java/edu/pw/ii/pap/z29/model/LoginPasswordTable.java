@@ -18,6 +18,7 @@ public class LoginPasswordTable {
         this.conn = conn;
     }
 
+
     public void create(LoginPassword login_password) throws SQLException {
         var stmt_str = "INSERT INTO login_password VALUES(?, ?)";
         try (var stmt = conn.prepareStatement(stmt_str)) {
@@ -76,6 +77,17 @@ public class LoginPasswordTable {
             }
         }
         return false;
+    }
+
+    public boolean insert(int user_id, Password password) throws SQLException {
+        var stmt_str = "INSERT INTO login_password (user_id, passwd) VALUES (?, ?)";
+        boolean did_insert = false;
+        try (PreparedStatement stmt = conn.prepareStatement(stmt_str)) {
+            stmt.setInt(1, user_id);
+            stmt.setString(2, password.getPassword());
+            did_insert = stmt.executeUpdate() == 1;
+        }
+        return did_insert;
     }
 }
 

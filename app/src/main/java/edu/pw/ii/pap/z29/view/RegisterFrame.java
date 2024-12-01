@@ -7,6 +7,8 @@ import javax.swing.*;
 import javax.swing.text.*;
 
 import edu.pw.ii.pap.z29.controller.MainController;
+import edu.pw.ii.pap.z29.model.primitives.Password;
+import edu.pw.ii.pap.z29.model.primitives.Username;
 
 import javax.swing.event.*;
 
@@ -90,8 +92,8 @@ public class RegisterFrame extends JFrame {
         registerButton.setForeground(MAIN_COLOR);
         registerButton.addActionListener(
             (ActionEvent e) -> {
-                String username = usernameField.getText();
-                String password = new String(passwordField.getPassword());
+                Username username = new Username(usernameField.getText());
+                Password password = new Password(new String(passwordField.getPassword()));
                 boolean success = mainController.addUser(username, password);
                 if (success) {
                     JOptionPane.showMessageDialog(this, "User registered successfully!");

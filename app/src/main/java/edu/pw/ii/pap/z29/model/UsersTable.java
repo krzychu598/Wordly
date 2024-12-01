@@ -18,6 +18,7 @@ public class UsersTable {
         this.conn = conn;
     }
 
+
     public int create(User user) throws SQLException {
         var stmt_str = "INSERT INTO users VALUES (DEFAULT, ?)";
         int user_id = 0;
