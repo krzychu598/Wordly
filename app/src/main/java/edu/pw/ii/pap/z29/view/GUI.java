@@ -19,7 +19,6 @@ public class GUI {
     private void createAndShowGUI() {
         loginFrame = new LoginFrame(mainController);
         loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        // frame.pack();
         loginFrame.setVisible(true);
 
 

@@ -2,18 +2,18 @@ package edu.pw.ii.pap.z29.view;
 
 import java.awt.*;
 import java.awt.event.*;
-
 import javax.swing.*;
-import javax.swing.text.*;
-import javax.swing.event.*;
 import edu.pw.ii.pap.z29.controller.MainController;
 
 
 
 public class LoginFrame extends JFrame {
+    public static final Color BLACK = Color.decode("#000000");
     public static final Color MAIN_COLOR = Color.decode("#101820");
     public static final Color TEXT_COLOR = Color.decode("#FEE715");
-    JLabel loginLabel;
+    public static final Color MY_PANEL_COLOR = Color.decode("#406080");
+    public static final Font PLAIN_FONT = new Font("Dialog", Font.PLAIN, 20);
+    JLabel titleLabel;
     JTextField usernameField;
     JPasswordField passwordField;
     MainController mainController;
@@ -22,103 +22,80 @@ public class LoginFrame extends JFrame {
         super("Login");
         this.mainController = mainController;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new GridBagLayout());
-        getContentPane().setBackground(MAIN_COLOR);
+        setLayout(new BorderLayout());
+        getContentPane().setBackground(BLACK);
+        getContentPane().setLayout(new GridBagLayout());
         addGuiParts();
         pack();
         setVisible(true);
     }
 
     private void addGuiParts() {
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10);
+        var centralPanel = new JPanel();
+        centralPanel.setBorder(BorderFactory.createEmptyBorder(50, 30, 50, 30));
+        centralPanel.setBackground(MAIN_COLOR);
+        centralPanel.setLayout(new BoxLayout(centralPanel, BoxLayout.PAGE_AXIS));
+        add(centralPanel);
 
-        loginLabel = new JLabel("The Wordle game");
-        loginLabel.setForeground(TEXT_COLOR);
-        loginLabel.setFont(new Font("Dialog", Font.BOLD, 40));
-        loginLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.gridwidth = 2;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        add(loginLabel, gbc);
+        titleLabel = new JLabel("The Wordle game");
+        titleLabel.setForeground(TEXT_COLOR);
+        titleLabel.setFont(new Font("Dialog", Font.BOLD, 40));
+        centralPanel.add(titleLabel);
 
-        JLabel usernameLabel = new JLabel("Username: ");
-        usernameLabel.setForeground(TEXT_COLOR);
-        usernameLabel.setFont(new Font("Dialog", Font.PLAIN, 20));
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        gbc.gridwidth = 1;
-        gbc.fill = GridBagConstraints.NONE;
-        add(usernameLabel, gbc);
+        centralPanel.add(Box.createRigidArea(new Dimension(0, 30)));
 
-        usernameField = new JTextField(20);
-        usernameField.setBackground(MAIN_COLOR);
-        usernameField.setForeground(TEXT_COLOR);
-        usernameField.setFont(new Font("Dialog", Font.PLAIN, 20));
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        gbc.gridwidth = 2;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        add(usernameField, gbc);
+        usernameField = GUIHelper.formatTextField(
+            new JTextField(), TEXT_COLOR, MAIN_COLOR, PLAIN_FONT);
+        var usernamePanel = new FormPanel(usernameField, "Username", MAIN_COLOR);
+        usernamePanel.setBorder(BorderFactory.createEmptyBorder(0, 15, 0, 15));
+        centralPanel.add(usernamePanel);
 
-        JLabel passwordLabel = new JLabel("Password: ");
-        passwordLabel.setForeground(TEXT_COLOR);
-        passwordLabel.setFont(new Font("Dialog", Font.PLAIN, 20));
-        gbc.gridx = 0;
-        gbc.gridy = 3;
-        gbc.gridwidth = 1;
-        gbc.fill = GridBagConstraints.NONE;
-        add(passwordLabel, gbc);
+        centralPanel.add(Box.createRigidArea(new Dimension(0, 20)));
 
-        passwordField = new JPasswordField(20);
-        passwordField.setBackground(MAIN_COLOR);
-        passwordField.setForeground(TEXT_COLOR);
-        passwordField.setFont(new Font("Dialog", Font.PLAIN, 20));
-        gbc.gridx = 0;
-        gbc.gridy = 4;
-        gbc.gridwidth = 2;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        add(passwordField, gbc);
+        passwordField = (JPasswordField)GUIHelper.formatTextField(
+            new JPasswordField(), TEXT_COLOR, MAIN_COLOR, PLAIN_FONT);
+        var passwordPanel = new FormPanel(passwordField, "Password", MAIN_COLOR);
+        passwordPanel.setBorder(BorderFactory.createEmptyBorder(0, 15, 0, 15));
+        centralPanel.add(passwordPanel);
 
-        // LOGIN BUTTON
+        centralPanel.add(Box.createRigidArea(new Dimension(0, 40)));
+
+        var buttonPanel = new JPanel();
+        buttonPanel.setLayout(new GridLayout());
+        buttonPanel.setBackground(MY_PANEL_COLOR);
+        buttonPanel.setMaximumSize(titleLabel.getPreferredSize());
+        
         JButton loginButton = new JButton("Login");
         loginButton.setFont(new Font("Dialog", Font.BOLD, 25));
         loginButton.setBackground(TEXT_COLOR);
         loginButton.setForeground(MAIN_COLOR);
         loginButton.addActionListener(
             (ActionEvent e) -> {
-                String username = usernameField.getText();
+                String username = usernamePanel.field.getText();
                 String password = new String(passwordField.getPassword());
                 mainController.getLoginController().checkLogin(username, password);
-        });
+            });
+        buttonPanel.add(loginButton);
+        centralPanel.add(buttonPanel);
 
-        gbc.gridx = 0;
-        gbc.gridy = 5;
-        gbc.gridwidth = 2;
-        gbc.anchor = GridBagConstraints.CENTER;
-        add(loginButton, gbc);
+        centralPanel.add(Box.createRigidArea(new Dimension(0, 20)));
 
-    //REGISTER BUTTON
-
-        JLabel registerLabel = new JLabel("Don't have account? Register");
+        JLabel registerLabel = new JLabel("Don't have an account? Register");
         registerLabel.setForeground(TEXT_COLOR);
-        registerLabel.setHorizontalAlignment(SwingConstants.CENTER);
-
         registerLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 LoginFrame.this.dispose();
-
+                
                 new RegisterFrame().setVisible(true);
             }
         });
-
-        gbc.gridx = 0;
-        gbc.gridy = 6;
-        gbc.gridwidth = 2;
-        add(registerLabel, gbc);
+        centralPanel.add(registerLabel);
+        
+        titleLabel.setAlignmentX(CENTER_ALIGNMENT);
+        usernamePanel.setAlignmentX(CENTER_ALIGNMENT);
+        passwordPanel.setAlignmentX(CENTER_ALIGNMENT);
+        buttonPanel.setAlignmentX(CENTER_ALIGNMENT);
+        registerLabel.setAlignmentX(CENTER_ALIGNMENT);
     }
-    
-
 }
