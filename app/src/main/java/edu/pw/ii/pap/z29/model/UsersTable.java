@@ -88,6 +88,23 @@ public class UsersTable {
         }
         return did_delete;
     }
+    
+    public Optional<User> readByUsername(String username) throws SQLException {
+        var query_str = "SELECT user_id, username FROM users WHERE username = ?";
+        var user_opt = Optional.<User>empty();
+        try (var query = conn.prepareStatement(query_str)) {
+            query.setString(1, username);
+            query.execute();
+            try (var rset = query.getResultSet()) {
+                if (rset.next()) {
+                    var user = record.deserialize(rset);
+                    user_opt = Optional.of(user);
+                }
+            }
+        }
+        return user_opt;
+    }
+
 }
 
 

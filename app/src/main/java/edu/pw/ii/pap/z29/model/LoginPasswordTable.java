@@ -65,10 +65,10 @@ public class LoginPasswordTable {
         return did_delete;
     }
 
-    public boolean checkCredentials(String login, String password) throws SQLException {
-        var stmt_str = "SELECT COUNT(*) FROM login_password WHERE login = ? AND passwd = ?";
+    public boolean checkCredentials(int user_id, String password) throws SQLException {
+        var stmt_str = "SELECT COUNT(*) FROM login_password WHERE user_id = ? AND passwd = ?";
         try (var stmt = conn.prepareStatement(stmt_str)) {
-            stmt.setString(1, login);
+            stmt.setInt(1, user_id);
             stmt.setString(2, password);
             try (var rset = stmt.executeQuery()) {
                 if (rset.next()) {
@@ -89,6 +89,7 @@ public class LoginPasswordTable {
         }
         return did_insert;
     }
+
 }
 
 class LoginPasswordRecord implements Record<LoginPassword> {

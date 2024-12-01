@@ -108,6 +108,25 @@ public class RegisterFrame extends JFrame {
         gbc.anchor = GridBagConstraints.CENTER;
         add(registerButton, gbc);
 
+        JLabel loginLabel = new JLabel("Have an account? Login");
+        loginLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        loginLabel.setForeground(TEXT_COLOR);
+    
+        loginLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                RegisterFrame.this.dispose();
+
+                new LoginFrame(mainController).setVisible(true);
+            }
+        });
+
+        gbc.gridx = 0;
+        gbc.gridy = 6;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        add(loginLabel, gbc);
+
     }
     
 
