@@ -27,4 +27,9 @@ public class LoginController {
                 mainController.gui.getLoginFrame(), "Try again!");
         }
     }
+
+    public void wantToRegister() {
+        mainController.gui.disposeOfLoginFrame();
+        mainController.gui.showRegisterFrame();
+    }
 }
