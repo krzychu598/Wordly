@@ -1,7 +1,11 @@
 package edu.pw.ii.pap.z29.view;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+
 import javax.swing.*;
+import javax.swing.text.StyledEditorKit;
+
 import edu.pw.ii.pap.z29.controller.MainController;
 
 
@@ -15,11 +19,12 @@ public class MainFrame extends JFrame {
     JLabel titleLabel;
     JTextField usernameField;
     JPasswordField passwordField;
-    MainController mainController;
 
-    public MainFrame(MainController mainController) {
+    GUI gui;
+
+    public MainFrame(GUI gui) {
         super("Main");
-        this.mainController = mainController;
+        this.gui = gui;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         getContentPane().setBackground(BLACK);
         getContentPane().setLayout(new GridBagLayout());
@@ -43,6 +48,23 @@ public class MainFrame extends JFrame {
 
     private JMenu createProfileMenu() {
         var menu = new JMenu("Profile");
+
+        var logoutAction = new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                gui.getMainController().getLoginController().wantToLogout();
+            }
+        };
+        logoutAction.putValue(Action.NAME, "Log Out");
+        menu.add(logoutAction);
+
+        var seeProfileAction = new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                gui.getMainController().getLoginController().seeProfile();
+            }
+        };
+        seeProfileAction.putValue(Action.NAME, "See Profile");
+        menu.add(seeProfileAction);
+
         return menu;
     }
 }

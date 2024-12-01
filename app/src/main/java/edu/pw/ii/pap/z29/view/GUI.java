@@ -47,9 +47,26 @@ public class GUI {
         loginFrame.dispose();
         loginFrame = null;
     }
+    public void disposeOfMainFrame() {
+        mainFrame.dispose();
+        mainFrame = null;
+    }
     
     public void showRegisterFrame() {
         registerFrame = new RegisterFrame();
         registerFrame.setVisible(true);
+    }
+
+    public void showLoginFrame() {
+        loginFrame = new LoginFrame(this);
+        loginFrame.setVisible(true);
+    }
+
+    public void showMainFrame() {
+        mainFrame = new MainFrame(this);
+    }
+
+    public void showProfileFrame() {
+        profileFrame = new ProfileFrame(mainController);
     }
 }
