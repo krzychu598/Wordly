@@ -62,7 +62,8 @@ public class LoginFrame extends JFrame {
 
         var buttonPanel = new JPanel();
         buttonPanel.setLayout(new GridLayout());
-        buttonPanel.setBackground(MY_PANEL_COLOR);
+        buttonPanel.setAlignmentX(LEFT_ALIGNMENT);
+        buttonPanel.setOpaque(false);
         buttonPanel.setMaximumSize(titleLabel.getPreferredSize());
         
         JButton loginButton = new JButton("Login");
@@ -80,6 +81,13 @@ public class LoginFrame extends JFrame {
 
         centralPanel.add(Box.createRigidArea(new Dimension(0, 20)));
 
+        var registerPanel = new JPanel(new GridLayout());
+        registerPanel.setOpaque(false);
+        registerPanel.setAlignmentX(LEFT_ALIGNMENT);
+        registerPanel.setMaximumSize(titleLabel.getPreferredSize());
+        var innerRegisterPanel = new JPanel();
+        innerRegisterPanel.setLayout(new BoxLayout(innerRegisterPanel, BoxLayout.PAGE_AXIS));
+        innerRegisterPanel.setOpaque(false);
         JLabel registerLabel = new JLabel("Don't have an account? Register");
         registerLabel.setForeground(TEXT_COLOR);
         registerLabel.addMouseListener(new MouseAdapter() {
@@ -90,12 +98,9 @@ public class LoginFrame extends JFrame {
                 new RegisterFrame().setVisible(true);
             }
         });
-        centralPanel.add(registerLabel);
-        
-        titleLabel.setAlignmentX(CENTER_ALIGNMENT);
-        usernamePanel.setAlignmentX(CENTER_ALIGNMENT);
-        passwordPanel.setAlignmentX(CENTER_ALIGNMENT);
-        buttonPanel.setAlignmentX(CENTER_ALIGNMENT);
         registerLabel.setAlignmentX(CENTER_ALIGNMENT);
+        innerRegisterPanel.add(registerLabel);
+        registerPanel.add(innerRegisterPanel);
+        centralPanel.add(registerPanel);
     }
 }

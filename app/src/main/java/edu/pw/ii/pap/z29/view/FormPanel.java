@@ -18,7 +18,7 @@ class FormPanel extends JPanel {
     FormPanel(JTextField field, String name, Color panel_color) {
         this.field = field;
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-        setBackground(panel_color);
+        setOpaque(false);
         label = new JLabel(name);
         label.setForeground(field.getForeground());
         label.setFont(field.getFont());
