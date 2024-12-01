@@ -16,7 +16,6 @@ public class ProfileFrame extends JFrame {
     int score = 5000;
     String username = "JHONATHAN";
     String password = "ziemniak12";
-    String email = "jhon@elo.com";
 
     public ProfileFrame(MainController mainController) {
         super("Profile");
@@ -32,17 +31,7 @@ public class ProfileFrame extends JFrame {
     private void addGuiParts() {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
-
-        JLabel loginLabel = new JLabel("Profile");
-        loginLabel.setForeground(TEXT_COLOR);
-        loginLabel.setFont(new Font("Dialog", Font.BOLD, 30));
-        loginLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.gridwidth = 2;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        add(loginLabel, gbc);
-
+    
         JLabel scoreLabel = new JLabel("Best score: " + score);
         scoreLabel.setForeground(TEXT_COLOR);
         scoreLabel.setFont(new Font("Dialog", Font.PLAIN, 20));
@@ -51,7 +40,7 @@ public class ProfileFrame extends JFrame {
         gbc.gridwidth = 1;
         gbc.fill = GridBagConstraints.NONE;
         add(scoreLabel, gbc);
-
+    
         JLabel usernameLabel = new JLabel("Username: " + username);
         usernameLabel.setForeground(TEXT_COLOR);
         usernameLabel.setFont(new Font("Dialog", Font.PLAIN, 20));
@@ -60,7 +49,7 @@ public class ProfileFrame extends JFrame {
         gbc.gridwidth = 1;
         gbc.fill = GridBagConstraints.NONE;
         add(usernameLabel, gbc);
-
+    
         JLabel passwordLabel = new JLabel("Password: " + "*****");
         passwordLabel.setForeground(TEXT_COLOR);
         passwordLabel.setFont(new Font("Dialog", Font.PLAIN, 20));
@@ -69,16 +58,16 @@ public class ProfileFrame extends JFrame {
         gbc.gridwidth = 1;
         gbc.fill = GridBagConstraints.NONE;
         add(passwordLabel, gbc);
-
+    
         JCheckBox togglePasswordCheckbox = new JCheckBox("Show");
         togglePasswordCheckbox.setForeground(TEXT_COLOR);
         togglePasswordCheckbox.setBackground(MAIN_COLOR);
         togglePasswordCheckbox.addActionListener(e -> {
             boolean isPasswordVisible = togglePasswordCheckbox.isSelected();
             if (isPasswordVisible) {
-                passwordLabel.setText("Password: " + password); // Show password
+                passwordLabel.setText("Password: " + password);
             } else {
-                passwordLabel.setText("Password: *****"); // Hide password
+                passwordLabel.setText("Password: *****");
             }
         });
         gbc.gridx = 1;
@@ -86,28 +75,51 @@ public class ProfileFrame extends JFrame {
         gbc.gridwidth = 1;
         gbc.fill = GridBagConstraints.NONE;
         add(togglePasswordCheckbox, gbc);
-
-        JLabel emailLabel = new JLabel("Email: " + email);
-        emailLabel.setForeground(TEXT_COLOR);
-        emailLabel.setFont(new Font("Dialog", Font.PLAIN, 20));
+    
+        addEditFunctionality(usernameLabel, "Username: ", text -> username = text);
+        addPasswordEditFunctionality(passwordLabel);
+    
+        JButton deleteButton = new JButton("Delete Account");
+        deleteButton.setForeground(MAIN_COLOR);
+        deleteButton.setBackground(TEXT_COLOR);
+        deleteButton.setFont(new Font("Dialog", Font.BOLD, 16));
+        deleteButton.setPreferredSize(deleteButton.getPreferredSize());
+        deleteButton.addActionListener(e -> {
+            int response = JOptionPane.showConfirmDialog(
+                this,
+                "Are you sure you want to delete your account?",
+                "Confirm Deletion",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE
+            );
+    
+            if (response == JOptionPane.YES_OPTION) {
+                //TODO delete user from database
+                JOptionPane.showMessageDialog(
+                    this,
+                    "Account deleted successfully.",
+                    "Deleted",
+                    JOptionPane.INFORMATION_MESSAGE
+                );
+                //TODO return to login frame
+            }
+        });
+    
         gbc.gridx = 0;
         gbc.gridy = 4;
         gbc.gridwidth = 1;
         gbc.fill = GridBagConstraints.NONE;
-        add(emailLabel, gbc);
-
-        // Add edit functionality to username and email labels
-        addEditFunctionality(usernameLabel, "Username: ", text -> username = text);
-        addEditFunctionality(emailLabel, "Email: ", text -> email = text);
-        addPasswordEditFunctionality(passwordLabel);
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(10, 10, 10, 10);
+        add(deleteButton, gbc);
     }
+    
 
     private void addPasswordEditFunctionality(JLabel passwordLabel) {
         passwordLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) { // Detect double-click
-                    // Create two text fields for password entry and confirmation
+                if (e.getClickCount() == 2) {
                     JPasswordField newPasswordField = new JPasswordField();
                     JPasswordField confirmPasswordField = new JPasswordField();
     
@@ -130,12 +142,11 @@ public class ProfileFrame extends JFrame {
                         JOptionPane.OK_CANCEL_OPTION,
                         JOptionPane.PLAIN_MESSAGE
                     );
-    
+
                     if (result == JOptionPane.OK_OPTION) {
                         String newPassword = new String(newPasswordField.getPassword());
                         String confirmPassword = new String(confirmPasswordField.getPassword());
     
-                        // Validate the new password
                         if (newPassword.equals(confirmPassword) && !newPassword.isEmpty()) {
                             password = newPassword;
                             passwordLabel.setText("Password: *****");
@@ -155,24 +166,19 @@ public class ProfileFrame extends JFrame {
     private void addEditFunctionality(JLabel label, String prefix, java.util.function.Consumer<String> updater) {
         label.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) { // Detect double-click
-                    // Extract the current editable part of the label's text
+                if (e.getClickCount() == 2) {
                     String currentText = label.getText().substring(prefix.length());
     
-                    // Create a text field pre-filled with the label's text
                     JTextField textField = new JTextField(currentText);
                     textField.setFont(label.getFont());
     
-                    // Ensure text is visible
                     textField.setForeground(Color.BLACK);
                     textField.setBackground(Color.WHITE);
                     textField.setCaretColor(Color.BLACK);
                     textField.setBorder(BorderFactory.createLineBorder(TEXT_COLOR));
     
-                    // Set the preferred size of the text field to match the label
                     textField.setPreferredSize(new Dimension(220, 24));
     
-                    // Replace the label with the text field
                     Container parent = label.getParent();
                     GridBagLayout layout = (GridBagLayout) parent.getLayout();
                     GridBagConstraints gbc = layout.getConstraints(label);
@@ -181,19 +187,16 @@ public class ProfileFrame extends JFrame {
                     parent.revalidate();
                     parent.repaint();
     
-                    // Add listener to save changes on Enter
                     textField.addActionListener(event -> {
                         String newText = textField.getText();
                         newText = newText.length() > 25 ? newText.substring(0, 25) : newText;
-                        updater.accept(newText); // Update the appropriate field
-                        label.setText(prefix + newText); // Update label text
+                        updater.accept(newText);
+                        label.setText(prefix + newText);
                         parent.remove(textField);
                         parent.add(label, gbc);
                         parent.revalidate();
                         parent.repaint();
                     });
-    
-                    // Focus on the text field
                     textField.requestFocus();
                 }
             }
