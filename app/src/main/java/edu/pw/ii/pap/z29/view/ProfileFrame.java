@@ -2,7 +2,7 @@ package edu.pw.ii.pap.z29.view;
 
 import java.awt.*;
 import java.awt.event.*;
-
+import java.sql.SQLException;
 import java.util.Comparator;
 import javax.swing.*;
 import javax.swing.text.*;
@@ -18,6 +18,7 @@ import edu.pw.ii.pap.z29.model.primitives.LoginPassword;
 import edu.pw.ii.pap.z29.model.primitives.Password;
 import edu.pw.ii.pap.z29.model.LoginPasswordTable;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Collections;
 
 
@@ -25,22 +26,29 @@ public class ProfileFrame extends JFrame {
     public static final Color MAIN_COLOR = Color.decode("#101820");
     public static final Color TEXT_COLOR = Color.decode("#FEE715");
 
-    MainController mainController;
-    ScoresTable scores = mainController.getScores();
-    UsersTable users = mainController.getUsers();
-    LoginPasswordTable passwords = mainController.getLoginPasswords();
+    private MainController mainController;
+    private ScoresTable scores;
+    private UsersTable users;
+    private LoginPasswordTable passwords;
+    private int user_id;
 
-    int user_id = mainController.getLoginController().getCurrentUserId();
-    LoginPassword loginPassword = passwords.read(user_id).get();
-    Password password = loginPassword.getPassword();
-    List<Integer> userScores = scores.readAllScores(user_id);
-    //Collections.sort(List<Integer> userScores, Collections.reverseOrder()); //sort in reverse
-    Integer score = userScores.get(0);
-    User user = users.read(user_id).get();
-    Username username = user.getUsername();
+    private LoginPassword loginPassword;
+    private Password password;
+    private List<Integer> userScores;
+    private User user;
+    private Username username;
+    private int score;
 
+
+
+    
     public ProfileFrame(MainController mainController) {
         super("Profile");
+        this.mainController = mainController;
+        this.scores = mainController.getScores();
+        this.users = mainController.getUsers();
+        this.passwords = mainController.getLoginPasswords();
+        this.user_id = mainController.getLoginController().getCurrentUserId();
         this.mainController = mainController;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new GridBagLayout());
@@ -48,7 +56,38 @@ public class ProfileFrame extends JFrame {
         addGuiParts();
         pack();
         setVisible(true);
+
+
+        try {
+            this.loginPassword = passwords.read(user_id).orElseThrow(() -> 
+                new IllegalArgumentException("No login password found for user ID: " + user_id)
+            );
+            this.password = loginPassword.getPassword();
+            this.userScores = scores.readAllScores(user_id);
+            this.user = users.read(user_id).orElseThrow(() -> 
+                new IllegalArgumentException("No user found for user ID: " + user_id)
+            );
+            this.username = user.getUsername();
+            this.score = userScores.get(0);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            showError("Error reading user data from the database. Please try again later.");
+            this.userScores = new ArrayList<>();
+            this.password = new Password("NOPASS");
+            this.loginPassword = new LoginPassword(user_id, password);
+            this.username = new Username("NONAME");
+            this.user = new User(username);
+            this.score = 0;
+        }
     }
+
+    private void showError(String message) {
+        JOptionPane.showMessageDialog(this, message, "Database Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    //Collections.sort(List<Integer> userScores, Collections.reverseOrder()); //sort in reverse
+    
+
 
     private void addGuiParts() {
         GridBagConstraints gbc = new GridBagConstraints();
@@ -116,10 +155,13 @@ public class ProfileFrame extends JFrame {
             );
     
             if (response == JOptionPane.YES_OPTION) {
-                users.delete(user_id);
+                try{users.delete(user_id);
                 scores.delete(user_id);
-                passwords.delete(user_id);
-                
+                passwords.delete(user_id);}
+                catch (SQLException  s){
+                    s.printStackTrace();
+                    showError("Error reading user data from the database. Please try again later.");
+                }
                 JOptionPane.showMessageDialog(
                     this,
                     "Account deleted successfully.",
@@ -175,7 +217,12 @@ public class ProfileFrame extends JFrame {
                         if (newPassword.equals(confirmPassword) && !newPassword.isEmpty()) {
                             password.setPassword(newPassword);
                             loginPassword.setPassword(password);
-                            passwords.update(loginPassword);
+
+                            try{passwords.update(loginPassword);}
+                            catch (SQLException  s){
+                                s.printStackTrace();
+                                showError("Error reading user data from the database. Please try again later.");
+                            }
                             passwordLabel.setText("Password: *****");
                         } else {
                             JOptionPane.showMessageDialog(passwordLabel.getParent(),
@@ -219,7 +266,11 @@ public class ProfileFrame extends JFrame {
                         newText = newText.length() > 25 ? newText.substring(0, 25) : newText;
                         username.setUsername(newText);
                         user.setUsername(username);
-                        users.update(user_id, user);
+                        try{users.update(user_id, user);}
+                        catch (SQLException  s){
+                            s.printStackTrace();
+                            showError("Error reading user data from the database. Please try again later.");
+                        }
                         label.setText(prefix + newText);
                         parent.remove(textField);
                         parent.add(label, gbc);
