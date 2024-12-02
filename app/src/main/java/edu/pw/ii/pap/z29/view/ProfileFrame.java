@@ -3,6 +3,7 @@ package edu.pw.ii.pap.z29.view;
 import java.awt.*;
 import java.awt.event.*;
 
+import java.util.Comparator;
 import javax.swing.*;
 import javax.swing.text.*;
 import javax.swing.event.*;
@@ -13,10 +14,15 @@ public class ProfileFrame extends JFrame {
     public static final Color TEXT_COLOR = Color.decode("#FEE715");
 
     MainController mainController;
-    int score = 5000;
-    String username = "JHONATHAN";
-    String password = "ziemniak12";
-
+    ScoresTable scoresTable;
+    UsersTable usersTable;
+    User user;
+    LoginPassword loginPassword;
+    ArrayList<Integer> scores = scoresTable.readAllScore(user.getUserId()).sort(Comparator.reverseOrder());
+    int score = scores[0];
+    String username = user.getUsername().getUsername();
+    String password = loginPassword.getPassword();
+    
     public ProfileFrame(MainController mainController) {
         super("Profile");
         this.mainController = mainController;
@@ -76,7 +82,7 @@ public class ProfileFrame extends JFrame {
         gbc.fill = GridBagConstraints.NONE;
         add(togglePasswordCheckbox, gbc);
     
-        addEditFunctionality(usernameLabel, "Username: ", text -> username = text);
+        addUsernameEdit(usernameLabel, "Username: ", text -> username = text);
         addPasswordEditFunctionality(passwordLabel);
     
         JButton deleteButton = new JButton("Delete Account");
@@ -94,14 +100,15 @@ public class ProfileFrame extends JFrame {
             );
     
             if (response == JOptionPane.YES_OPTION) {
-                //TODO delete user from database
+                usersTable.delete(user.getUserId());
+                scoresTable.delete(user.getUserId());
                 JOptionPane.showMessageDialog(
                     this,
                     "Account deleted successfully.",
                     "Deleted",
                     JOptionPane.INFORMATION_MESSAGE
                 );
-                //TODO return to login frame
+                //TODO go back to login frame
             }
         });
     
@@ -163,7 +170,7 @@ public class ProfileFrame extends JFrame {
     }
     
 
-    private void addEditFunctionality(JLabel label, String prefix, java.util.function.Consumer<String> updater) {
+    private void addUsernameEdit(JLabel label) {
         label.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
@@ -190,8 +197,7 @@ public class ProfileFrame extends JFrame {
                     textField.addActionListener(event -> {
                         String newText = textField.getText();
                         newText = newText.length() > 25 ? newText.substring(0, 25) : newText;
-                        updater.accept(newText);
-                        label.setText(prefix + newText);
+                        label.setText("Username: " + newText);
                         parent.remove(textField);
                         parent.add(label, gbc);
                         parent.revalidate();
