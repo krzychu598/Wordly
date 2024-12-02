@@ -8,21 +8,37 @@ import javax.swing.*;
 import javax.swing.text.*;
 import javax.swing.event.*;
 import edu.pw.ii.pap.z29.controller.MainController;
+import lombok.Data;
+import edu.pw.ii.pap.z29.model.ScoresTable;
+import edu.pw.ii.pap.z29.model.UsersTable;
+import edu.pw.ii.pap.z29.model.primitives.User;
+import java.util.Optional;
+import edu.pw.ii.pap.z29.model.primitives.Username;
+import edu.pw.ii.pap.z29.model.primitives.LoginPassword;
+import edu.pw.ii.pap.z29.model.primitives.Password;
+import edu.pw.ii.pap.z29.model.LoginPasswordTable;
+import java.util.List;
+import java.util.Collections;
+
 
 public class ProfileFrame extends JFrame {
     public static final Color MAIN_COLOR = Color.decode("#101820");
     public static final Color TEXT_COLOR = Color.decode("#FEE715");
 
     MainController mainController;
-    ScoresTable scoresTable;
-    UsersTable usersTable;
-    User user;
-    LoginPassword loginPassword;
-    ArrayList<Integer> scores = scoresTable.readAllScore(user.getUserId()).sort(Comparator.reverseOrder());
-    int score = scores[0];
-    String username = user.getUsername().getUsername();
-    String password = loginPassword.getPassword();
-    
+    ScoresTable scores = mainController.getScores();
+    UsersTable users = mainController.getUsers();
+    LoginPasswordTable passwords = mainController.getLoginPasswords();
+
+    int user_id = mainController.getLoginController().getCurrentUserId();
+    LoginPassword loginPassword = passwords.read(user_id).get();
+    Password password = loginPassword.getPassword();
+    List<Integer> userScores = scores.readAllScores(user_id);
+    //Collections.sort(List<Integer> userScores, Collections.reverseOrder()); //sort in reverse
+    Integer score = userScores.get(0);
+    User user = users.read(user_id).get();
+    Username username = user.getUsername();
+
     public ProfileFrame(MainController mainController) {
         super("Profile");
         this.mainController = mainController;
@@ -47,7 +63,7 @@ public class ProfileFrame extends JFrame {
         gbc.fill = GridBagConstraints.NONE;
         add(scoreLabel, gbc);
     
-        JLabel usernameLabel = new JLabel("Username: " + username);
+        JLabel usernameLabel = new JLabel("Username: " + username.getUsername());
         usernameLabel.setForeground(TEXT_COLOR);
         usernameLabel.setFont(new Font("Dialog", Font.PLAIN, 20));
         gbc.gridx = 0;
@@ -71,7 +87,7 @@ public class ProfileFrame extends JFrame {
         togglePasswordCheckbox.addActionListener(e -> {
             boolean isPasswordVisible = togglePasswordCheckbox.isSelected();
             if (isPasswordVisible) {
-                passwordLabel.setText("Password: " + password);
+                passwordLabel.setText("Password: " + password.getPassword());
             } else {
                 passwordLabel.setText("Password: *****");
             }
@@ -82,7 +98,7 @@ public class ProfileFrame extends JFrame {
         gbc.fill = GridBagConstraints.NONE;
         add(togglePasswordCheckbox, gbc);
     
-        addUsernameEdit(usernameLabel, "Username: ", text -> username = text);
+        addUsernameEdit(usernameLabel, "Username: ");
         addPasswordEditFunctionality(passwordLabel);
     
         JButton deleteButton = new JButton("Delete Account");
@@ -100,8 +116,10 @@ public class ProfileFrame extends JFrame {
             );
     
             if (response == JOptionPane.YES_OPTION) {
-                usersTable.delete(user.getUserId());
-                scoresTable.delete(user.getUserId());
+                users.delete(user_id);
+                scores.delete(user_id);
+                passwords.delete(user_id);
+                
                 JOptionPane.showMessageDialog(
                     this,
                     "Account deleted successfully.",
@@ -155,7 +173,9 @@ public class ProfileFrame extends JFrame {
                         String confirmPassword = new String(confirmPasswordField.getPassword());
     
                         if (newPassword.equals(confirmPassword) && !newPassword.isEmpty()) {
-                            password = newPassword;
+                            password.setPassword(newPassword);
+                            loginPassword.setPassword(password);
+                            passwords.update(loginPassword);
                             passwordLabel.setText("Password: *****");
                         } else {
                             JOptionPane.showMessageDialog(passwordLabel.getParent(),
@@ -170,7 +190,7 @@ public class ProfileFrame extends JFrame {
     }
     
 
-    private void addUsernameEdit(JLabel label) {
+    private void addUsernameEdit(JLabel label, String prefix) {
         label.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
@@ -197,7 +217,10 @@ public class ProfileFrame extends JFrame {
                     textField.addActionListener(event -> {
                         String newText = textField.getText();
                         newText = newText.length() > 25 ? newText.substring(0, 25) : newText;
-                        label.setText("Username: " + newText);
+                        username.setUsername(newText);
+                        user.setUsername(username);
+                        users.update(user_id, user);
+                        label.setText(prefix + newText);
                         parent.remove(textField);
                         parent.add(label, gbc);
                         parent.revalidate();
