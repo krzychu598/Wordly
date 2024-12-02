@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Optional;
 
 import edu.pw.ii.pap.z29.model.primitives.User;
-import edu.pw.ii.pap.z29.model.primitives.Username;
 
 
 public class ScoresTable {
@@ -43,21 +42,20 @@ public class ScoresTable {
 
     public List<Integer> readAllScores(int user_id) throws SQLException {
         var query_str = "SELECT score FROM scores WHERE user_id = ?";
-        var scores = new ArrayList<Integer>();
-
+        List<Integer> scores = new ArrayList<>();
+    
         try (var query = conn.prepareStatement(query_str)) {
             query.setInt(1, user_id);
-
-            if (query.execute()) {
-                try (var rset = query.getResultSet()) {
-                    while (rset.next()) {
-                        scores.add(rset.getInt("score"));
-                    }
+    
+            try (var rset = query.executeQuery()) {
+                while (rset.next()) {
+                    scores.add(rset.getInt("score"));
                 }
             }
         }
         return scores;
     }
+    
 
 
     public boolean delete(int user_id) throws SQLException {
