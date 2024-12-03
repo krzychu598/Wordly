@@ -50,13 +50,11 @@ public class LoginController {
     }
 
     public void wantToLogout() {
-        mainController.gui.disposeOfMainFrame();
-        mainController.gui.showLoginFrame();
         currentUser = null;
+        mainController.gui.showLoginFrame();
     }
 
     public void seeProfile() {
-        mainController.gui.disposeOfMainFrame();
         mainController.gui.showProfileFrame();
     }
 

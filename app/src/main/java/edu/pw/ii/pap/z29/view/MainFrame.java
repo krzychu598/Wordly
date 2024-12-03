@@ -51,6 +51,7 @@ public class MainFrame extends JFrame {
 
         var logoutAction = new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
+                MainFrame.this.dispose();
                 gui.getMainController().getLoginController().wantToLogout();
             }
         };
@@ -59,6 +60,7 @@ public class MainFrame extends JFrame {
 
         var seeProfileAction = new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
+                MainFrame.this.dispose();
                 gui.getMainController().getLoginController().seeProfile();
             }
         };
