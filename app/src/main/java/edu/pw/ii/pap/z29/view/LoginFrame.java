@@ -91,7 +91,9 @@ public class LoginFrame extends JFrame {
         registerLabel.setForeground(TEXT_COLOR);
         registerLabel.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                gui.getMainController().getLoginController().wantToRegister();
+                LoginFrame.this.dispose();
+
+                new RegisterFrame(gui).setVisible(true);
             }
         });
         registerLabel.setAlignmentX(CENTER_ALIGNMENT);

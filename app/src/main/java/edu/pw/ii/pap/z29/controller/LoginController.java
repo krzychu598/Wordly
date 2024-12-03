@@ -1,13 +1,19 @@
 package edu.pw.ii.pap.z29.controller;
 
 import java.sql.SQLException;
+import java.util.Optional;
+
 import javax.swing.JOptionPane;
 import edu.pw.ii.pap.z29.exception.NotLoggedInException;
 
 
+import edu.pw.ii.pap.z29.model.primitives.User;
+import lombok.Data;
+
+@Data
 public class LoginController {
     MainController mainController;
-    private Integer currentUserId = null;
+    private User currentUser = null;
 
     public LoginController(MainController mainController) {
         this.mainController = mainController;
@@ -16,9 +22,12 @@ public class LoginController {
     public void checkLogin(String login, String password) {
         boolean correct = false;
         try {
-            correct = mainController.loginPasswords.checkCredentials(
-                login, password);
-            currentUserId = 0;  // TODO: checkCredentials must return user_id;
+            Optional<User> userOpt = mainController.users.readByUsername(login);
+            if (userOpt.isPresent()) {
+                var user = userOpt.get();
+                correct = mainController.loginPasswords.checkCredentials(user.getUserId(), password);
+                currentUser = user;
+            }
         } catch (SQLException e) {
             mainController.sqlLogger.log(e);
         }
@@ -26,30 +35,32 @@ public class LoginController {
             mainController.gui.disposeOfLoginFrame();
             mainController.gui.showMainFrame();
         } else {
-            JOptionPane.showMessageDialog(
-                mainController.gui.getLoginFrame(), "Try again!");
+            JOptionPane.showMessageDialog(mainController.gui.getLoginFrame(), "Try again!");
         }
     }
 
-    public int getCurrentUserId() {
-        if (currentUserId == null)
+    public User getCurrentUser() {
+        if (currentUser == null)
             throw new NotLoggedInException();
-        return currentUserId;
+        return currentUser;
     }
 
     public void wantToRegister() {
-        mainController.gui.disposeOfLoginFrame();
         mainController.gui.showRegisterFrame();
     }
 
     public void wantToLogout() {
         mainController.gui.disposeOfMainFrame();
         mainController.gui.showLoginFrame();
-        currentUserId = null;
+        currentUser = null;
     }
 
     public void seeProfile() {
         mainController.gui.disposeOfMainFrame();
         mainController.gui.showProfileFrame();
+    }
+
+    public void wantToLogin() {
+        mainController.gui.showLoginFrame();
     }
 }

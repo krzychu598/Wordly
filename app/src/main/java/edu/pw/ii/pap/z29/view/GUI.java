@@ -53,7 +53,7 @@ public class GUI {
     }
     
     public void showRegisterFrame() {
-        registerFrame = new RegisterFrame();
+        registerFrame = new RegisterFrame(this);
         registerFrame.setVisible(true);
     }
 
@@ -64,6 +64,7 @@ public class GUI {
 
     public void showMainFrame() {
         mainFrame = new MainFrame(this);
+        mainFrame.setVisible(false);
     }
 
     public void showProfileFrame() {
