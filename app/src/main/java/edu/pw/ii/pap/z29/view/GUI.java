@@ -2,11 +2,17 @@ package edu.pw.ii.pap.z29.view;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
+import java.awt.Color;
+import java.awt.Font;
 
 import edu.pw.ii.pap.z29.controller.MainController;
 
 
 public class GUI {
+    protected static final Color BLACK = Color.decode("#000000");
+    protected static final Color MAIN_COLOR = Color.decode("#101820");
+    protected static final Color SECONDARY_COLOR = Color.decode("#FEE715");
+    protected static final Font PLAIN_FONT = new Font("Dialog", Font.PLAIN, 20);
 
     private MainController mainController;
     private LoginFrame loginFrame;

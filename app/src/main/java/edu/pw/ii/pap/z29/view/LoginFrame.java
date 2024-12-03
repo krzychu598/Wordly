@@ -8,11 +8,6 @@ import edu.pw.ii.pap.z29.controller.MainController;
 
 
 public class LoginFrame extends JFrame {
-    public static final Color BLACK = Color.decode("#000000");
-    public static final Color MAIN_COLOR = Color.decode("#101820");
-    public static final Color TEXT_COLOR = Color.decode("#FEE715");
-    public static final Color MY_PANEL_COLOR = Color.decode("#406080");
-    public static final Font PLAIN_FONT = new Font("Dialog", Font.PLAIN, 20);
     JLabel titleLabel;
     JTextField usernameField;
     JPasswordField passwordField;
@@ -22,7 +17,7 @@ public class LoginFrame extends JFrame {
         super("Login");
         this.gui = gui;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        getContentPane().setBackground(BLACK);
+        getContentPane().setBackground(GUI.BLACK);
         getContentPane().setLayout(new GridBagLayout());
         addGuiParts();
         pack();
@@ -32,28 +27,28 @@ public class LoginFrame extends JFrame {
     private void addGuiParts() {
         var centralPanel = new JPanel();
         centralPanel.setBorder(BorderFactory.createEmptyBorder(50, 30, 50, 30));
-        centralPanel.setBackground(MAIN_COLOR);
+        centralPanel.setBackground(GUI.MAIN_COLOR);
         centralPanel.setLayout(new BoxLayout(centralPanel, BoxLayout.PAGE_AXIS));
         add(centralPanel);
 
         titleLabel = new JLabel("The Wordle game");
-        titleLabel.setForeground(TEXT_COLOR);
+        titleLabel.setForeground(GUI.SECONDARY_COLOR);
         titleLabel.setFont(new Font("Dialog", Font.BOLD, 40));
         centralPanel.add(titleLabel);
 
         centralPanel.add(Box.createRigidArea(new Dimension(0, 30)));
 
         usernameField = GUIHelper.formatTextField(
-            new JTextField(), TEXT_COLOR, MAIN_COLOR, PLAIN_FONT);
-        var usernamePanel = new FormPanel(usernameField, "Username", MAIN_COLOR);
+            new JTextField(), GUI.SECONDARY_COLOR, GUI.MAIN_COLOR, GUI.PLAIN_FONT);
+        var usernamePanel = new FormPanel(usernameField, "Username", GUI.MAIN_COLOR);
         usernamePanel.setBorder(BorderFactory.createEmptyBorder(0, 15, 0, 15));
         centralPanel.add(usernamePanel);
 
         centralPanel.add(Box.createRigidArea(new Dimension(0, 20)));
 
         passwordField = (JPasswordField)GUIHelper.formatTextField(
-            new JPasswordField(), TEXT_COLOR, MAIN_COLOR, PLAIN_FONT);
-        var passwordPanel = new FormPanel(passwordField, "Password", MAIN_COLOR);
+            new JPasswordField(), GUI.SECONDARY_COLOR, GUI.MAIN_COLOR, GUI.PLAIN_FONT);
+        var passwordPanel = new FormPanel(passwordField, "Password", GUI.MAIN_COLOR);
         passwordPanel.setBorder(BorderFactory.createEmptyBorder(0, 15, 0, 15));
         centralPanel.add(passwordPanel);
 
@@ -67,8 +62,8 @@ public class LoginFrame extends JFrame {
         
         JButton loginButton = new JButton("Login");
         loginButton.setFont(new Font("Dialog", Font.BOLD, 25));
-        loginButton.setBackground(TEXT_COLOR);
-        loginButton.setForeground(MAIN_COLOR);
+        loginButton.setBackground(GUI.SECONDARY_COLOR);
+        loginButton.setForeground(GUI.MAIN_COLOR);
         loginButton.addActionListener(
             (ActionEvent e) -> {
                 String username = usernamePanel.field.getText();
@@ -88,7 +83,7 @@ public class LoginFrame extends JFrame {
         innerRegisterPanel.setLayout(new BoxLayout(innerRegisterPanel, BoxLayout.PAGE_AXIS));
         innerRegisterPanel.setOpaque(false);
         JLabel registerLabel = new JLabel("Don't have an account? Register");
-        registerLabel.setForeground(TEXT_COLOR);
+        registerLabel.setForeground(GUI.SECONDARY_COLOR);
         registerLabel.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 LoginFrame.this.dispose();

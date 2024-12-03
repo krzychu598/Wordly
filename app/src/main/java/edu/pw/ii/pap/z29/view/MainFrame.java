@@ -11,11 +11,7 @@ import edu.pw.ii.pap.z29.controller.MainController;
 
 
 public class MainFrame extends JFrame {
-    public static final Color BLACK = Color.decode("#000000");
-    public static final Color MAIN_COLOR = Color.decode("#101820");
-    public static final Color TEXT_COLOR = Color.decode("#FEE715");
-    public static final Color MY_PANEL_COLOR = Color.decode("#406080");
-    public static final Font PLAIN_FONT = new Font("Dialog", Font.PLAIN, 20);
+    private static final Color MY_PANEL_COLOR = Color.decode("#406080");
     JLabel titleLabel;
     JTextField usernameField;
     JPasswordField passwordField;
@@ -26,7 +22,7 @@ public class MainFrame extends JFrame {
         super("Main");
         this.gui = gui;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        getContentPane().setBackground(BLACK);
+        getContentPane().setBackground(GUI.MAIN_COLOR);
         getContentPane().setLayout(new GridBagLayout());
         addGuiParts();
         pack();
@@ -41,7 +37,7 @@ public class MainFrame extends JFrame {
 
         var centralPanel = new JPanel();
         centralPanel.setBorder(BorderFactory.createEmptyBorder(50, 30, 50, 30));
-        centralPanel.setBackground(MAIN_COLOR);
+        centralPanel.setOpaque(false);
         centralPanel.setLayout(new BoxLayout(centralPanel, BoxLayout.PAGE_AXIS));
         add(centralPanel);
     }

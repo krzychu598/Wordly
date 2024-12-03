@@ -14,9 +14,6 @@ import javax.swing.event.*;
 
 
 public class RegisterFrame extends JFrame {
-    public static final Color MAIN_COLOR = Color.decode("#101820");
-    // public static final Color SECONDARY_COLOR = 300;
-    public static final Color TEXT_COLOR = Color.decode("#FEE715");
     JLabel registerLabel;
     JTextField usernameField;
     JPasswordField passwordField;
@@ -27,7 +24,7 @@ public class RegisterFrame extends JFrame {
         this.gui = gui;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new GridBagLayout());
-        getContentPane().setBackground(MAIN_COLOR);
+        getContentPane().setBackground(GUI.MAIN_COLOR);
         addGuiParts();
         pack();
         setVisible(true);
@@ -38,7 +35,7 @@ public class RegisterFrame extends JFrame {
         gbc.insets = new Insets(10, 10, 10, 10);
 
         registerLabel = new JLabel("Register account");
-        registerLabel.setForeground(TEXT_COLOR);
+        registerLabel.setForeground(GUI.SECONDARY_COLOR);
         registerLabel.setFont(new Font("Dialog", Font.BOLD, 40));
         registerLabel.setHorizontalAlignment(SwingConstants.CENTER);
         gbc.gridx = 0;
@@ -48,7 +45,7 @@ public class RegisterFrame extends JFrame {
         add(registerLabel, gbc);
 
         JLabel usernameLabel = new JLabel("Username: ");
-        usernameLabel.setForeground(TEXT_COLOR);
+        usernameLabel.setForeground(GUI.SECONDARY_COLOR);
         usernameLabel.setFont(new Font("Dialog", Font.PLAIN, 20));
         gbc.gridx = 0;
         gbc.gridy = 1;
@@ -57,8 +54,8 @@ public class RegisterFrame extends JFrame {
         add(usernameLabel, gbc);
 
         usernameField = new JTextField(20);
-        usernameField.setBackground(MAIN_COLOR);
-        usernameField.setForeground(TEXT_COLOR);
+        usernameField.setBackground(GUI.MAIN_COLOR);
+        usernameField.setForeground(GUI.SECONDARY_COLOR);
         usernameField.setFont(new Font("Dialog", Font.PLAIN, 20));
         gbc.gridx = 0;
         gbc.gridy = 2;
@@ -67,7 +64,7 @@ public class RegisterFrame extends JFrame {
         add(usernameField, gbc);
 
         JLabel passwordLabel = new JLabel("Password: ");
-        passwordLabel.setForeground(TEXT_COLOR);
+        passwordLabel.setForeground(GUI.SECONDARY_COLOR);
         passwordLabel.setFont(new Font("Dialog", Font.PLAIN, 20));
         gbc.gridx = 0;
         gbc.gridy = 3;
@@ -76,8 +73,8 @@ public class RegisterFrame extends JFrame {
         add(passwordLabel, gbc);
 
         passwordField = new JPasswordField(20);
-        passwordField.setBackground(MAIN_COLOR);
-        passwordField.setForeground(TEXT_COLOR);
+        passwordField.setBackground(GUI.MAIN_COLOR);
+        passwordField.setForeground(GUI.SECONDARY_COLOR);
         passwordField.setFont(new Font("Dialog", Font.PLAIN, 20));
         gbc.gridx = 0;
         gbc.gridy = 4;
@@ -88,8 +85,8 @@ public class RegisterFrame extends JFrame {
         // REGISTER BUTTON
         JButton registerButton = new JButton("REGISTER");
         registerButton.setFont(new Font("Dialog", Font.BOLD, 25));
-        registerButton.setBackground(TEXT_COLOR);
-        registerButton.setForeground(MAIN_COLOR);
+        registerButton.setBackground(GUI.SECONDARY_COLOR);
+        registerButton.setForeground(GUI.MAIN_COLOR);
         registerButton.addActionListener(
             (ActionEvent e) -> {
                 Username username = new Username(usernameField.getText());
@@ -110,7 +107,7 @@ public class RegisterFrame extends JFrame {
 
         JLabel loginLabel = new JLabel("Have an account? Login");
         loginLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        loginLabel.setForeground(TEXT_COLOR);
+        loginLabel.setForeground(GUI.SECONDARY_COLOR);
     
         loginLabel.addMouseListener(new MouseAdapter() {
             @Override
