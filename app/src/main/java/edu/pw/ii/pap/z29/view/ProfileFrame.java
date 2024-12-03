@@ -53,19 +53,16 @@ public class ProfileFrame extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new GridBagLayout());
         getContentPane().setBackground(MAIN_COLOR);
-        addGuiParts();
-        pack();
-        setVisible(true);
-
-
+        
+        
         try {
             this.loginPassword = passwords.read(user_id).orElseThrow(() -> 
-                new IllegalArgumentException("No login password found for user ID: " + user_id)
+            new IllegalArgumentException("No login password found for user ID: " + user_id)
             );
             this.password = loginPassword.getPassword();
             this.userScores = scores.readAllScores(user_id);
             this.user = users.read(user_id).orElseThrow(() -> 
-                new IllegalArgumentException("No user found for user ID: " + user_id)
+            new IllegalArgumentException("No user found for user ID: " + user_id)
             );
             this.username = user.getUsername();
             this.score = userScores.get(0);
@@ -79,8 +76,11 @@ public class ProfileFrame extends JFrame {
             this.user = new User(username);
             this.score = 0;
         }
+        addGuiParts();
+        pack();
+        setVisible(true);
     }
-
+    
     private void showError(String message) {
         JOptionPane.showMessageDialog(this, message, "Database Error", JOptionPane.ERROR_MESSAGE);
     }
