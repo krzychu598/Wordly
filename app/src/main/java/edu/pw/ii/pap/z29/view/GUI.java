@@ -64,7 +64,6 @@ public class GUI {
 
     public void showMainFrame() {
         mainFrame = new MainFrame(this);
-        mainFrame.setVisible(false);
     }
 
     public void showProfileFrame() {
