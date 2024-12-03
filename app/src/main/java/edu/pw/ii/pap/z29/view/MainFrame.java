@@ -11,8 +11,6 @@ import edu.pw.ii.pap.z29.controller.MainController;
 
 
 public class MainFrame extends JFrame {
-    private static final Color MY_PANEL_COLOR = Color.decode("#406080");
-
     JButton playButton;
 
     GUI gui;
