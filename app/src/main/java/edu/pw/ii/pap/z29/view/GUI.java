@@ -1,10 +1,10 @@
 package edu.pw.ii.pap.z29.view;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 import java.awt.Color;
 import java.awt.Font;
-
 import edu.pw.ii.pap.z29.controller.MainController;
 
 
@@ -24,22 +24,23 @@ public class GUI {
         this.mainController = mainController;
     }
 
+    static JLabel createTitleLabel(int font_size) {
+        var titleLabel = new JLabel("The Wordle game");
+        titleLabel.setForeground(GUI.SECONDARY_COLOR);
+        titleLabel.setFont(new Font("Dialog", Font.BOLD, font_size));
+        return titleLabel;
+    }
+
     private void createAndShowGUI() {
         loginFrame = new LoginFrame(this);
         loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         loginFrame.setVisible(true);
-
-
-        //uncomment to test profileFrame
-/*         profileFrame = new ProfileFrame(mainController);
-        profileFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        // frame.pack();
-        profileFrame.setVisible(true); */
     }
 
     public void run() {
         SwingUtilities.invokeLater(() -> createAndShowGUI());
     }
+
 
     public MainController getMainController() {
         return mainController;

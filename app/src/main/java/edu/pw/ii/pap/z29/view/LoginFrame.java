@@ -31,9 +31,7 @@ public class LoginFrame extends JFrame {
         centralPanel.setLayout(new BoxLayout(centralPanel, BoxLayout.PAGE_AXIS));
         add(centralPanel);
 
-        titleLabel = new JLabel("The Wordle game");
-        titleLabel.setForeground(GUI.SECONDARY_COLOR);
-        titleLabel.setFont(new Font("Dialog", Font.BOLD, 40));
+        titleLabel = GUI.createTitleLabel(40);
         centralPanel.add(titleLabel);
 
         centralPanel.add(Box.createRigidArea(new Dimension(0, 30)));
@@ -58,7 +56,6 @@ public class LoginFrame extends JFrame {
         buttonPanel.setLayout(new GridLayout());
         buttonPanel.setAlignmentX(LEFT_ALIGNMENT);
         buttonPanel.setOpaque(false);
-        buttonPanel.setMaximumSize(titleLabel.getPreferredSize());
         
         JButton loginButton = new JButton("Login");
         loginButton.setFont(new Font("Dialog", Font.BOLD, 25));
