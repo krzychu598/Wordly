@@ -6,7 +6,6 @@ import java.util.Optional;
 import javax.swing.JOptionPane;
 import edu.pw.ii.pap.z29.exception.NotLoggedInException;
 
-
 import edu.pw.ii.pap.z29.model.primitives.User;
 import lombok.Data;
 
