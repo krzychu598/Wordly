@@ -22,7 +22,6 @@ public class LoginFrame extends JFrame {
         super("Login");
         this.gui = gui;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new BorderLayout());
         getContentPane().setBackground(BLACK);
         getContentPane().setLayout(new GridBagLayout());
         addGuiParts();
@@ -93,8 +92,7 @@ public class LoginFrame extends JFrame {
         registerLabel.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 LoginFrame.this.dispose();
-
-                new RegisterFrame(gui).setVisible(true);
+                gui.getMainController().getLoginController().wantToRegister();
             }
         });
         registerLabel.setAlignmentX(CENTER_ALIGNMENT);

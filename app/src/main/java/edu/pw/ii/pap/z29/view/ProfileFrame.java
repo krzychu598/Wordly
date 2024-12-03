@@ -48,7 +48,7 @@ public class ProfileFrame extends JFrame {
         this.scores = mainController.getScores();
         this.users = mainController.getUsers();
         this.passwords = mainController.getLoginPasswords();
-        this.user_id = mainController.getLoginController().getCurrentUserId();
+        this.user_id = mainController.getLoginController().getCurrentUser().getUserId();
         this.mainController = mainController;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new GridBagLayout());
