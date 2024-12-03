@@ -20,11 +20,11 @@ public class RegisterFrame extends JFrame {
     JLabel registerLabel;
     JTextField usernameField;
     JPasswordField passwordField;
-    MainController mainController;
+    GUI gui;
     
-    public RegisterFrame(MainController mainController) {
+    public RegisterFrame(GUI gui) {
         super("Register");
-        this.mainController = mainController;
+        this.gui = gui;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new GridBagLayout());
         getContentPane().setBackground(MAIN_COLOR);
@@ -94,7 +94,7 @@ public class RegisterFrame extends JFrame {
             (ActionEvent e) -> {
                 Username username = new Username(usernameField.getText());
                 Password password = new Password(new String(passwordField.getPassword()));
-                boolean success = mainController.addUser(username, password);
+                boolean success = gui.getMainController().addUser(username, password);
                 if (success) {
                     JOptionPane.showMessageDialog(this, "User registered successfully!");
                 } else {
@@ -116,8 +116,7 @@ public class RegisterFrame extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 RegisterFrame.this.dispose();
-
-                new LoginFrame(mainController).setVisible(true);
+                gui.getMainController().getLoginController().wantToLogin();
             }
         });
 

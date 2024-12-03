@@ -48,7 +48,12 @@ public class GUI {
     }
     
     public void showRegisterFrame() {
-        registerFrame = new RegisterFrame();
+        registerFrame = new RegisterFrame(this);
         registerFrame.setVisible(true);
+    }
+
+    public void showLoginFrame() {
+        loginFrame = new LoginFrame(this);
+        loginFrame.setVisible(true);
     }
 }

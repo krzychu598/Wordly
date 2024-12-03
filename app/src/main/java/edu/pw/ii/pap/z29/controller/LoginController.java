@@ -17,26 +17,30 @@ public class LoginController {
         this.mainController = mainController;
     }
 
-public void checkLogin(String login, String password) {
-    boolean correct = false;
-    try {
-        Optional<User> userOpt = mainController.users.readByUsername(login);
-        if (userOpt.isPresent()) {
-            User user = userOpt.get();
-            correct = mainController.loginPasswords.checkCredentials(user.getUserId(), password);
-            currentUserId = user.getUserId();
+    public void checkLogin(String login, String password) {
+        boolean correct = false;
+        try {
+            Optional<User> userOpt = mainController.users.readByUsername(login);
+            if (userOpt.isPresent()) {
+                User user = userOpt.get();
+                correct = mainController.loginPasswords.checkCredentials(user.getUserId(), password);
+                currentUserId = user.getUserId();
+            }
+        } catch (SQLException e) {
+            mainController.sqlLogger.log(e);
         }
-    } catch (SQLException e) {
-        mainController.sqlLogger.log(e);
+        if (correct) {
+            JOptionPane.showMessageDialog(mainController.gui.getLoginFrame(), "Welcome!");
+        } else {
+            JOptionPane.showMessageDialog(mainController.gui.getLoginFrame(), "Try again!");
+        }
     }
-    if (correct) {
-        JOptionPane.showMessageDialog(mainController.gui.getLoginFrame(), "Welcome!");
-    } else {
-        JOptionPane.showMessageDialog(mainController.gui.getLoginFrame(), "Try again!");
-    }
-}
-public void wantToRegister() {
-        mainController.gui.disposeOfLoginFrame();
+
+    public void wantToRegister() {
         mainController.gui.showRegisterFrame();
+    }
+
+    public void wantToLogin() {
+        mainController.gui.showLoginFrame();
     }
 }

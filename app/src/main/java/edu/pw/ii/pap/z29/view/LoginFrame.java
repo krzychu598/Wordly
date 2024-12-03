@@ -94,7 +94,7 @@ public class LoginFrame extends JFrame {
             public void mouseClicked(MouseEvent e) {
                 LoginFrame.this.dispose();
 
-                new RegisterFrame(mainController).setVisible(true);
+                new RegisterFrame(gui).setVisible(true);
             }
         });
         registerLabel.setAlignmentX(CENTER_ALIGNMENT);
