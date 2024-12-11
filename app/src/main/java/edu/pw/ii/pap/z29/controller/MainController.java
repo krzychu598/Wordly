@@ -17,7 +17,7 @@ import lombok.Data;
 @Data
 public class MainController {
     LoginController loginController;
-
+    GameController gameController;
     GUI gui;
 
     SQLLogger sqlLogger = new SQLLogger();
@@ -42,6 +42,14 @@ public class MainController {
 
     public LoginController getLoginController() {
         return loginController;
+    }
+    public void newGame(int wordLength, boolean definition){
+        gameController = new GameController(this, wordLength, definition);
+        gui.disposeOfMainFrame();
+        gui.showGameFrame();
+    }
+    public GameController getGamController() {
+        return gameController;
     }
 
     public boolean addUser(Username username, Password password) {

@@ -32,7 +32,7 @@ public class MainFrame extends JFrame {
         var profileMenu = createProfileMenu();
         menuBar.add(profileMenu);
         var centralPanel = createCentralPanel();
-        add(centralPanel);
+        this.add(centralPanel);
 
         var titleLabel = GUI.createTitleLabel(60);
         titleLabel.setAlignmentX(CENTER_ALIGNMENT);
@@ -77,7 +77,23 @@ public class MainFrame extends JFrame {
         playButton.setForeground(GUI.MAIN_COLOR);
         playButton.addActionListener(
             (ActionEvent e) -> {
-                JOptionPane.showMessageDialog(this, "To be continued...");
+                JPopupMenu pop = new JPopupMenu("Settings");
+                JSlider lengthSlider = new JSlider(4, 10, 7);
+                lengthSlider.setMajorTickSpacing(1);
+                lengthSlider.setPaintTicks(true);
+                lengthSlider.setPaintLabels(true);
+                JCheckBox definitionBox = new JCheckBox("Show Definition");
+                JButton start = new JButton("Start");
+                start.addActionListener((ActionEvent f)->{
+                    MainFrame.this.dispose();
+                    gui.getMainController().newGame(lengthSlider.getValue(), definitionBox.isSelected());;
+                    
+                });
+                pop.add(new JLabel("Word length:"));
+                pop.add(lengthSlider);
+                pop.add(definitionBox);
+                pop.add(start);
+                pop.show(playButton, playButton.getWidth() / 2, playButton.getHeight());
             });
         return playButton;
     }

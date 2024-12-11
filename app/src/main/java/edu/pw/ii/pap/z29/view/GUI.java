@@ -19,6 +19,7 @@ public class GUI {
     private ProfileFrame profileFrame;
     private MainFrame mainFrame;
     private RegisterFrame registerFrame;
+    private GameFrame gameFrame;
 
     public GUI(MainController mainController) {
         this.mainController = mainController;
@@ -59,6 +60,7 @@ public class GUI {
         mainFrame = null;
     }
     
+    
     public void showRegisterFrame() {
         registerFrame = new RegisterFrame(this);
         registerFrame.setVisible(true);
@@ -75,5 +77,9 @@ public class GUI {
 
     public void showProfileFrame() {
         profileFrame = new ProfileFrame(mainController);
+    }
+
+    public void showGameFrame() {
+        gameFrame = new GameFrame(this);
     }
 }
