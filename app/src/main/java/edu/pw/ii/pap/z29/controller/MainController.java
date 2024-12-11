@@ -48,7 +48,7 @@ public class MainController {
         gui.disposeOfMainFrame();
         gui.showGameFrame();
     }
-    public GameController getGamController() {
+    public GameController getGameController() {
         return gameController;
     }
 
