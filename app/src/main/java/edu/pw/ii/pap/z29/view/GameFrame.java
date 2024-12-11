@@ -31,9 +31,15 @@ public class GameFrame extends JFrame{
 
         titleLabel = GUI.createTitleLabel(40);
         centralPanel.add(titleLabel);
-        for(int i = 0; i < gui.getMainController().getGamController().getWordLength(); ++i){
-            boxes.addElement(new JTextField());
-            centralPanel.add(boxes.lastElement());
-        }
+        for (int j = 0; j < 6; ++j){
+            var boxesPanel = new JPanel();
+            for(int i = 0; i < gui.getMainController().getGamController().getWordLength(); ++i){
+                var box = new JTextField();
+                box.setColumns(2);
+                boxes.addElement(box);
+                boxesPanel.add(box);
+            }
+            centralPanel.add(boxesPanel);
+    }
     }
 }
