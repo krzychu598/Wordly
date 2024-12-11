@@ -11,8 +11,12 @@ public class GameController {
         this.definition = definition;
     }
 
-    public void wantToPlay() {
-        mainController.gui.showGameFrame();
+    public boolean validateField(){
+        return false;
+    }
+
+    public int getWordLength(){
+        return wordLength;
     }
 
 }
