@@ -2,24 +2,15 @@ package edu.pw.ii.pap.z29.view;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.text.Document;
-import java.time.*;
 import java.util.*;
 
-import edu.pw.ii.pap.z29.controller.ApiController;
-import edu.pw.ii.pap.z29.controller.GameController;
 
 public class GameFrame extends JFrame{
     Vector<Vector<JTextField>> allLetterFields;
-    JLabel titleLabel;
-    JPanel showDefinitionPanel;
     GUI gui;
     int focusedLine;
     boolean isUpdating;
@@ -58,22 +49,19 @@ public class GameFrame extends JFrame{
             for (int i = 0; i < length; ++i){
                 a = a.concat(allLetterFields.get(focusedLine).get(i).getText());
             }
-            long time = System.currentTimeMillis();
-            System.out.println("start checking");
-            var vals = new ArrayList<Integer>(gui.getMainController().getGameController().check(a));
-            System.out.println("checked " + (System.currentTimeMillis()-time) + " ms");
+            ArrayList<Integer> vals = new ArrayList<Integer>(gui.getMainController().getGameController().check(a));
             if (vals.size() == 0){
                 JOptionPane.showMessageDialog(GameFrame.this, "Word doesn't exist");
                 return;
             } else if (vals.size() == 1){
-                System.out.println("Incorrect Length");
+                JOptionPane.showMessageDialog(GameFrame.this, "Incorrect Length");
                 return;
             }
             SwingUtilities.invokeLater(() -> {
             int i = 0;
             for (var val : vals){
                 JTextField letterField = allLetterFields.get(focusedLine).get(i);
-                letterField.setEnabled(false);
+                //letterField.setEnabled(false);
                 if(val == 0){
                     letterField.setBackground(GUI.GREEN);
                 } else if (val == 1){
@@ -91,7 +79,6 @@ public class GameFrame extends JFrame{
             ++focusedLine;
             if (focusedLine < MAX_IT){
                 setFocus(focusedLine, true);
-                allLetterFields.get(focusedLine).get(0).requestFocusInWindow();
             } else{
                 JOptionPane.showMessageDialog(GameFrame.this, "You lose!!");
 
@@ -150,6 +137,35 @@ public class GameFrame extends JFrame{
         letterField.getDocument().addDocumentListener(new LetterFieldDocumentListener());
         return letterField;
     }
+    private JLabel createDefinitionLabel(){
+        var definitionLabel = new JLabel();
+        definitionLabel.setFont(new Font("Dialog", Font.BOLD, 10));
+        definitionLabel.setBackground(Color.WHITE);
+        definitionLabel.setForeground(GUI.SECONDARY_COLOR);
+        definitionLabel.setHorizontalAlignment(JLabel.CENTER);
+        definitionLabel.setBorder(BorderFactory.createLineBorder(Color.YELLOW, 2, true));
+        definitionLabel.setPreferredSize(new Dimension(200, 50));
+        return definitionLabel;
+    }
+    private JButton createDefinitionButton(JLabel definitionLabel){
+        var showButton = new JButton("Show Definition");
+        showButton.setFont(new Font("Dialog", Font.BOLD, 10));
+        showButton.setBackground(GUI.SECONDARY_COLOR);
+        showButton.setForeground(GUI.MAIN_COLOR);
+        showButton.setHorizontalAlignment(JButton.CENTER);
+        showButton.addActionListener((ActionEvent e)->{
+            definitionLabel.setText(gui.getMainController().getGameController().getDefinition());
+
+        });
+        return showButton;
+    }
+    private void createEnterWordButton(){
+        enterButton = new JButton("Enter");
+        enterButton.setFont(new Font("Dialog", Font.BOLD, 25));
+        enterButton.setBackground(GUI.SECONDARY_COLOR);
+        enterButton.setForeground(GUI.MAIN_COLOR);
+        enterButton.addActionListener(new EnterButtonListener());
+    }
     private void createFocusManager(){
         var forwardKeys = getFocusTraversalKeys(
             KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS);
@@ -181,29 +197,12 @@ public class GameFrame extends JFrame{
         var centralPanel = createCentralPanel();
         add(centralPanel);
 
-        titleLabel = GUI.createTitleLabel(40);
+        JLabel titleLabel = GUI.createTitleLabel(40);
         centralPanel.add(titleLabel);
 
-        JButton showButton = new JButton("Show definition");
-        JLabel definitionLabel = new JLabel();
+        JLabel definitionLabel = createDefinitionLabel();
+        JButton showButton = createDefinitionButton(definitionLabel);
 
-        showButton.setFont(new Font("Dialog", Font.BOLD, 10));
-        showButton.setBackground(GUI.SECONDARY_COLOR);
-        showButton.setForeground(GUI.MAIN_COLOR);
-        showButton.setHorizontalAlignment(JButton.CENTER);
-        showButton.addActionListener((ActionEvent e)->{
-            long time = System.currentTimeMillis();
-            System.out.println("get definition...");
-            definitionLabel.setText(gui.getMainController().getGameController().getDefinition());
-            System.out.println("got definition " + (System.currentTimeMillis()-time));
-
-        });
-        definitionLabel.setFont(new Font("Dialog", Font.BOLD, 10));
-        definitionLabel.setBackground(Color.WHITE);
-        definitionLabel.setForeground(GUI.SECONDARY_COLOR);
-        definitionLabel.setHorizontalAlignment(JLabel.CENTER);
-        definitionLabel.setBorder(BorderFactory.createLineBorder(Color.YELLOW, 2, true));
-        definitionLabel.setPreferredSize(new Dimension(200, 50));
         centralPanel.add(showButton);
         centralPanel.add(definitionLabel);
 
@@ -220,11 +219,7 @@ public class GameFrame extends JFrame{
             setFocus(j, false);
             centralPanel.add(letterFieldsPanel);
         }
-        enterButton = new JButton("Enter");
-        enterButton.setFont(new Font("Dialog", Font.BOLD, 25));
-        enterButton.setBackground(GUI.SECONDARY_COLOR);
-        enterButton.setForeground(GUI.MAIN_COLOR);
-        enterButton.addActionListener(new EnterButtonListener());
+        createEnterWordButton();
         centralPanel.add(enterButton);
         setFocus(0, true);
     }

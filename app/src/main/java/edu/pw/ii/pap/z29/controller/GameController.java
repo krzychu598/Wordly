@@ -4,14 +4,17 @@ public class GameController {
     MainController mainController;
     int wordLength;
     String word;
-
+    /*TODO (implement functionality)
+    | implement score system
+    */
     public GameController(MainController mainController, int wordLength ) {
+        /*TODO (potential bug)
+        code sometimes gets stuck here. Probably api issue
+        */
         this.mainController = mainController;
         this.wordLength = wordLength;
-        //long time = System.currentTimeMillis();
-        //System.out.println("get random word...");
+        //System.out.println("before random word");
         this.word = ApiController.getRandomWord(wordLength);
-        //System.out.println("got word " + (System.currentTimeMillis()-time));
     }
 
     public int getWordLength(){
@@ -30,8 +33,6 @@ public class GameController {
         return false;
     }
     public ArrayList<Integer> check(String givenWord){
-        System.out.println(givenWord);
-        System.out.println(word);
         givenWord = givenWord.toLowerCase();
         var results = new ArrayList<Integer>();
         if(givenWord.length() != word.length()){

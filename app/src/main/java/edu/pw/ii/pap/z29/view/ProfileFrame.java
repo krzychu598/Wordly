@@ -65,7 +65,11 @@ public class ProfileFrame extends JFrame {
             new IllegalArgumentException("No user found for user ID: " + user_id)
             );
             this.username = user.getUsername();
-            this.score = userScores.get(0);
+            if (userScores.size() != 0){
+                this.score = userScores.get(0);
+            } else{
+                this.score = 0;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             showError("Error reading user data from the database. Please try again later.");
