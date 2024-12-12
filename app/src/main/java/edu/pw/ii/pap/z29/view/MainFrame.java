@@ -82,16 +82,14 @@ public class MainFrame extends JFrame {
                 lengthSlider.setMajorTickSpacing(1);
                 lengthSlider.setPaintTicks(true);
                 lengthSlider.setPaintLabels(true);
-                JCheckBox definitionBox = new JCheckBox("Show Definition");
                 JButton start = new JButton("Start");
                 start.addActionListener((ActionEvent f)->{
                     MainFrame.this.dispose();
-                    gui.getMainController().newGame(lengthSlider.getValue(), definitionBox.isSelected());;
+                    gui.getMainController().newGame(lengthSlider.getValue());;
                     
                 });
                 pop.add(new JLabel("Word length:"));
                 pop.add(lengthSlider);
-                pop.add(definitionBox);
                 pop.add(start);
                 pop.show(playButton, playButton.getWidth() / 2, playButton.getHeight());
             });

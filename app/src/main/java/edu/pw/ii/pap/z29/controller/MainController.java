@@ -37,14 +37,15 @@ public class MainController {
         } catch (SQLException e) {
             sqlLogger.log(e);
         }
-        gui.run();
+        // gui.run();
+        gui.skipLogin();
     }
 
     public LoginController getLoginController() {
         return loginController;
     }
-    public void newGame(int wordLength, boolean definition){
-        gameController = new GameController(this, wordLength, definition);
+    public void newGame(int wordLength){
+        gameController = new GameController(this, wordLength);
         gui.disposeOfMainFrame();
         gui.showGameFrame();
     }

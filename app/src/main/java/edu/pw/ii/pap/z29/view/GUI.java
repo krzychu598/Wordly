@@ -40,7 +40,9 @@ public class GUI {
         loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         loginFrame.setVisible(true);
     }
-
+    public void skipLogin(){
+        SwingUtilities.invokeLater(()->mainController.getLoginController().checkLogin("123", "123"));
+    }
     public void run() {
         SwingUtilities.invokeLater(() -> createAndShowGUI());
     }

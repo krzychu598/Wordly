@@ -3,23 +3,18 @@ import java.util.*;
 public class GameController {
     MainController mainController;
     int wordLength;
-    boolean definition;
     String word;
 
-    public GameController(MainController mainController, int wordLength, boolean definition) {
+    public GameController(MainController mainController, int wordLength ) {
         this.mainController = mainController;
         this.wordLength = wordLength;
-        this.definition = definition;
         this.word = ApiController.getRandomWord(wordLength);
-    }
-
-    public boolean validateField(){
-        return false;
     }
 
     public int getWordLength(){
         return wordLength;
     }
+
 
     public boolean validateInput(String letter){
         if((letter.length() > 1) || (letter.isEmpty())){
@@ -36,6 +31,11 @@ public class GameController {
         System.out.println(word);
         givenWord = givenWord.toLowerCase();
         var results = new ArrayList<Integer>();
+        if(givenWord.length() != word.length()){
+            //4 - incorrect length
+            results.add(4);
+            return results;
+        }
         if(!ApiController.isInDictionary(givenWord)){
             return results;
         }
@@ -50,5 +50,9 @@ public class GameController {
             }
         }
         return results;
+    }
+
+    public String getDefinition(){
+        return ApiController.getDefinition(word);
     }
 }

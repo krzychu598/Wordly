@@ -31,7 +31,9 @@ public class LoginController {
             mainController.sqlLogger.log(e);
         }
         if (correct) {
+            if(mainController.gui.getLoginFrame() != null){
             mainController.gui.disposeOfLoginFrame();
+            }
             mainController.gui.showMainFrame();
         } else {
             JOptionPane.showMessageDialog(mainController.gui.getLoginFrame(), "Try again!");

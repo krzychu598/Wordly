@@ -2,9 +2,14 @@ package edu.pw.ii.pap.z29.view;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.text.Document;
 
 import java.util.*;
 
@@ -12,27 +17,38 @@ import edu.pw.ii.pap.z29.controller.ApiController;
 import edu.pw.ii.pap.z29.controller.GameController;
 
 public class GameFrame extends JFrame{
-    Vector<Vector<JTextField>> allBoxes;
+    Vector<Vector<JTextField>> allLetterFields;
     JLabel titleLabel;
+    JPanel showDefinitionPanel;
     GUI gui;
-    int line;
+    int focusedLine;
     boolean isUpdating;
     int length;
+    InputMap inputs;
+    ActionMap actions;
+    final static int MAX_IT = 3;
     public GameFrame(GUI gui){
         super("Game");
         this.gui = gui;
-        allBoxes = new Vector<Vector<JTextField>>();
-        line = 0;
-        isUpdating = true;
+        allLetterFields = new Vector<Vector<JTextField>>();
+        focusedLine = 0;
+        isUpdating = false;
         length = gui.getMainController().getGameController().getWordLength();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         getContentPane().setBackground(GUI.BLACK);
         getContentPane().setLayout(new GridBagLayout());
         addGuiParts();
         pack();
+        setFocus(0, true);
+        allLetterFields.get(0).get(0).requestFocusInWindow();
         setVisible(true);
     }
-
+    private void setFocus(int line, boolean offOn){
+        for(var field : allLetterFields.get(line)){
+            field.setFocusable(offOn);
+            field.setRequestFocusEnabled(offOn);
+        }
+    }
     private void addGuiParts() {
         var centralPanel = new JPanel();
         centralPanel.setBorder(BorderFactory.createEmptyBorder(50, 30, 50, 30));
@@ -42,22 +58,40 @@ public class GameFrame extends JFrame{
 
         titleLabel = GUI.createTitleLabel(40);
         centralPanel.add(titleLabel);
- 
-        for (int j = 0; j < 6; ++j){
-            var boxesPanel = new JPanel();
-            boxesPanel.setBackground(GUI.MAIN_COLOR);
-            var boxes = new Vector<JTextField>();
+
+        JButton showButton = new JButton("Show definition");
+        JLabel definitionLabel = new JLabel();
+
+        showButton.setFont(new Font("Dialog", Font.BOLD, 10));
+        showButton.setBackground(GUI.SECONDARY_COLOR);
+        showButton.setForeground(GUI.MAIN_COLOR);
+        showButton.setHorizontalAlignment(JButton.CENTER);
+        showButton.addActionListener((ActionEvent e)->{
+            definitionLabel.setText(gui.getMainController().getGameController().getDefinition());;
+
+        });
+        definitionLabel.setFont(new Font("Dialog", Font.BOLD, 10));
+        definitionLabel.setBackground(Color.WHITE);
+        definitionLabel.setForeground(Color.WHITE);
+        definitionLabel.setHorizontalAlignment(JLabel.CENTER);
+        definitionLabel.setBorder(BorderFactory.createLineBorder(Color.YELLOW, 2, true));
+        definitionLabel.setPreferredSize(new Dimension(200, 50));
+        centralPanel.add(showButton);
+        centralPanel.add(definitionLabel);
+
+
+        for (int j = 0; j < MAX_IT; ++j){
+            var letterFieldsPanel = new JPanel();
+            letterFieldsPanel.setBackground(GUI.MAIN_COLOR);
+            var letterFields = new Vector<JTextField>();
             for(int i = 0; i < length; ++i){
-                var box = new JTextField();
-                // box.setBackground(GUI.SECONDARY_COLOR);
-                box.setColumns(2);
-                var boxListener = new DocumentListener() {
+                var letterField = new JTextField();
+                letterField.setHorizontalAlignment(JTextField.CENTER);
+                letterField.setColumns(2);
+                var letterFieldListener = new DocumentListener() {
                     @Override
                     public void insertUpdate(DocumentEvent e) {
-                        isUpdating = !isUpdating;
-                        if(!isUpdating) {
                             update();
-                        }
                     }
         
                     @Override
@@ -70,31 +104,33 @@ public class GameFrame extends JFrame{
                         //pass
                     }
                     public void update(){
-                        isUpdating = true;
                         SwingUtilities.invokeLater(() -> {
                             int a;
-                            String text = box.getText();
+                            String text = letterField.getText();
                             if (text.length() > 1) {
-                                box.setText(text.substring(text.length()-1));
+                                letterField.setText(text.substring(text.length()-1));
+                            } else if (text.isEmpty()){
+                                return;
                             }
                             char l = text.charAt(0);
                             if (!(l>='a' && l <= 'z') && !(l>='A' && l<='Z') ){
-                                box.setText("");
+                                letterField.setText("");
                             }
-                            box.setText(box.getText().toUpperCase());
-                            if((a = allBoxes.get(line).indexOf(box) + 1) < allBoxes.get(line).size()){
-                                allBoxes.get(line).get(a).requestFocus();
+                            letterField.setText(letterField.getText().toUpperCase());
+                            if((a = allLetterFields.get(focusedLine).indexOf(letterField) + 1) < allLetterFields.get(focusedLine).size() && !text.equals(letterField.getText())){
+                                allLetterFields.get(focusedLine).get(a).requestFocusInWindow();
+
                             }
                         });
-                        isUpdating = false;
                     }
                 };
-                box.getDocument().addDocumentListener(boxListener);
-                boxes.addElement(box);
-                boxesPanel.add(box);
+                letterField.setRequestFocusEnabled(false);
+                letterField.getDocument().addDocumentListener(letterFieldListener);
+                letterFields.addElement(letterField);
+                letterFieldsPanel.add(letterField);
             }
-            allBoxes.addElement(boxes);
-            centralPanel.add(boxesPanel);
+            allLetterFields.addElement(letterFields);
+            centralPanel.add(letterFieldsPanel);
         }
         var enter = new JButton("Enter");
         enter.setFont(new Font("Dialog", Font.BOLD, 25));
@@ -103,29 +139,60 @@ public class GameFrame extends JFrame{
         enter.addActionListener((ActionEvent e)-> {
             String a = "";
             for (int i = 0; i < length; ++i){
-                a = a.concat(allBoxes.get(line).get(i).getText());
+                a = a.concat(allLetterFields.get(focusedLine).get(i).getText());
             }
             var vals = new ArrayList<Integer>(gui.getMainController().getGameController().check(a));
-            int i = 0;
             if (vals.size() == 0){
-                System.out.println("word doesnt exist");
-                System.out.println(a);
+                JOptionPane.showMessageDialog(this, "Word doesn't exist");
+                return;
+            } else if (vals.size() == 1){
+                System.out.println("Incorrect Length");
                 return;
             }
+            SwingUtilities.invokeLater(() -> {
+            int i = 0;
             for (var val : vals){
+                JTextField letterField = allLetterFields.get(focusedLine).get(i);
+                letterField.setEnabled(false);
                 if(val == 0){
-                    allBoxes.get(line).get(i).setBackground(GUI.GREEN);
+                    letterField.setBackground(GUI.GREEN);
                 } else if (val == 1){
-                    allBoxes.get(line).get(i).setBackground(GUI.YELLOW);
+                    letterField.setBackground(GUI.YELLOW);
                 } else{
-                    allBoxes.get(line).get(i).setBackground(GUI.BLACK);
+                    letterField.setBackground(GUI.BLACK);
                 }
                 ++i;
             }
-            ++line;
-            allBoxes.get(line).get(0).requestFocus();
+            if(vals.stream().distinct().limit(2).count() <= 1 && vals.get(0) == 0){
+                JOptionPane.showMessageDialog(this, "Congratulations!!");
+                //SwingUtilities.invokeLater(()->);
+            }
+            setFocus(focusedLine, false);
+            ++focusedLine;
+            if (focusedLine < MAX_IT){
+            setFocus(focusedLine, true);
+            allLetterFields.get(focusedLine).get(0).requestFocusInWindow();
+            } else{
+                JOptionPane.showMessageDialog(this, "You lose!!");
 
+            }
+        });
         });
         centralPanel.add(enter);
+
+        var forwardKeys = getFocusTraversalKeys(
+            KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS);
+        var newForwardKeys = new HashSet<AWTKeyStroke>(forwardKeys);
+        newForwardKeys.add(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0));
+        setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS,
+            newForwardKeys);
+
+        var backwardKeys = getFocusTraversalKeys(
+            KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS);
+        var newBackwardKeys = new HashSet<AWTKeyStroke>(backwardKeys);
+        newBackwardKeys.add(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0));
+        setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS,
+            newBackwardKeys);
     }
+
 }
