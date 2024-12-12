@@ -1,4 +1,5 @@
 package edu.pw.ii.pap.z29.controller;
+import java.util.*;
 public class GameController {
     MainController mainController;
     int wordLength;
@@ -30,10 +31,24 @@ public class GameController {
         }
         return false;
     }
-    public boolean check(String word){
-        if(ApiController.isInDictionary(word)){
-            return true;
+    public ArrayList<Integer> check(String givenWord){
+        System.out.println(givenWord);
+        System.out.println(word);
+        givenWord = givenWord.toLowerCase();
+        var results = new ArrayList<Integer>();
+        if(!ApiController.isInDictionary(givenWord)){
+            return results;
         }
-        return false;
+        for(int i = 0; i < word.length(); ++i){
+            char a;
+            if((a = givenWord.charAt(i)) == word.charAt(i)){
+                results.add(0);
+            } else if (word.indexOf(a) != -1){
+                results.add(1);
+            } else{
+                results.add(2);
+            }
+        }
+        return results;
     }
 }

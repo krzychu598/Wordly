@@ -6,7 +6,7 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import java.util.Vector;
+import java.util.*;
 
 import edu.pw.ii.pap.z29.controller.ApiController;
 import edu.pw.ii.pap.z29.controller.GameController;
@@ -82,7 +82,6 @@ public class GameFrame extends JFrame{
                                 box.setText("");
                             }
                             box.setText(box.getText().toUpperCase());
-                            System.out.println("s");
                             if((a = allBoxes.get(line).indexOf(box) + 1) < allBoxes.get(line).size()){
                                 allBoxes.get(line).get(a).requestFocus();
                             }
@@ -102,15 +101,30 @@ public class GameFrame extends JFrame{
         enter.setBackground(GUI.SECONDARY_COLOR);
         enter.setForeground(GUI.MAIN_COLOR);
         enter.addActionListener((ActionEvent e)-> {
-            String a = allBoxes.get(line).get(0).getText();
-            for (int i =1; i< length; ++i){
-                a.concat(allBoxes.get(line).get(i).getText());
+            String a = "";
+            for (int i = 0; i < length; ++i){
+                a = a.concat(allBoxes.get(line).get(i).getText());
             }
-            if(gui.getMainController().getGameController().check(a)){
-                System.out.println("OK");   
-            } else{
-                System.out.println("NOT");
+            var vals = new ArrayList<Integer>(gui.getMainController().getGameController().check(a));
+            int i = 0;
+            if (vals.size() == 0){
+                System.out.println("word doesnt exist");
+                System.out.println(a);
+                return;
             }
+            for (var val : vals){
+                if(val == 0){
+                    allBoxes.get(line).get(i).setBackground(GUI.GREEN);
+                } else if (val == 1){
+                    allBoxes.get(line).get(i).setBackground(GUI.YELLOW);
+                } else{
+                    allBoxes.get(line).get(i).setBackground(GUI.BLACK);
+                }
+                ++i;
+            }
+            ++line;
+            allBoxes.get(line).get(0).requestFocus();
+
         });
         centralPanel.add(enter);
     }

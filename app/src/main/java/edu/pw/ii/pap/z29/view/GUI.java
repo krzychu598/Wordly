@@ -13,6 +13,9 @@ public class GUI {
     protected static final Color MAIN_COLOR = Color.decode("#101820");
     protected static final Color SECONDARY_COLOR = Color.decode("#FEE715");
     protected static final Font PLAIN_FONT = new Font("Dialog", Font.PLAIN, 20);
+    protected static final Color GREEN = Color.decode("#008000");
+    protected static final Color YELLOW = Color.decode("#FFFF00");
+
 
     private MainController mainController;
     private LoginFrame loginFrame;
