@@ -8,7 +8,10 @@ public class GameController {
     public GameController(MainController mainController, int wordLength ) {
         this.mainController = mainController;
         this.wordLength = wordLength;
+        //long time = System.currentTimeMillis();
+        //System.out.println("get random word...");
         this.word = ApiController.getRandomWord(wordLength);
+        //System.out.println("got word " + (System.currentTimeMillis()-time));
     }
 
     public int getWordLength(){

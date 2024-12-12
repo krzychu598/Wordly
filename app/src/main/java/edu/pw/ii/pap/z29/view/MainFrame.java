@@ -84,7 +84,6 @@ public class MainFrame extends JFrame {
                 lengthSlider.setPaintLabels(true);
                 JButton start = new JButton("Start");
                 start.addActionListener((ActionEvent f)->{
-                    MainFrame.this.dispose();
                     gui.getMainController().newGame(lengthSlider.getValue());;
                     
                 });

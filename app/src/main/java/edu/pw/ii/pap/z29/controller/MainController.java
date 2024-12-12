@@ -45,8 +45,8 @@ public class MainController {
         return loginController;
     }
     public void newGame(int wordLength){
-        gameController = new GameController(this, wordLength);
         gui.disposeOfMainFrame();
+        gameController = new GameController(this, wordLength);
         gui.showGameFrame();
     }
     public GameController getGameController() {

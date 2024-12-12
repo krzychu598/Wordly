@@ -37,6 +37,7 @@ public final class ApiController {
             if(!ApiController.isInDictionary(responseBody)){
                 throw new WordNotFoundException();
             }
+            System.out.println("randomWord: " + responseBody);
             return responseBody;
         } catch (StringIndexOutOfBoundsException e){
             throw new InvalidLengthException(Integer.toString(length));
