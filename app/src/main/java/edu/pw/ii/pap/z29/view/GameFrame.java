@@ -13,7 +13,6 @@ public class GameFrame extends JFrame{
     Vector<Vector<JTextField>> allLetterFields;
     GUI gui;
     int focusedLine;
-    boolean isUpdating;
     int length;
     JButton enterButton;
     InputMap inputs;
@@ -24,7 +23,6 @@ public class GameFrame extends JFrame{
         this.gui = gui;
         allLetterFields = new Vector<Vector<JTextField>>();
         focusedLine = 0;
-        isUpdating = false;
         length = gui.getMainController().getGameController().getWordLength();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         getContentPane().setBackground(GUI.BLACK);
@@ -95,17 +93,10 @@ public class GameFrame extends JFrame{
                     int a;
                     JTextField letterField = (JTextField) e.getDocument().getProperty("SOURCE");
                     String text = letterField.getText();
-                    if (text.length() >= 1) {
-                        letterField.setText(text.substring(text.length()-1).toUpperCase());
-                    } else if (text.isEmpty()){
-                        return;
-                    }
-                    char l = text.charAt(0);
-                    if (!(l>='a' && l <= 'z') && !(l>='A' && l<='Z') ){
-                        letterField.setText("");
-                        return;
-                    }
-                    if((a = allLetterFields.get(focusedLine).indexOf(letterField) + 1) < allLetterFields.get(focusedLine).size() && !text.equals(letterField.getText())){
+                    String validatedText = gui.getMainController().getGameController().validateInput(text);
+                    letterField.setText(validatedText);
+                    
+                    if((a = allLetterFields.get(focusedLine).indexOf(letterField) + 1) < length && !text.equals(validatedText) && validatedText != null){
                         allLetterFields.get(focusedLine).get(a).requestFocusInWindow();
 
                     }

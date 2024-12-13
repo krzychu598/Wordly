@@ -22,15 +22,17 @@ public class GameController {
     }
 
 
-    public boolean validateInput(String letter){
-        if((letter.length() > 1) || (letter.isEmpty())){
-            return false;
-        } 
-        char l = letter.charAt(0);
-        if ((l>='a' && l <= 'z') || (l>='A' && l<='Z') ){
-            return true;
+    public String validateInput(String text){
+        if (text.length() >= 1) {
+            text = text.substring(text.length()-1);
+        } else if (text.isEmpty()){
+            return null;
         }
-        return false;
+        char l = text.charAt(0);
+        if (!(l>='a' && l <= 'z') && !(l>='A' && l<='Z') ){
+            return null;
+        }
+        return text.toUpperCase();
     }
     public ArrayList<Integer> check(String givenWord){
         givenWord = givenWord.toLowerCase();
