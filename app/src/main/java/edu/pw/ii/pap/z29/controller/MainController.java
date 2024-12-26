@@ -28,7 +28,6 @@ public class MainController {
 
     public void run() {
         loginController = new LoginController(this);
-        gui = new GUI(this);
         try {
             var conn = database.getConnection();
             users = new UsersTable(conn);
@@ -37,6 +36,7 @@ public class MainController {
         } catch (SQLException e) {
             sqlLogger.log(e);
         }
+        gui = new GUI(this);
         gui.run();
         //gui.skipLogin();
     }
@@ -44,14 +44,14 @@ public class MainController {
     public LoginController getLoginController() {
         return loginController;
     }
+
     public void newGame(int wordLength){
-        gui.disposeOfMainFrame();
-        //System.out.println("disposed");
         gameController = new GameController(this, wordLength);
         //System.out.println("created controller");
-        gui.showGameFrame();
+        gui.showPane(GUI.Pane.Game);
         //System.out.println("shown frame");
     }
+
     public GameController getGameController() {
         return gameController;
     }
@@ -72,7 +72,6 @@ public class MainController {
             return false;
         }
     }
-
 
     public boolean checkCredentials(String username, String password) {
         try {

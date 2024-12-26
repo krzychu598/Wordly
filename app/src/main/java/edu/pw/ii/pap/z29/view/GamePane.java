@@ -9,7 +9,7 @@ import javax.swing.event.DocumentListener;
 import java.util.*;
 
 
-public class GameFrame extends JFrame{
+public class GamePane extends CardPane {
     Vector<Vector<JTextField>> allLetterFields;
     GUI gui;
     int focusedLine;
@@ -18,21 +18,29 @@ public class GameFrame extends JFrame{
     InputMap inputs;
     ActionMap actions;
     final static int MAX_IT = 3;
-    public GameFrame(GUI gui){
-        super("Game");
+
+    public GamePane(GUI gui){
         this.gui = gui;
+        setName("GamePane");
+        setBackground(GUI.BLACK);
+        setLayout(new GridBagLayout());
+    }
+
+    @Override
+    public void init() {
         allLetterFields = new Vector<Vector<JTextField>>();
         focusedLine = 0;
         length = gui.getMainController().getGameController().getWordLength();
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        getContentPane().setBackground(GUI.BLACK);
-        getContentPane().setLayout(new GridBagLayout());
         addGuiParts();
         createFocusManager();
-        pack();
-        setVisible(true);
         allLetterFields.get(0).get(0).requestFocusInWindow();
     }
+
+    @Override
+    public void cleanup() {
+        removeAll();
+    }
+
     private void setFocus(int line, boolean offOn){
         for(var field : allLetterFields.get(line)){
             field.setFocusable(offOn);
@@ -49,10 +57,10 @@ public class GameFrame extends JFrame{
             }
             ArrayList<Integer> vals = new ArrayList<Integer>(gui.getMainController().getGameController().check(a));
             if (vals.size() == 0){
-                JOptionPane.showMessageDialog(GameFrame.this, "Word doesn't exist");
+                JOptionPane.showMessageDialog(GamePane.this, "Word doesn't exist");
                 return;
             } else if (vals.size() == 1){
-                JOptionPane.showMessageDialog(GameFrame.this, "Incorrect Length");
+                JOptionPane.showMessageDialog(GamePane.this, "Incorrect Length");
                 return;
             }
             SwingUtilities.invokeLater(() -> {
@@ -70,7 +78,7 @@ public class GameFrame extends JFrame{
                 ++i;
             }
             if(vals.stream().distinct().limit(2).count() <= 1 && vals.get(0) == 0){
-                JOptionPane.showMessageDialog(GameFrame.this, "Congratulations!!");
+                JOptionPane.showMessageDialog(GamePane.this, "Congratulations!!");
                 return;
             }
             setFocus(focusedLine, false);
@@ -78,7 +86,7 @@ public class GameFrame extends JFrame{
             if (focusedLine < MAX_IT){
                 setFocus(focusedLine, true);
             } else{
-                JOptionPane.showMessageDialog(GameFrame.this, "You lose!!");
+                JOptionPane.showMessageDialog(GamePane.this, "You lose!!");
 
             }
             });
@@ -177,8 +185,8 @@ public class GameFrame extends JFrame{
                 enterButton.doClick();
             }
         };
-        InputMap inputMap = this.getRootPane().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-        ActionMap actionMap = this.getRootPane().getActionMap();
+        InputMap inputMap = this.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        ActionMap actionMap = this.getActionMap();
 
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "enterWord");
         actionMap.put("enterWord", enterWordAction);
