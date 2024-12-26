@@ -2,8 +2,10 @@ package edu.pw.ii.pap.z29.view;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.font.*;
 import javax.swing.*;
 import java.lang.Thread;
+import java.util.Map;
 
 
 
@@ -14,25 +16,38 @@ public class LoginPane extends CardPane {
     JButton loginButton;
     GUI gui;
     int i = 0;
-
+    
     public LoginPane(GUI gui) {
         this.gui = gui;
         setName("LoginPane");
+        setBackground(GUI.MAIN_COLOR);
         setLayout(new GridBagLayout());
         addGuiParts();
     }
 
+    @Override public void init() {}
+
+    @Override public void cleanup() {
+        usernameField.setText("");
+        passwordField.setText("");
+    }
+    
     private void addGuiParts() {
         var centralPanel = new JPanel();
         centralPanel.setBorder(BorderFactory.createEmptyBorder(50, 30, 50, 30));
-        centralPanel.setBackground(GUI.MAIN_COLOR);
+        centralPanel.setOpaque(false);
         centralPanel.setLayout(new BoxLayout(centralPanel, BoxLayout.PAGE_AXIS));
         add(centralPanel);
 
-        titleLabel = GUI.createTitleLabel(40);
+        var strut = (JComponent)Box.createHorizontalStrut(400);
+        strut.setAlignmentX(LEFT_ALIGNMENT);
+        centralPanel.add(strut);
+
+        titleLabel = GUIHelper.createTitleLabel("The Wordle Game", 40);
+        titleLabel.setAlignmentX(LEFT_ALIGNMENT);
         centralPanel.add(titleLabel);
 
-        centralPanel.add(Box.createRigidArea(new Dimension(0, 30)));
+        centralPanel.add(Box.createVerticalStrut(30));
 
         usernameField = GUIHelper.formatTextField(
             new JTextField(), GUI.SECONDARY_COLOR, GUI.MAIN_COLOR, GUI.PLAIN_FONT);
@@ -40,7 +55,7 @@ public class LoginPane extends CardPane {
         usernamePanel.setBorder(BorderFactory.createEmptyBorder(0, 15, 0, 15));
         centralPanel.add(usernamePanel);
 
-        centralPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+        centralPanel.add(Box.createVerticalStrut(20));
 
         passwordField = (JPasswordField)GUIHelper.formatTextField(
             new JPasswordField(), GUI.SECONDARY_COLOR, GUI.MAIN_COLOR, GUI.PLAIN_FONT);
@@ -48,13 +63,9 @@ public class LoginPane extends CardPane {
         passwordPanel.setBorder(BorderFactory.createEmptyBorder(0, 15, 0, 15));
         centralPanel.add(passwordPanel);
 
-        centralPanel.add(Box.createRigidArea(new Dimension(0, 40)));
+        centralPanel.add(Box.createVerticalStrut(40));
 
-        var buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridLayout());
-        buttonPanel.setAlignmentX(LEFT_ALIGNMENT);
-        buttonPanel.setOpaque(false);
-        
+        var buttonPanel = GUIHelper.createContainerPanel(new GridLayout());  
         loginButton = new JButton("Login");
         loginButton.setFont(new Font("Dialog", Font.BOLD, 25));
         loginButton.setBackground(GUI.SECONDARY_COLOR);
@@ -70,33 +81,18 @@ public class LoginPane extends CardPane {
         buttonPanel.add(loginButton);
         centralPanel.add(buttonPanel);
 
-        centralPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+        centralPanel.add(Box.createVerticalStrut(20));
 
-        var registerPanel = new JPanel(new GridLayout());
-        registerPanel.setOpaque(false);
-        registerPanel.setAlignmentX(LEFT_ALIGNMENT);
-        registerPanel.setMaximumSize(titleLabel.getPreferredSize());
-        var innerRegisterPanel = new JPanel();
-        innerRegisterPanel.setLayout(new BoxLayout(innerRegisterPanel, BoxLayout.PAGE_AXIS));
-        innerRegisterPanel.setOpaque(false);
-        JLabel registerLabel = new JLabel("Don't have an account? Register");
+        var registerPanel = GUIHelper.createContainerPanel();
+        var registerLabel = new JLabel("<HTML><U>Don't have an account? Register</U></HTML>");
         registerLabel.setForeground(GUI.SECONDARY_COLOR);
         registerLabel.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent e) {
                 gui.getMainController().getLoginController().wantToRegister();
             }
         });
-        registerLabel.setAlignmentX(CENTER_ALIGNMENT);
-        innerRegisterPanel.add(registerLabel);
-        registerPanel.add(innerRegisterPanel);
+        registerPanel.add(registerLabel);
         centralPanel.add(registerPanel);
     }
-
-    synchronized int nexti() {
-        return i++;
-    }
-
-    @Override void init() {}
-
-    @Override void cleanup() {}
 }

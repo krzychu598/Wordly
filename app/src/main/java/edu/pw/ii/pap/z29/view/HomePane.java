@@ -4,9 +4,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 
 import javax.swing.*;
-import javax.swing.text.StyledEditorKit;
-
-import edu.pw.ii.pap.z29.controller.MainController;
 
 
 
@@ -40,7 +37,7 @@ public class HomePane extends CardPane {
         var centralPanel = createCentralPanel();
         this.add(centralPanel);
 
-        var titleLabel = GUI.createTitleLabel(60);
+        var titleLabel = GUIHelper.createTitleLabel("The Wordle Game", 60);
         titleLabel.setAlignmentX(CENTER_ALIGNMENT);
         centralPanel.add(titleLabel);
 

@@ -196,7 +196,7 @@ public class GamePane extends CardPane {
         var centralPanel = createCentralPanel();
         add(centralPanel);
 
-        JLabel titleLabel = GUI.createTitleLabel(40);
+        JLabel titleLabel = GUIHelper.createTitleLabel("The Wordle Game", 40);
         centralPanel.add(titleLabel);
 
         JLabel definitionLabel = createDefinitionLabel();

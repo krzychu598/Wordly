@@ -81,11 +81,4 @@ public class GUI {
         frame.setVisible(true);
         frame.showPane(panes.get(Pane.Login));
     }
-
-    static JLabel createTitleLabel(int font_size) {
-        var titleLabel = new JLabel("The Wordle game");
-        titleLabel.setForeground(GUI.SECONDARY_COLOR);
-        titleLabel.setFont(new Font("Dialog", Font.BOLD, font_size));
-        return titleLabel;
-    }
 }
