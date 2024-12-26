@@ -3,25 +3,23 @@ package edu.pw.ii.pap.z29.view;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import edu.pw.ii.pap.z29.controller.MainController;
+import java.lang.Thread;
 
 
 
-public class LoginFrame extends JFrame {
+public class LoginPane extends CardPane {
     JLabel titleLabel;
     JTextField usernameField;
     JPasswordField passwordField;
+    JButton loginButton;
     GUI gui;
+    int i = 0;
 
-    public LoginFrame(GUI gui) {
-        super("Login");
+    public LoginPane(GUI gui) {
         this.gui = gui;
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        getContentPane().setBackground(GUI.BLACK);
-        getContentPane().setLayout(new GridBagLayout());
+        setName("LoginPane");
+        setLayout(new GridBagLayout());
         addGuiParts();
-        pack();
-        setVisible(true);
     }
 
     private void addGuiParts() {
@@ -57,7 +55,7 @@ public class LoginFrame extends JFrame {
         buttonPanel.setAlignmentX(LEFT_ALIGNMENT);
         buttonPanel.setOpaque(false);
         
-        JButton loginButton = new JButton("Login");
+        loginButton = new JButton("Login");
         loginButton.setFont(new Font("Dialog", Font.BOLD, 25));
         loginButton.setBackground(GUI.SECONDARY_COLOR);
         loginButton.setForeground(GUI.MAIN_COLOR);
@@ -65,7 +63,9 @@ public class LoginFrame extends JFrame {
             (ActionEvent e) -> {
                 String username = usernamePanel.field.getText();
                 String password = new String(passwordField.getPassword());
-                gui.getMainController().getLoginController().checkLogin(username, password);
+                (new Thread(() -> {
+                    gui.getMainController().getLoginController().checkLogin(username, password);
+                })).start();;
             });
         buttonPanel.add(loginButton);
         centralPanel.add(buttonPanel);
@@ -83,7 +83,6 @@ public class LoginFrame extends JFrame {
         registerLabel.setForeground(GUI.SECONDARY_COLOR);
         registerLabel.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                LoginFrame.this.dispose();
                 gui.getMainController().getLoginController().wantToRegister();
             }
         });
@@ -92,4 +91,12 @@ public class LoginFrame extends JFrame {
         registerPanel.add(innerRegisterPanel);
         centralPanel.add(registerPanel);
     }
+
+    synchronized int nexti() {
+        return i++;
+    }
+
+    @Override void init() {}
+
+    @Override void cleanup() {}
 }

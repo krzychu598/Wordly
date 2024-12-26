@@ -22,10 +22,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 
-public class ProfileFrame extends JFrame {
+public class ProfilePane extends CardPane {
     public static final Color MAIN_COLOR = Color.decode("#101820");
     public static final Color TEXT_COLOR = Color.decode("#FEE715");
 
+    private GUI gui;
     private MainController mainController;
     private ScoresTable scores;
     private UsersTable users;
@@ -40,21 +41,20 @@ public class ProfileFrame extends JFrame {
     private int score;
 
 
-
-    
-    public ProfileFrame(MainController mainController) {
-        super("Profile");
-        this.mainController = mainController;
+    public ProfilePane(GUI gui) {
+        this.gui = gui;
+        this.mainController = gui.getMainController();
+        setName("ProfilePane");
         this.scores = mainController.getScores();
         this.users = mainController.getUsers();
         this.passwords = mainController.getLoginPasswords();
-        this.user_id = mainController.getLoginController().getCurrentUser().getUserId();
-        this.mainController = mainController;
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new GridBagLayout());
-        getContentPane().setBackground(MAIN_COLOR);
-        
-        
+        setBackground(MAIN_COLOR);
+    }
+
+    @Override
+    public void init() {
+        this.user_id = mainController.getLoginController().getCurrentUser().getUserId();
         try {
             this.loginPassword = passwords.read(user_id).orElseThrow(() -> 
             new IllegalArgumentException("No login password found for user ID: " + user_id)
@@ -81,8 +81,11 @@ public class ProfileFrame extends JFrame {
             this.score = 0;
         }
         addGuiParts();
-        pack();
-        setVisible(true);
+    }
+
+    @Override
+    public void cleanup() {
+        removeAll();;
     }
     
     private void showError(String message) {

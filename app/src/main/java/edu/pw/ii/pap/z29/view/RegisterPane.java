@@ -13,22 +13,23 @@ import edu.pw.ii.pap.z29.model.primitives.Username;
 import javax.swing.event.*;
 
 
-public class RegisterFrame extends JFrame {
+public class RegisterPane extends CardPane {
     JLabel registerLabel;
     JTextField usernameField;
     JPasswordField passwordField;
     GUI gui;
     
-    public RegisterFrame(GUI gui) {
-        super("Register");
+    public RegisterPane(GUI gui) {
         this.gui = gui;
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setName("RegisterPane");
         setLayout(new GridBagLayout());
-        getContentPane().setBackground(GUI.MAIN_COLOR);
+        setBackground(GUI.MAIN_COLOR);
         addGuiParts();
-        pack();
-        setVisible(true);
     }
+
+    @Override public void init() {}
+
+    @Override public void cleanup() {}
 
     private void addGuiParts() {
         GridBagConstraints gbc = new GridBagConstraints();
@@ -112,7 +113,6 @@ public class RegisterFrame extends JFrame {
         loginLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                RegisterFrame.this.dispose();
                 gui.getMainController().getLoginController().wantToLogin();
             }
         });

@@ -2,9 +2,12 @@ package edu.pw.ii.pap.z29.view;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import java.awt.Color;
 import java.awt.Font;
+import java.util.HashMap;
+
 import edu.pw.ii.pap.z29.controller.MainController;
 
 
@@ -16,16 +19,67 @@ public class GUI {
     protected static final Color GREEN = Color.decode("#008000");
     protected static final Color YELLOW = Color.decode("#FFFF00");
 
+    public enum Pane {
+        Game,
+        Home,
+        Login,
+        Profile,
+        Register,
+    }
 
     private MainController mainController;
-    private LoginFrame loginFrame;
-    private ProfileFrame profileFrame;
-    private MainFrame mainFrame;
-    private RegisterFrame registerFrame;
-    private GameFrame gameFrame;
-
+    private HashMap<Pane, CardPane> panes = new HashMap<Pane, CardPane>();
+    Pane currentPane;
+    MainFrame frame;
+    
     public GUI(MainController mainController) {
         this.mainController = mainController;
+        frame = new MainFrame(this);
+        addPane(Pane.Game, new GamePane(this));
+        addPane(Pane.Home, new HomePane(this));
+        addPane(Pane.Login, new LoginPane(this));
+        addPane(Pane.Profile, new ProfilePane(this));
+        addPane(Pane.Register, new RegisterPane(this));
+    }    
+    
+    public MainController getMainController() {
+        return mainController;
+    }
+
+    public JPanel getPane(Pane pane) {
+        return panes.get(pane);
+    }
+
+    public JFrame getFrame() {
+        return frame;
+    }
+
+    public synchronized Pane getCurrentPane() {
+        return currentPane;
+    }
+    
+    public void skipLogin(){
+        SwingUtilities.invokeLater(()->mainController.getLoginController().checkLogin("123", "123"));
+    }
+
+    public void run() {
+        SwingUtilities.invokeLater(() -> createAndShowGUI());
+    }    
+    
+    public synchronized void showPane(Pane pane) {
+        if (frame.showPane(panes.get(pane)))
+            currentPane = pane;
+    }
+    
+    private void addPane(Pane name, CardPane pane) {
+        panes.put(name, pane);
+        frame.addPane(pane);
+    }
+    
+    private void createAndShowGUI() {
+        frame.pack();
+        frame.setVisible(true);
+        frame.showPane(panes.get(Pane.Login));
     }
 
     static JLabel createTitleLabel(int font_size) {
@@ -33,58 +87,5 @@ public class GUI {
         titleLabel.setForeground(GUI.SECONDARY_COLOR);
         titleLabel.setFont(new Font("Dialog", Font.BOLD, font_size));
         return titleLabel;
-    }
-
-    private void createAndShowGUI() {
-        loginFrame = new LoginFrame(this);
-        loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        loginFrame.setVisible(true);
-    }
-    public void skipLogin(){
-        SwingUtilities.invokeLater(()->mainController.getLoginController().checkLogin("123", "123"));
-    }
-    public void run() {
-        SwingUtilities.invokeLater(() -> createAndShowGUI());
-    }
-
-
-    public MainController getMainController() {
-        return mainController;
-    }
-
-    public LoginFrame getLoginFrame() {
-        return loginFrame;
-    }
-
-    public void disposeOfLoginFrame() {
-        loginFrame.dispose();
-        loginFrame = null;
-    }
-    public void disposeOfMainFrame() {
-        mainFrame.dispose();
-        mainFrame = null;
-    }
-    
-    
-    public void showRegisterFrame() {
-        registerFrame = new RegisterFrame(this);
-        registerFrame.setVisible(true);
-    }
-
-    public void showLoginFrame() {
-        loginFrame = new LoginFrame(this);
-        loginFrame.setVisible(true);
-    }
-
-    public void showMainFrame() {
-        mainFrame = new MainFrame(this);
-    }
-
-    public void showProfileFrame() {
-        profileFrame = new ProfileFrame(mainController);
-    }
-
-    public void showGameFrame() {
-        gameFrame = new GameFrame(this);
     }
 }
