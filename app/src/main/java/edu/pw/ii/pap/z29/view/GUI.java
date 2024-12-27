@@ -57,10 +57,6 @@ public class GUI {
     public synchronized Pane getCurrentPane() {
         return currentPane;
     }
-    
-    public void skipLogin(){
-        SwingUtilities.invokeLater(()->mainController.getLoginController().checkLogin("123", "123"));
-    }
 
     public void run() {
         SwingUtilities.invokeLater(() -> createAndShowGUI());

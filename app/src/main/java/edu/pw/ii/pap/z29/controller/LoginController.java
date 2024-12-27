@@ -6,8 +6,9 @@ import java.util.concurrent.locks.Lock;
 
 import javax.swing.JOptionPane;
 import edu.pw.ii.pap.z29.exception.NotLoggedInException;
-
+import edu.pw.ii.pap.z29.model.primitives.Password;
 import edu.pw.ii.pap.z29.model.primitives.User;
+import edu.pw.ii.pap.z29.model.primitives.Username;
 import edu.pw.ii.pap.z29.view.GUI;
 import lombok.Data;
 
@@ -20,8 +21,8 @@ public class LoginController {
         this.mainController = mainController;
     }
 
-    public void checkLogin(String login, String password) {
-        if (loginUser(login, password)) {
+    public void checkLogin(Username username, Password password) {
+        if (loginUser(username, password)) {
             mainController.gui.showPane(GUI.Pane.Home);
         } else {
             JOptionPane.showMessageDialog(mainController.gui.getFrame(), "Try again!");
@@ -51,13 +52,14 @@ public class LoginController {
         mainController.gui.showPane(GUI.Pane.Login);
     }
 
-    private boolean loginUser(String login, String password) {
+    private boolean loginUser(Username username, Password password) {
         boolean is_correct = false;
         try {
-            Optional<User> userOpt = mainController.users.readByUsername(login);
+            Optional<User> userOpt = mainController.users.read(username);
             if (userOpt.isPresent()) {
                 var user = userOpt.get();
-                is_correct = mainController.loginPasswords.checkCredentials(user.getUserId(), password);
+                var login_passwd = mainController.loginPasswords.read(user.getUserId()).get();
+                is_correct = login_passwd.getPassword().equals(password);
                 synchronized(this) {
                     currentUser = user;
                 }

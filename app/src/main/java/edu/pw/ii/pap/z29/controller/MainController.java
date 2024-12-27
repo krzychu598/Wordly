@@ -67,24 +67,8 @@ public class MainController {
                 return true;
             }
             return false;
-        }   catch (SQLException e) {
-            sqlLogger.log(e);
-            return false;
-        }
-    }
-
-    public boolean checkCredentials(String username, String password) {
-        try {
-            Optional<User> userOpt = users.readByUsername(username);
-            if (userOpt.isPresent()) {
-                User user = userOpt.get();
-                return loginPasswords.checkCredentials(user.getUserId(), password);
-            }
-            return false;
         } catch (SQLException e) {
-            sqlLogger.log(e);
             return false;
         }
     }
-
 }

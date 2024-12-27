@@ -65,20 +65,6 @@ public class LoginPasswordTable {
         return did_delete;
     }
 
-    public boolean checkCredentials(int user_id, String password) throws SQLException {
-        var stmt_str = "SELECT COUNT(*) FROM login_password WHERE user_id = ? AND passwd = ?";
-        try (var stmt = conn.prepareStatement(stmt_str)) {
-            stmt.setInt(1, user_id);
-            stmt.setString(2, password);
-            try (var rset = stmt.executeQuery()) {
-                if (rset.next()) {
-                    return rset.getInt(1) > 0;
-                }
-            }
-        }
-        return false;
-    }
-
     public boolean insert(int user_id, Password password) throws SQLException {
         var stmt_str = "INSERT INTO login_password (user_id, passwd) VALUES (?, ?)";
         boolean did_insert = false;
