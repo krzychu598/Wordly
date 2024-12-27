@@ -4,6 +4,10 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.font.*;
 import javax.swing.*;
+
+import edu.pw.ii.pap.z29.model.primitives.Username;
+import edu.pw.ii.pap.z29.model.primitives.Password;
+
 import java.lang.Thread;
 import java.util.Map;
 
@@ -72,8 +76,8 @@ public class LoginPane extends CardPane {
         loginButton.setForeground(GUI.MAIN_COLOR);
         loginButton.addActionListener(
             (ActionEvent e) -> {
-                String username = usernamePanel.field.getText();
-                String password = new String(passwordField.getPassword());
+                var username = new Username(usernamePanel.field.getText());
+                var password = new Password(new String(passwordField.getPassword()));
                 (new Thread(() -> {
                     gui.getMainController().getLoginController().checkLogin(username, password);
                 })).start();;
