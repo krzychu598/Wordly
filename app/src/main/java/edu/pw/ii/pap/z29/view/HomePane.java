@@ -37,7 +37,7 @@ public class HomePane extends CardPane {
         var centralPanel = createCentralPanel();
         this.add(centralPanel);
 
-        var titleLabel = GUIHelper.createTitleLabel("The Wordle Game", 60);
+        var titleLabel = GUIHelper.createDefaultLabel("The Wordle Game", 60);
         titleLabel.setAlignmentX(CENTER_ALIGNMENT);
         centralPanel.add(titleLabel);
 

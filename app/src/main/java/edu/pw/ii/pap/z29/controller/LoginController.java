@@ -10,9 +10,9 @@ import edu.pw.ii.pap.z29.model.primitives.Password;
 import edu.pw.ii.pap.z29.model.primitives.User;
 import edu.pw.ii.pap.z29.model.primitives.Username;
 import edu.pw.ii.pap.z29.view.GUI;
-import lombok.Data;
+import edu.pw.ii.pap.z29.view.CardPane.PaneInitException;
 
-@Data
+
 public class LoginController {
     MainController mainController;
     private User currentUser = null;
@@ -32,7 +32,7 @@ public class LoginController {
     public synchronized User getCurrentUser() {
         if (currentUser == null)
             throw new NotLoggedInException();
-        return currentUser;
+        return currentUser.toBuilder().build();
     }
 
     public void wantToRegister() {
@@ -45,7 +45,11 @@ public class LoginController {
     }
 
     public void seeProfile() {
-        mainController.gui.showPane(GUI.Pane.Profile);
+        try {
+            mainController.gui.showPane(GUI.Pane.Profile);
+        } catch (PaneInitException e) {
+            JOptionPane.showMessageDialog(mainController.gui.getFrame(), "Couldn't show profile.");
+        }
     }
 
     public void wantToLogin() {

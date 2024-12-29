@@ -1,10 +1,9 @@
 package edu.pw.ii.pap.z29.view;
 
 import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
-import java.util.HashMap;
-import java.lang.Thread;
+
+import edu.pw.ii.pap.z29.view.CardPane.PaneInitException;
 
 
 public class MainFrame extends JFrame {
@@ -27,7 +26,7 @@ public class MainFrame extends JFrame {
         add(pane, pane.getName());
     }
 
-    public synchronized boolean showPane(CardPane pane) {
+    public synchronized boolean showPane(CardPane pane) throws PaneInitException {
         boolean shown = false;
         if (currentPane != pane) {
             if (currentPane != null)
