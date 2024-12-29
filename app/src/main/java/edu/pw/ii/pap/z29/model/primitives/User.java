@@ -1,10 +1,12 @@
 package edu.pw.ii.pap.z29.model.primitives;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
 
 
 @Data
+@Builder(toBuilder=true)
 public class User {
     private int userId;
     @NonNull private Username username;

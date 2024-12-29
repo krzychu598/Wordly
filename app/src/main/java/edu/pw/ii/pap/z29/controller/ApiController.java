@@ -14,8 +14,8 @@ import edu.pw.ii.pap.z29.exception.InvalidLengthException;
 
 public final class ApiController {
     
-    static String urlRand = "https://random-word-api.herokuapp.com/word?length=%d";
-    static String urlDef = "https://api.dictionaryapi.dev/api/v2/entries/en/%s";
+    static final String urlRand = "https://random-word-api.herokuapp.com/word?length=%d";
+    static final String urlDef = "https://api.dictionaryapi.dev/api/v2/entries/en/%s";
 
     /**
      * randomWord returns a random word that can be found in the dictionary api 

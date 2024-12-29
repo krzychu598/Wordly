@@ -3,6 +3,8 @@ package edu.pw.ii.pap.z29.controller;
 import java.sql.SQLException;
 import edu.pw.ii.pap.z29.Database;
 import edu.pw.ii.pap.z29.view.GUI;
+import lombok.Getter;
+import lombok.AccessLevel;
 import edu.pw.ii.pap.z29.model.SQLLogger;
 import edu.pw.ii.pap.z29.model.ScoresTable;
 import edu.pw.ii.pap.z29.model.UsersTable;
@@ -12,21 +14,22 @@ import edu.pw.ii.pap.z29.model.primitives.Username;
 import edu.pw.ii.pap.z29.model.primitives.LoginPassword;
 import edu.pw.ii.pap.z29.model.primitives.Password;
 import edu.pw.ii.pap.z29.model.LoginPasswordTable;
-import lombok.Data;
 
-@Data
+
+@Getter
 public class MainController {
     LoginController loginController;
     GameController gameController;
+    ProfileController profileController;
     GUI gui;
-
-    SQLLogger sqlLogger = new SQLLogger();
-    Database database = new Database();
-    UsersTable users;
-    LoginPasswordTable loginPasswords;
-    ScoresTable scores;
+    @Getter(AccessLevel.PACKAGE) SQLLogger sqlLogger = new SQLLogger();
+    @Getter(AccessLevel.NONE) Database database = new Database();
+    @Getter(AccessLevel.PACKAGE) UsersTable users;
+    @Getter(AccessLevel.PACKAGE) LoginPasswordTable loginPasswords;
+    @Getter(AccessLevel.PACKAGE) ScoresTable scores;
 
     public void run() {
+        profileController = new ProfileController(this);
         loginController = new LoginController(this);
         try {
             var conn = database.getConnection();
@@ -41,19 +44,11 @@ public class MainController {
         //gui.skipLogin();
     }
 
-    public LoginController getLoginController() {
-        return loginController;
-    }
-
     public void newGame(int wordLength){
         gameController = new GameController(this, wordLength);
         //System.out.println("created controller");
         gui.showPane(GUI.Pane.Game);
         //System.out.println("shown frame");
-    }
-
-    public GameController getGameController() {
-        return gameController;
     }
 
     public boolean addUser(Username username, Password password) {

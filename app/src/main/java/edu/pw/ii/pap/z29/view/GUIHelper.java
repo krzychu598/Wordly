@@ -1,6 +1,8 @@
 package edu.pw.ii.pap.z29.view;
 
 import javax.swing.JTextField;
+import javax.swing.text.AttributeSet.FontAttribute;
+import javax.swing.text.StyleConstants.FontConstants;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -9,13 +11,16 @@ import java.awt.Component;
 import java.awt.FlowLayout;
 
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 
-class GUIHelper {
+public class GUIHelper {
     public static JTextField formatTextField(JTextField field,
             Color text_color, Color background_color, Font font) {
+        field.setAlignmentX(Component.LEFT_ALIGNMENT);
         field.setForeground(text_color);
         field.setBackground(background_color);
         field.setFont(font);
@@ -23,21 +28,33 @@ class GUIHelper {
         return field;
     }
 
-    static JLabel createTitleLabel(String text, int font_size) {
-        var titleLabel = new JLabel(text);
-        titleLabel.setForeground(GUI.SECONDARY_COLOR);
-        titleLabel.setFont(new Font("Dialog", Font.BOLD, font_size));
-        return titleLabel;
+    public static JLabel createDefaultLabel(String text, int font_size) {
+        var label = new JLabel(text);
+        label.setForeground(GUI.SECONDARY_COLOR);
+        label.setFont(new Font("Dialog", Font.PLAIN, font_size));
+        return label;
     }
 
-    static JPanel createContainerPanel() {
+    public static JButton createDefaultButton(String text, int font_size) {
+        var button = new JButton(text);
+        button.setBackground(GUI.SECONDARY_COLOR);
+        button.setForeground(GUI.MAIN_COLOR);
+        button.setFont(new Font("Dialog", Font.PLAIN, font_size));
+        return button;
+    }
+
+    public static JPanel createContainerPanel() {
         return createContainerPanel(new FlowLayout());
     }
     
-    static JPanel createContainerPanel(LayoutManager layout) {
+    public static JPanel createContainerPanel(LayoutManager layout) {
         var panel = new JPanel(layout);
         panel.setOpaque(false);
         panel.setAlignmentX(Component.LEFT_ALIGNMENT);
         return panel;
+    }
+
+    public static void showError(Component parent, String message) {
+        JOptionPane.showMessageDialog(parent, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
 }

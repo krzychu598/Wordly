@@ -5,7 +5,8 @@ import java.sql.SQLException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.Optional;
-
+import java.util.List;
+import java.util.ArrayList;
 import edu.pw.ii.pap.z29.model.primitives.Friendship;
 
 
@@ -46,6 +47,25 @@ public class FriendshipsTable {
             }
         }
         return friendship_opt;
+    }
+
+    List<Friendship> read_friends(int user_id) throws SQLException {
+        var query_str = new String("SELECT inviting, invited, pending FROM friendships "
+            + "WHERE inviting = ? OR invited = ?");
+        var friends = new ArrayList<Friendship>();
+        try (var query = conn.prepareStatement(query_str))
+        {
+            query.setInt(2, user_id);
+            query.setInt(1, user_id);
+            query.execute();
+            try (var rset = query.getResultSet()) {
+                while (rset.next()) {
+                    var friendship = record.deserialize(rset);
+                    friends.add(friendship);
+                }
+            }
+        }
+        return friends;
     }
 
     public boolean update_pending(Friendship friendship) throws SQLException {

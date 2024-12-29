@@ -9,6 +9,7 @@ import java.awt.Font;
 import java.util.HashMap;
 
 import edu.pw.ii.pap.z29.controller.MainController;
+import edu.pw.ii.pap.z29.view.CardPane.PaneInitException;
 
 
 public class GUI {
@@ -62,9 +63,11 @@ public class GUI {
         SwingUtilities.invokeLater(() -> createAndShowGUI());
     }    
     
-    public synchronized void showPane(Pane pane) {
-        if (frame.showPane(panes.get(pane)))
+    public synchronized boolean showPane(Pane pane) throws PaneInitException {
+        boolean shown = frame.showPane(panes.get(pane));
+        if (shown)
             currentPane = pane;
+        return shown;
     }
     
     private void addPane(Pane name, CardPane pane) {

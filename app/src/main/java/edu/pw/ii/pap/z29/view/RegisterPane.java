@@ -42,8 +42,7 @@ public class RegisterPane extends CardPane {
         centralPanel.add(strut);
 
         var titlePanel = GUIHelper.createContainerPanel();
-        var titleLabel = GUIHelper.createTitleLabel("The Wordle Game", 40);
-        titleLabel.setAlignmentX(CENTER_ALIGNMENT);
+        var titleLabel = GUIHelper.createDefaultLabel("The Wordle Game", 40);
         titlePanel.add(titleLabel);
         centralPanel.add(titlePanel);
 
@@ -86,7 +85,7 @@ public class RegisterPane extends CardPane {
 
         centralPanel.add(Box.createVerticalStrut(20));
 
-        var LoginPanel = GUIHelper.createContainerPanel(new GridBagLayout());
+        var LoginPanel = GUIHelper.createContainerPanel();
         var loginLabel = new JLabel("<HTML><U>Have an account already? Login</U></HTML>");
         loginLabel.setForeground(GUI.SECONDARY_COLOR);
         loginLabel.addMouseListener(new MouseAdapter() {

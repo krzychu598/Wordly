@@ -7,7 +7,6 @@ import javax.swing.JTextField;
 import java.awt.Color;
 import javax.swing.BoxLayout;
 import javax.swing.Box;
-import java.awt.Dimension;
 
 
 class FormPanel extends JPanel {
@@ -24,7 +23,7 @@ class FormPanel extends JPanel {
         label.setFont(field.getFont());
         label.setAlignmentX(Component.LEFT_ALIGNMENT);
         add(label);
-        gap = Box.createRigidArea(new Dimension(0, 10));
+        gap = Box.createVerticalStrut(10);
         add(gap);
         field.setAlignmentX(Component.LEFT_ALIGNMENT);
         add(field);

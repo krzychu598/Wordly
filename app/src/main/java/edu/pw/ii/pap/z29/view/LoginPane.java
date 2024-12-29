@@ -47,9 +47,10 @@ public class LoginPane extends CardPane {
         strut.setAlignmentX(LEFT_ALIGNMENT);
         centralPanel.add(strut);
 
-        titleLabel = GUIHelper.createTitleLabel("The Wordle Game", 40);
-        titleLabel.setAlignmentX(LEFT_ALIGNMENT);
-        centralPanel.add(titleLabel);
+        var titlePanel = GUIHelper.createContainerPanel();
+        titleLabel = GUIHelper.createDefaultLabel("The Wordle Game", 40);
+        titlePanel.add(titleLabel);
+        centralPanel.add(titlePanel);
 
         centralPanel.add(Box.createVerticalStrut(30));
 
