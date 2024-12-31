@@ -5,6 +5,8 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.*;
 
+import edu.pw.ii.pap.z29.view.utility.CardPane;
+
 
 
 public class HomePane extends CardPane {

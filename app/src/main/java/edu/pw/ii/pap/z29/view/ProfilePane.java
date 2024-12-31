@@ -9,13 +9,16 @@ import edu.pw.ii.pap.z29.controller.ProfileController;
 import edu.pw.ii.pap.z29.model.primitives.Password;
 import edu.pw.ii.pap.z29.model.primitives.Score;
 import edu.pw.ii.pap.z29.model.primitives.Username;
+import edu.pw.ii.pap.z29.view.utility.CardPane;
+import edu.pw.ii.pap.z29.view.utility.ListPanel;
 import edu.pw.ii.pap.z29.controller.ProfileController.UserData;
-import edu.pw.ii.pap.z29.controller.ProfileController.UserDataException;
+import edu.pw.ii.pap.z29.exception.UserDataException;
 import java.util.Collections;
 
 
 public class ProfilePane extends CardPane {
     private GUI gui;
+    private SpringLayout layout;
     private UserData userData;
     private JLabel scoreLabel;
     private JLabel usernameLabel;
@@ -25,7 +28,8 @@ public class ProfilePane extends CardPane {
     public ProfilePane(GUI gui) {
         this.gui = gui;
         setName("ProfilePane");
-        setLayout(new GridBagLayout());
+        this.layout = new SpringLayout();
+        setLayout(layout);
         setBackground(GUI.MAIN_COLOR);
     }
 
@@ -47,48 +51,51 @@ public class ProfilePane extends CardPane {
     private void addGuiParts() {
         var centralPanel = new JPanel();
         centralPanel.setBorder(BorderFactory.createEmptyBorder(50, 30, 50, 30));
-        centralPanel.setOpaque(false);
         centralPanel.setLayout(new BoxLayout(centralPanel, BoxLayout.PAGE_AXIS));
+        centralPanel.setOpaque(false);
         add(centralPanel);
-
+        layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, centralPanel,
+        0, SpringLayout.HORIZONTAL_CENTER, this);
+        layout.putConstraint(SpringLayout.VERTICAL_CENTER, centralPanel,
+        0, SpringLayout.VERTICAL_CENTER, this);
+        var backButton = GUIHelper.createDefaultButton("Back", 16);
+        backButton.addActionListener(e -> {
+            (new Thread(() ->
+                getProfileController().goBack())).start();
+            });
+        add(backButton);
+        layout.putConstraint(SpringLayout.WEST, backButton, 10, SpringLayout.WEST, this);
+        layout.putConstraint(SpringLayout.NORTH, backButton, 10, SpringLayout.NORTH, this);
+        
         var strut = (JComponent)Box.createHorizontalStrut(400);
         strut.setAlignmentX(LEFT_ALIGNMENT);
         centralPanel.add(strut);
         
-        var listPanel = GUIHelper.createContainerPanel();
-        listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.LINE_AXIS));
-        var fieldPanel = GUIHelper.createContainerPanel();
-        fieldPanel.setLayout(new BoxLayout(fieldPanel, BoxLayout.PAGE_AXIS));
-        listPanel.add(fieldPanel);
-        listPanel.add(Box.createHorizontalStrut(50));
-        listPanel.add(Box.createHorizontalGlue());
-        var valuePanel = GUIHelper.createContainerPanel();
-        valuePanel.setLayout(new BoxLayout(valuePanel, BoxLayout.PAGE_AXIS));
-        listPanel.add(valuePanel);
-        listPanel.add(Box.createHorizontalGlue());
+        var listPanel = new ListPanel(50);
+        listPanel.strut.setSize(new Dimension(50, 0));
 
         var scoreFieldLabel = GUIHelper.createDefaultLabel("Score:", 20);
-        fieldPanel.add(scoreFieldLabel);
+        listPanel.fieldPanel.add(scoreFieldLabel);
         this.scoreLabel = GUIHelper.createDefaultLabel("", 20);
-        valuePanel.add(scoreLabel);
-
+        listPanel.valuePanel.add(scoreLabel);
+        
         var usernameFieldLabel = GUIHelper.createDefaultLabel("Username:", 20);
-        fieldPanel.add(usernameFieldLabel);
+        listPanel.fieldPanel.add(usernameFieldLabel);
         this.usernameLabel = GUIHelper.createDefaultLabel("", 20);
         var usernameLabelParent = GUIHelper.createContainerPanel();
         usernameLabelParent.setLayout(new BoxLayout(usernameLabelParent, BoxLayout.LINE_AXIS));
         usernameLabelParent.add(usernameLabel);
         usernameLabel.addMouseListener(new UsernameEditListener(usernameLabel));
-        valuePanel.add(usernameLabelParent);
+        listPanel.valuePanel.add(usernameLabelParent);
         
         this.passwordToggle = new JCheckBox("Show");
         passwordToggle.setForeground(GUI.SECONDARY_COLOR);
-        passwordToggle.setBackground(GUI.MAIN_COLOR);
+        passwordToggle.setOpaque(false);
         passwordToggle.addActionListener(e -> {
             updatePasswordLabel();
         });
         var passwordFieldLabel = GUIHelper.createDefaultLabel("Password:", 20);
-        fieldPanel.add(passwordFieldLabel);
+        listPanel.fieldPanel.add(passwordFieldLabel);
         this.passwordLabel = GUIHelper.createDefaultLabel("", 20);
         var passwordValueRow = GUIHelper.createContainerPanel();
         passwordValueRow.setLayout(new BoxLayout(passwordValueRow, BoxLayout.LINE_AXIS));
@@ -96,14 +103,14 @@ public class ProfilePane extends CardPane {
         passwordValueRow.add(passwordLabel);
         passwordValueRow.add(Box.createHorizontalStrut(10));
         passwordValueRow.add(passwordToggle);
-        valuePanel.add(passwordValueRow);
-
+        listPanel.valuePanel.add(passwordValueRow);
+        
         centralPanel.add(listPanel);
         centralPanel.add(Box.createVerticalStrut(30));
         var friendsButton = GUIHelper.createDefaultButton("Friends list", 16);
         friendsButton.addActionListener(e -> {
             (new Thread(() ->
-                getProfileController().wantToSeeFriends())).start();
+            getProfileController().wantToSeeFriends())).start();
         });
         centralPanel.add(friendsButton);
         centralPanel.add(Box.createVerticalStrut(50));
@@ -111,11 +118,12 @@ public class ProfilePane extends CardPane {
         deleteButton.setBackground(new Color(200, 10, 10));
         deleteButton.addActionListener(e -> {
             (new Thread(() ->
-                getProfileController().wantToDeleteAccount())).start();
+            getProfileController().wantToDeleteAccount())).start();
         });
         centralPanel.add(deleteButton);
+        centralPanel.setMaximumSize(getPreferredSize());
     }
-
+    
     public void updateUserData() {
         this.userData = getProfileController().readUserData();
         var max_score = userData.getScores().size() != 0 ?
@@ -175,13 +183,11 @@ public class ProfilePane extends CardPane {
     }
 
     private class PasswordEditListener extends MouseAdapter {
-        JLabel passwordLabel;
         JPasswordField newPasswordField = new JPasswordField();
         JPasswordField confirmPasswordField = new JPasswordField();
         JPanel panel = new JPanel(new GridLayout(2, 2, 5, 5));
 
         PasswordEditListener(JLabel passwordLabel) {
-            this.passwordLabel = passwordLabel;
             newPasswordField.setFont(passwordLabel.getFont());
             confirmPasswordField.setFont(passwordLabel.getFont());
             panel.add(new JLabel("New Password:"));

@@ -3,39 +3,36 @@ package edu.pw.ii.pap.z29.view;
 import java.awt.*;
 import javax.swing.*;
 
-import edu.pw.ii.pap.z29.view.CardPane.PaneInitException;
+import edu.pw.ii.pap.z29.view.utility.CardPane;
+import edu.pw.ii.pap.z29.view.utility.MainPane;
+import edu.pw.ii.pap.z29.view.utility.CardPane.PaneInitException;
 
 
 public class MainFrame extends JFrame {
     GUI gui;
-    CardLayout layout = new CardLayout();
-    CardPane currentPane;
+    MainPane contentPane;
     
     public MainFrame(GUI gui) {
         super("Wordle");
         this.gui = gui;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        getContentPane().setLayout(layout);
+        this.contentPane = new MainPane();
+        setContentPane(contentPane);
     }
 
     public synchronized CardPane getCurrentPane() {
-        return currentPane;
+        return contentPane.getCurrentPane();
     }
 
     public synchronized void addPane(CardPane pane) {
-        add(pane, pane.getName());
+        contentPane.add(pane, pane.getName());
     }
 
     public synchronized boolean showPane(CardPane pane) throws PaneInitException {
-        boolean shown = false;
-        if (currentPane != pane) {
-            if (currentPane != null)
-                currentPane.cleanup();
-            currentPane = pane;
-            currentPane.init();
-            layout.show(getContentPane(), pane.getName());
-            shown = true;
-        }
-        return shown;
+        return contentPane.showPane(pane);
+    }
+
+    public synchronized void clear() {
+        contentPane.clear();
     }
 }

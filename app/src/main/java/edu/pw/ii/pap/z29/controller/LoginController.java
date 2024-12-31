@@ -2,7 +2,6 @@ package edu.pw.ii.pap.z29.controller;
 
 import java.sql.SQLException;
 import java.util.Optional;
-import java.util.concurrent.locks.Lock;
 
 import javax.swing.JOptionPane;
 import edu.pw.ii.pap.z29.exception.NotLoggedInException;
@@ -10,7 +9,7 @@ import edu.pw.ii.pap.z29.model.primitives.Password;
 import edu.pw.ii.pap.z29.model.primitives.User;
 import edu.pw.ii.pap.z29.model.primitives.Username;
 import edu.pw.ii.pap.z29.view.GUI;
-import edu.pw.ii.pap.z29.view.CardPane.PaneInitException;
+import edu.pw.ii.pap.z29.view.utility.CardPane.PaneInitException;
 
 
 public class LoginController {

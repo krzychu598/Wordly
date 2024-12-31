@@ -6,6 +6,8 @@ import java.awt.font.*;
 import javax.swing.*;
 
 import edu.pw.ii.pap.z29.model.primitives.Username;
+import edu.pw.ii.pap.z29.view.utility.CardPane;
+import edu.pw.ii.pap.z29.view.utility.FormPanel;
 import edu.pw.ii.pap.z29.model.primitives.Password;
 
 import java.lang.Thread;
@@ -19,7 +21,6 @@ public class LoginPane extends CardPane {
     JPasswordField passwordField;
     JButton loginButton;
     GUI gui;
-    int i = 0;
     
     public LoginPane(GUI gui) {
         this.gui = gui;

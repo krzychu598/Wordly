@@ -11,6 +11,8 @@ import java.awt.Component;
 import java.awt.FlowLayout;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -56,5 +58,19 @@ public class GUIHelper {
 
     public static void showError(Component parent, String message) {
         JOptionPane.showMessageDialog(parent, message, "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    public static JPanel createDefaultListPanel() {
+        var listPanel = GUIHelper.createContainerPanel();
+        listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.LINE_AXIS));
+        var fieldPanel = GUIHelper.createContainerPanel();
+        fieldPanel.setLayout(new BoxLayout(fieldPanel, BoxLayout.PAGE_AXIS));
+        listPanel.add(fieldPanel);
+        listPanel.add(Box.createHorizontalStrut(50));
+        listPanel.add(Box.createHorizontalGlue());
+        var valuePanel = GUIHelper.createContainerPanel();
+        valuePanel.setLayout(new BoxLayout(valuePanel, BoxLayout.PAGE_AXIS));
+        listPanel.add(valuePanel);
+        return listPanel;
     }
 }

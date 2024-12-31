@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import edu.pw.ii.pap.z29.Database;
 import edu.pw.ii.pap.z29.view.GUI;
 import lombok.Getter;
+import lombok.experimental.StandardException;
 import lombok.AccessLevel;
 import edu.pw.ii.pap.z29.model.SQLLogger;
 import edu.pw.ii.pap.z29.model.ScoresTable;
@@ -13,6 +14,7 @@ import java.util.Optional;
 import edu.pw.ii.pap.z29.model.primitives.Username;
 import edu.pw.ii.pap.z29.model.primitives.LoginPassword;
 import edu.pw.ii.pap.z29.model.primitives.Password;
+import edu.pw.ii.pap.z29.model.FriendshipsTable;
 import edu.pw.ii.pap.z29.model.LoginPasswordTable;
 
 
@@ -21,21 +23,25 @@ public class MainController {
     LoginController loginController;
     GameController gameController;
     ProfileController profileController;
+    FriendsController friendsController;
     GUI gui;
     @Getter(AccessLevel.PACKAGE) SQLLogger sqlLogger = new SQLLogger();
     @Getter(AccessLevel.NONE) Database database = new Database();
     @Getter(AccessLevel.PACKAGE) UsersTable users;
     @Getter(AccessLevel.PACKAGE) LoginPasswordTable loginPasswords;
     @Getter(AccessLevel.PACKAGE) ScoresTable scores;
+    @Getter(AccessLevel.PACKAGE) FriendshipsTable friendships;
 
     public void run() {
         profileController = new ProfileController(this);
         loginController = new LoginController(this);
+        friendsController = new FriendsController(this);
         try {
             var conn = database.getConnection();
             users = new UsersTable(conn);
             loginPasswords = new LoginPasswordTable(conn);
             scores = new ScoresTable(conn);
+            friendships = new FriendshipsTable(conn);
         } catch (SQLException e) {
             sqlLogger.log(e);
         }
@@ -66,4 +72,7 @@ public class MainController {
             return false;
         }
     }
+
+    @StandardException
+    static public class UserDataException extends RuntimeException {}
 }

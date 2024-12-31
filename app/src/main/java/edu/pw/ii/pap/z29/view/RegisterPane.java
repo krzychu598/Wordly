@@ -8,6 +8,8 @@ import javax.swing.*;
 
 import edu.pw.ii.pap.z29.model.primitives.Password;
 import edu.pw.ii.pap.z29.model.primitives.Username;
+import edu.pw.ii.pap.z29.view.utility.CardPane;
+import edu.pw.ii.pap.z29.view.utility.FormPanel;
 
 
 public class RegisterPane extends CardPane {
