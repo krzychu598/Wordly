@@ -1,4 +1,4 @@
-package edu.pw.ii.pap.z29.view;
+package edu.pw.ii.pap.z29.view.utility;
 
 import javax.swing.JPanel;
 import lombok.experimental.StandardException;

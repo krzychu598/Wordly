@@ -9,7 +9,8 @@ import java.awt.Font;
 import java.util.HashMap;
 
 import edu.pw.ii.pap.z29.controller.MainController;
-import edu.pw.ii.pap.z29.view.CardPane.PaneInitException;
+import edu.pw.ii.pap.z29.view.utility.CardPane;
+import edu.pw.ii.pap.z29.view.utility.CardPane.PaneInitException;
 
 
 public class GUI {
@@ -19,8 +20,10 @@ public class GUI {
     protected static final Font PLAIN_FONT = new Font("Dialog", Font.PLAIN, 20);
     protected static final Color GREEN = Color.decode("#008000");
     protected static final Color YELLOW = Color.decode("#FFFF00");
+    protected static final Color ORANGE = Color.decode("#FFBF00");
 
     public enum Pane {
+        Friends,
         Game,
         Home,
         Login,
@@ -36,6 +39,7 @@ public class GUI {
     public GUI(MainController mainController) {
         this.mainController = mainController;
         frame = new MainFrame(this);
+        addPane(Pane.Friends, new FriendsPane(this));
         addPane(Pane.Game, new GamePane(this));
         addPane(Pane.Home, new HomePane(this));
         addPane(Pane.Login, new LoginPane(this));

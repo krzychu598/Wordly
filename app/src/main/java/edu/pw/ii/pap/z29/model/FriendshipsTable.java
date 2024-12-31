@@ -49,7 +49,7 @@ public class FriendshipsTable {
         return friendship_opt;
     }
 
-    List<Friendship> read_friends(int user_id) throws SQLException {
+    public List<Friendship> read_friends(int user_id) throws SQLException {
         var query_str = new String("SELECT inviting, invited, pending FROM friendships "
             + "WHERE inviting = ? OR invited = ?");
         var friends = new ArrayList<Friendship>();

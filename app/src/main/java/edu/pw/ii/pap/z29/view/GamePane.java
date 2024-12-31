@@ -6,6 +6,9 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+
+import edu.pw.ii.pap.z29.view.utility.CardPane;
+
 import java.util.*;
 
 

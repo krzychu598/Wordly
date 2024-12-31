@@ -1,7 +1,7 @@
 package edu.pw.ii.pap.z29.controller;
 
 import lombok.Data;
-import lombok.experimental.StandardException;
+import edu.pw.ii.pap.z29.model.primitives.Friendship;
 import edu.pw.ii.pap.z29.model.primitives.Password;
 import edu.pw.ii.pap.z29.model.primitives.User;
 import edu.pw.ii.pap.z29.model.primitives.Username;
@@ -9,9 +9,11 @@ import edu.pw.ii.pap.z29.view.GUI;
 import edu.pw.ii.pap.z29.view.GUIHelper;
 import edu.pw.ii.pap.z29.view.ProfilePane;
 import edu.pw.ii.pap.z29.model.primitives.Score;
+import edu.pw.ii.pap.z29.exception.UserDataException;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import javax.swing.JOptionPane;
 
@@ -28,18 +30,32 @@ public class ProfileController {
         user_data.setUser(mainController.getLoginController().getCurrentUser());
         var user_id = user_data.getUser().getUserId();
         try {
-            var loginPassword = mainController.getLoginPasswords().read(user_id).orElseThrow(() -> 
-                new IllegalArgumentException("No login password found for user ID: " + user_id)
-            );
+            var loginPassword = mainController.getLoginPasswords().read(user_id).get();
             user_data.password = loginPassword.getPassword();
             user_data.scores = mainController.getScores().readAllScores(user_id);
         } catch (SQLException e) {
             mainController.getSqlLogger().log(e);
             throw new UserDataException(e);
-        } catch (IllegalArgumentException e) {
+        } catch (NoSuchElementException e) {
             throw new UserDataException(e);
         }
         return user_data;
+    }
+
+    public List<Friendship> readFriendships() throws UserDataException {
+        int user_id = mainController.getLoginController().getCurrentUser().getUserId();
+        List<Friendship> friendships;
+        try {
+            friendships = mainController.getFriendships().read_friends(user_id);
+        } catch (SQLException e) {
+            mainController.getSqlLogger().log(e);
+            throw new UserDataException(e);
+        }
+        return friendships;
+    }
+
+    public void goBack() {
+        mainController.getGui().showPane(GUI.Pane.Home);
     }
 
     public void wantToDeleteAccount() {
@@ -108,7 +124,7 @@ public class ProfileController {
     }
 
     public void wantToSeeFriends() {
-        
+        mainController.getGui().showPane(GUI.Pane.Friends);
     }
 
     @Data
@@ -125,7 +141,4 @@ public class ProfileController {
             this.scores = scores;
         }
     }
-
-    @StandardException
-    static public class UserDataException extends RuntimeException {}
 }
