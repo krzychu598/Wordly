@@ -83,8 +83,7 @@ public class GamePane extends CardPane {
             }
             if(vals.stream().distinct().limit(2).count() <= 1 && vals.get(0) == 0){
                 gui.getMainController().getGameController().scoreGuessedWord(focusedLine);
-                System.out.println(gui.getMainController().getGameController().getScore()); //to delete
-                JOptionPane.showMessageDialog(GamePane.this, "Congratulations!!");
+                gui.showPane(GUI.Pane.GameSummary);
                 return;
             }
             setFocus(focusedLine, false);
@@ -93,9 +92,7 @@ public class GamePane extends CardPane {
                 setFocus(focusedLine, true);
             } else{
                 gui.getMainController().getGameController().scoreNotGuessed();
-                System.out.println(gui.getMainController().getGameController().getScore()); //to delete
-                JOptionPane.showMessageDialog(GamePane.this, "You lose!!");
-
+                gui.showPane(GUI.Pane.GameSummary);
             }
             });
 
