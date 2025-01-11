@@ -6,6 +6,9 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+
+import edu.pw.ii.pap.z29.controller.GameController;
+
 import java.util.*;
 
 
@@ -23,10 +26,11 @@ public class GameFrame extends JFrame{
         this.gui = gui;
         allLetterFields = new Vector<Vector<JTextField>>();
         focusedLine = 0;
-        length = gui.getMainController().getGameController().getWordLength();
+        length = getGameController().getWordLength();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         getContentPane().setBackground(GUI.BLACK);
         getContentPane().setLayout(new GridBagLayout());
+        setLocationRelativeTo(null);
         addGuiParts();
         createFocusManager();
         pack();
@@ -40,14 +44,21 @@ public class GameFrame extends JFrame{
         }
         allLetterFields.get(line).get(0).requestFocusInWindow();
     }
+    private GameController getGameController(){
+        return gui.getMainController().getGameController();
+    }
     private class EnterButtonListener implements ActionListener{
+        /*TODO (implement functionality)
+        |create end of game frame 
+        | success or failure, score, replay
+        */
         @Override
         public void actionPerformed(ActionEvent e){
             String a = "";
             for (int i = 0; i < length; ++i){
                 a = a.concat(allLetterFields.get(focusedLine).get(i).getText());
             }
-            ArrayList<Integer> vals = new ArrayList<Integer>(gui.getMainController().getGameController().check(a));
+            ArrayList<Integer> vals = new ArrayList<Integer>(getGameController().check(a));
             if (vals.size() == 0){
                 JOptionPane.showMessageDialog(GameFrame.this, "Word doesn't exist");
                 return;
@@ -93,7 +104,7 @@ public class GameFrame extends JFrame{
                     int a;
                     JTextField letterField = (JTextField) e.getDocument().getProperty("SOURCE");
                     String text = letterField.getText();
-                    String validatedText = gui.getMainController().getGameController().validateInput(text);
+                    String validatedText = getGameController().validateInput(text);
                     letterField.setText(validatedText);
                     
                     if((a = allLetterFields.get(focusedLine).indexOf(letterField) + 1) < length && !text.equals(validatedText) && validatedText != null){
@@ -145,7 +156,7 @@ public class GameFrame extends JFrame{
         showButton.setForeground(GUI.MAIN_COLOR);
         showButton.setHorizontalAlignment(JButton.CENTER);
         showButton.addActionListener((ActionEvent e)->{
-            definitionLabel.setText(gui.getMainController().getGameController().getDefinition());
+            definitionLabel.setText(getGameController().getDefinition());
 
         });
         return showButton;
