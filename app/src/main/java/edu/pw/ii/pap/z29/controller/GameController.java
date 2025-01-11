@@ -9,7 +9,8 @@ public class GameController {
     MainController mainController;
     int wordLength;
     String word;
-    int score;
+    int score = 0;
+    int guesssedLetters;
     final static int MAX_IT = 3;
     /*TODO (implement functionality)
     | implement score system
@@ -22,7 +23,6 @@ public class GameController {
         this.wordLength = wordLength;
         //System.out.println("before random word");
         this.word = ApiController.getRandomWord(wordLength);
-        score = wordLength * 10 + 30;
     }
 
     public int getWordLength(){
@@ -32,7 +32,18 @@ public class GameController {
     public int getMaxIt(){
         return MAX_IT;
     }
-
+    public void scoreGuessedWord(int turn){
+        score += Math.max(wordLength * 10 - (int)( 10 * turn / (MAX_IT-1)), 0);
+    }
+    public void scoreNotGuessed(){
+        score = Math.max(score+5*guesssedLetters, 0);
+    }
+    public void scoreShownDefinition(){
+        score -= 20; 
+    }
+    public int getScore(){
+        return score;
+    }
     public String validateInput(String text){
         if (text.length() >= 1) {
             text = text.substring(text.length()-1);
@@ -46,6 +57,7 @@ public class GameController {
         return text.toUpperCase();
     }
     public ArrayList<Integer> check(String givenWord){
+        guesssedLetters = 0;
         givenWord = givenWord.toLowerCase();
         var results = new ArrayList<Integer>();
         if(givenWord.length() != word.length()){
@@ -60,6 +72,7 @@ public class GameController {
             char a;
             if((a = givenWord.charAt(i)) == word.charAt(i)){
                 results.add(0);
+                guesssedLetters++;
             } else if (word.indexOf(a) != -1){
                 results.add(1);
             } else{
@@ -83,7 +96,6 @@ public class GameController {
 
     }
     public String getDefinition(){
-        score-=20;
         String definition = ApiController.getDefinition(word);
         return String.format("<html>%s</html>", toHtml(definition));
     }

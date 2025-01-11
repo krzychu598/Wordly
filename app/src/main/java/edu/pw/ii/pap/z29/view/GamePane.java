@@ -82,6 +82,8 @@ public class GamePane extends CardPane {
                 ++i;
             }
             if(vals.stream().distinct().limit(2).count() <= 1 && vals.get(0) == 0){
+                gui.getMainController().getGameController().scoreGuessedWord(focusedLine);
+                System.out.println(gui.getMainController().getGameController().getScore()); //to delete
                 JOptionPane.showMessageDialog(GamePane.this, "Congratulations!!");
                 return;
             }
@@ -90,6 +92,8 @@ public class GamePane extends CardPane {
             if (focusedLine < MAX_IT){
                 setFocus(focusedLine, true);
             } else{
+                gui.getMainController().getGameController().scoreNotGuessed();
+                System.out.println(gui.getMainController().getGameController().getScore()); //to delete
                 JOptionPane.showMessageDialog(GamePane.this, "You lose!!");
 
             }
@@ -160,6 +164,7 @@ public class GamePane extends CardPane {
         showButton.setHorizontalAlignment(JButton.CENTER);
         showButton.addActionListener((ActionEvent e)->{
             definitionLabel.setVisible(true);
+            gui.getMainController().getGameController().scoreShownDefinition();
         });
         return showButton;
     }
