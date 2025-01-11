@@ -1,7 +1,6 @@
 package edu.pw.ii.pap.z29;
 
 import edu.pw.ii.pap.z29.controller.MainController;
-import edu.pw.ii.pap.z29.controller.ApiController;
 
 public class App {
     public static void main(String[] args) {

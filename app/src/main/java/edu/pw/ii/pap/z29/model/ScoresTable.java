@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import edu.pw.ii.pap.z29.model.primitives.User;
+import edu.pw.ii.pap.z29.model.primitives.Score;
 
 
 public class ScoresTable {
@@ -18,48 +18,41 @@ public class ScoresTable {
         this.conn = conn;
     }
 
-
-    public boolean insert(User user, int score) throws SQLException {
-        var stmt_str = "INSERT INTO scores (user_id, score) VALUES (?, ?)";
-        int id = 0;
-    
+    public int insert(Score score) throws SQLException {
+        final var stmt_str = "INSERT INTO scores2 (user_id, score) VALUES (?, ?)";
+        int score_id = 0;
         try (var stmt = conn.prepareStatement(stmt_str, new String[]{"id"})) {
-            stmt.setInt(1, user.getUserId());
-            stmt.setInt(2, score);
-    
+            stmt.setInt(1, score.getUserId());
+            stmt.setInt(2, score.getScore());
             stmt.executeUpdate();
-    
             try (var rset = stmt.getGeneratedKeys()) {
-                if (rset.next()) {
-                    id = rset.getInt(1);
-                }
+                score_id = rset.getInt(1);
             }
         }
-    
-        return id != 0;
+        return score_id;
     }
-    
 
-    public List<Integer> readAllScores(int user_id) throws SQLException {
-        var query_str = "SELECT score FROM scores WHERE user_id = ?";
-        List<Integer> scores = new ArrayList<>();
-    
-        try (var query = conn.prepareStatement(query_str)) {
-            query.setInt(1, user_id);
-    
-            try (var rset = query.executeQuery()) {
+    public List<Score> readAllScores(int user_id) throws SQLException {
+        final var stmt_str = "SELECT score_id, score FROM scores2 WHERE user_id = ?";
+        List<Score> scores = new ArrayList<>();
+        try (var stmt = conn.prepareStatement(stmt_str)) {
+            stmt.setInt(1, user_id);
+            try (var rset = stmt.executeQuery()) {
                 while (rset.next()) {
-                    scores.add(rset.getInt("score"));
+                    var score = new Score(
+                        rset.getInt("score_id"),
+                        user_id,
+                        rset.getInt("score")
+                    );
+                    scores.add(score);
                 }
             }
         }
         return scores;
     }
-    
-
 
     public boolean delete(int user_id) throws SQLException {
-        var update_str = new StringBuilder("DELETE FROM scores WHERE user_id = ?");
+        var update_str = new StringBuilder("DELETE FROM scores2 WHERE user_id = ?");
         boolean did_delete;
         try (var update = conn.prepareStatement(update_str.toString())) {
             update.setInt(1, user_id);

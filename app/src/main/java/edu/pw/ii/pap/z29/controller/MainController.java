@@ -3,6 +3,9 @@ package edu.pw.ii.pap.z29.controller;
 import java.sql.SQLException;
 import edu.pw.ii.pap.z29.Database;
 import edu.pw.ii.pap.z29.view.GUI;
+import lombok.Getter;
+import lombok.experimental.StandardException;
+import lombok.AccessLevel;
 import edu.pw.ii.pap.z29.model.SQLLogger;
 import edu.pw.ii.pap.z29.model.ScoresTable;
 import edu.pw.ii.pap.z29.model.UsersTable;
@@ -11,49 +14,47 @@ import java.util.Optional;
 import edu.pw.ii.pap.z29.model.primitives.Username;
 import edu.pw.ii.pap.z29.model.primitives.LoginPassword;
 import edu.pw.ii.pap.z29.model.primitives.Password;
+import edu.pw.ii.pap.z29.model.FriendshipsTable;
 import edu.pw.ii.pap.z29.model.LoginPasswordTable;
-import lombok.Data;
 
-@Data
+
+@Getter
 public class MainController {
     LoginController loginController;
     GameController gameController;
+    ProfileController profileController;
+    FriendsController friendsController;
     GUI gui;
-
-    SQLLogger sqlLogger = new SQLLogger();
-    Database database = new Database();
-    UsersTable users;
-    LoginPasswordTable loginPasswords;
-    ScoresTable scores;
+    @Getter(AccessLevel.PACKAGE) SQLLogger sqlLogger = new SQLLogger();
+    @Getter(AccessLevel.NONE) Database database = new Database();
+    @Getter(AccessLevel.PACKAGE) UsersTable users;
+    @Getter(AccessLevel.PACKAGE) LoginPasswordTable loginPasswords;
+    @Getter(AccessLevel.PACKAGE) ScoresTable scores;
+    @Getter(AccessLevel.PACKAGE) FriendshipsTable friendships;
 
     public void run() {
+        profileController = new ProfileController(this);
         loginController = new LoginController(this);
-        gui = new GUI(this);
+        friendsController = new FriendsController(this);
         try {
             var conn = database.getConnection();
             users = new UsersTable(conn);
             loginPasswords = new LoginPasswordTable(conn);
             scores = new ScoresTable(conn);
+            friendships = new FriendshipsTable(conn);
         } catch (SQLException e) {
             sqlLogger.log(e);
         }
+        gui = new GUI(this);
         gui.run();
         //gui.skipLogin();
     }
 
-    public LoginController getLoginController() {
-        return loginController;
-    }
     public void newGame(int wordLength){
-        gui.disposeOfMainFrame();
-        //System.out.println("disposed");
         gameController = new GameController(this, wordLength);
         //System.out.println("created controller");
-        gui.showGameFrame();
+        gui.showPane(GUI.Pane.Game);
         //System.out.println("shown frame");
-    }
-    public GameController getGameController() {
-        return gameController;
     }
 
     public boolean addUser(Username username, Password password) {
@@ -67,25 +68,11 @@ public class MainController {
                 return true;
             }
             return false;
-        }   catch (SQLException e) {
-            sqlLogger.log(e);
-            return false;
-        }
-    }
-
-
-    public boolean checkCredentials(String username, String password) {
-        try {
-            Optional<User> userOpt = users.readByUsername(username);
-            if (userOpt.isPresent()) {
-                User user = userOpt.get();
-                return loginPasswords.checkCredentials(user.getUserId(), password);
-            }
-            return false;
         } catch (SQLException e) {
-            sqlLogger.log(e);
             return false;
         }
     }
 
+    @StandardException
+    static public class UserDataException extends RuntimeException {}
 }

@@ -18,9 +18,8 @@ public class UsersTable {
         this.conn = conn;
     }
 
-
     public int create(User user) throws SQLException {
-        var stmt_str = "INSERT INTO users VALUES (DEFAULT, ?)";
+        var stmt_str = "INSERT INTO users (user_id, username) VALUES (DEFAULT, ?)";
         int user_id = 0;
         try (var stmt = conn.prepareStatement(stmt_str, new String[]{"user_id"}))
         {
@@ -88,23 +87,16 @@ public class UsersTable {
         }
         return did_delete;
     }
-    
-    public Optional<User> readByUsername(String username) throws SQLException {
-        var query_str = "SELECT user_id, username FROM users WHERE username = ?";
-        var user_opt = Optional.<User>empty();
-        try (var query = conn.prepareStatement(query_str)) {
-            query.setString(1, username);
-            query.execute();
-            try (var rset = query.getResultSet()) {
-                if (rset.next()) {
-                    var user = record.deserialize(rset);
-                    user_opt = Optional.of(user);
-                }
-            }
-        }
-        return user_opt;
-    }
 
+    public boolean delete(Username username) throws SQLException {
+        var update_str = new StringBuilder("DELETE FROM users WHERE username = ?");
+        boolean did_delete;
+        try (var update = conn.prepareStatement(update_str.toString())) {
+            update.setString(1, username.getUsername());
+            did_delete = update.executeUpdate() == 1;
+        }
+        return did_delete;
+    }
 }
 
 

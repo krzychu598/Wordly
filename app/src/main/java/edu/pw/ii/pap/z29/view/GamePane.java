@@ -7,12 +7,12 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import edu.pw.ii.pap.z29.controller.GameController;
+import edu.pw.ii.pap.z29.view.utility.CardPane;
 
 import java.util.*;
 
 
-public class GameFrame extends JFrame{
+public class GamePane extends CardPane {
     Vector<Vector<JTextField>> allLetterFields;
     GUI gui;
     int focusedLine;
@@ -21,22 +21,29 @@ public class GameFrame extends JFrame{
     InputMap inputs;
     ActionMap actions;
     final static int MAX_IT = 3;
-    public GameFrame(GUI gui){
-        super("Game");
+
+    public GamePane(GUI gui){
         this.gui = gui;
+        setName("GamePane");
+        setBackground(GUI.BLACK);
+        setLayout(new GridBagLayout());
+    }
+
+    @Override
+    public void init() {
         allLetterFields = new Vector<Vector<JTextField>>();
         focusedLine = 0;
-        length = getGameController().getWordLength();
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        getContentPane().setBackground(GUI.BLACK);
-        getContentPane().setLayout(new GridBagLayout());
-        setLocationRelativeTo(null);
+        length = gui.getMainController().getGameController().getWordLength();
         addGuiParts();
         createFocusManager();
-        pack();
-        setVisible(true);
         allLetterFields.get(0).get(0).requestFocusInWindow();
     }
+
+    @Override
+    public void cleanup() {
+        removeAll();
+    }
+
     private void setFocus(int line, boolean offOn){
         for(var field : allLetterFields.get(line)){
             field.setFocusable(offOn);
@@ -44,26 +51,19 @@ public class GameFrame extends JFrame{
         }
         allLetterFields.get(line).get(0).requestFocusInWindow();
     }
-    private GameController getGameController(){
-        return gui.getMainController().getGameController();
-    }
     private class EnterButtonListener implements ActionListener{
-        /*TODO (implement functionality)
-        |create end of game frame 
-        | success or failure, score, replay
-        */
         @Override
         public void actionPerformed(ActionEvent e){
             String a = "";
             for (int i = 0; i < length; ++i){
                 a = a.concat(allLetterFields.get(focusedLine).get(i).getText());
             }
-            ArrayList<Integer> vals = new ArrayList<Integer>(getGameController().check(a));
+            ArrayList<Integer> vals = new ArrayList<Integer>(gui.getMainController().getGameController().check(a));
             if (vals.size() == 0){
-                JOptionPane.showMessageDialog(GameFrame.this, "Word doesn't exist");
+                JOptionPane.showMessageDialog(GamePane.this, "Word doesn't exist");
                 return;
             } else if (vals.size() == 1){
-                JOptionPane.showMessageDialog(GameFrame.this, "Incorrect Length");
+                JOptionPane.showMessageDialog(GamePane.this, "Incorrect Length");
                 return;
             }
             SwingUtilities.invokeLater(() -> {
@@ -81,7 +81,7 @@ public class GameFrame extends JFrame{
                 ++i;
             }
             if(vals.stream().distinct().limit(2).count() <= 1 && vals.get(0) == 0){
-                JOptionPane.showMessageDialog(GameFrame.this, "Congratulations!!");
+                JOptionPane.showMessageDialog(GamePane.this, "Congratulations!!");
                 return;
             }
             setFocus(focusedLine, false);
@@ -89,7 +89,7 @@ public class GameFrame extends JFrame{
             if (focusedLine < MAX_IT){
                 setFocus(focusedLine, true);
             } else{
-                JOptionPane.showMessageDialog(GameFrame.this, "You lose!!");
+                JOptionPane.showMessageDialog(GamePane.this, "You lose!!");
 
             }
             });
@@ -104,7 +104,7 @@ public class GameFrame extends JFrame{
                     int a;
                     JTextField letterField = (JTextField) e.getDocument().getProperty("SOURCE");
                     String text = letterField.getText();
-                    String validatedText = getGameController().validateInput(text);
+                    String validatedText = gui.getMainController().getGameController().validateInput(text);
                     letterField.setText(validatedText);
                     
                     if((a = allLetterFields.get(focusedLine).indexOf(letterField) + 1) < length && !text.equals(validatedText) && validatedText != null){
@@ -156,7 +156,7 @@ public class GameFrame extends JFrame{
         showButton.setForeground(GUI.MAIN_COLOR);
         showButton.setHorizontalAlignment(JButton.CENTER);
         showButton.addActionListener((ActionEvent e)->{
-            definitionLabel.setText(getGameController().getDefinition());
+            definitionLabel.setText(gui.getMainController().getGameController().getDefinition());
 
         });
         return showButton;
@@ -188,8 +188,8 @@ public class GameFrame extends JFrame{
                 enterButton.doClick();
             }
         };
-        InputMap inputMap = this.getRootPane().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-        ActionMap actionMap = this.getRootPane().getActionMap();
+        InputMap inputMap = this.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        ActionMap actionMap = this.getActionMap();
 
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "enterWord");
         actionMap.put("enterWord", enterWordAction);
@@ -199,7 +199,7 @@ public class GameFrame extends JFrame{
         var centralPanel = createCentralPanel();
         add(centralPanel);
 
-        JLabel titleLabel = GUI.createTitleLabel(40);
+        JLabel titleLabel = GUIHelper.createDefaultLabel("The Wordle Game", 40);
         centralPanel.add(titleLabel);
 
         JLabel definitionLabel = createDefinitionLabel();

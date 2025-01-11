@@ -2,10 +2,15 @@ package edu.pw.ii.pap.z29.view;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import java.awt.Color;
 import java.awt.Font;
+import java.util.HashMap;
+
 import edu.pw.ii.pap.z29.controller.MainController;
+import edu.pw.ii.pap.z29.view.utility.CardPane;
+import edu.pw.ii.pap.z29.view.utility.CardPane.PaneInitException;
 
 
 public class GUI {
@@ -15,76 +20,68 @@ public class GUI {
     protected static final Font PLAIN_FONT = new Font("Dialog", Font.PLAIN, 20);
     protected static final Color GREEN = Color.decode("#008000");
     protected static final Color YELLOW = Color.decode("#FFFF00");
+    protected static final Color ORANGE = Color.decode("#FFBF00");
 
+    public enum Pane {
+        Friends,
+        Game,
+        Home,
+        Login,
+        Profile,
+        Register,
+    }
 
     private MainController mainController;
-    private LoginFrame loginFrame;
-    private ProfileFrame profileFrame;
-    private MainFrame mainFrame;
-    private RegisterFrame registerFrame;
-    private GameFrame gameFrame;
-
+    private HashMap<Pane, CardPane> panes = new HashMap<Pane, CardPane>();
+    Pane currentPane;
+    MainFrame frame;
+    
     public GUI(MainController mainController) {
         this.mainController = mainController;
-    }
-
-    static JLabel createTitleLabel(int font_size) {
-        var titleLabel = new JLabel("The Wordle game");
-        titleLabel.setForeground(GUI.SECONDARY_COLOR);
-        titleLabel.setFont(new Font("Dialog", Font.BOLD, font_size));
-        return titleLabel;
-    }
-
-    private void createAndShowGUI() {
-        loginFrame = new LoginFrame(this);
-        loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        loginFrame.setVisible(true);
-    }
-    public void skipLogin(){
-        SwingUtilities.invokeLater(()->mainController.getLoginController().checkLogin("123", "123"));
-    }
-    public void run() {
-        SwingUtilities.invokeLater(() -> createAndShowGUI());
-    }
-
-
+        frame = new MainFrame(this);
+        addPane(Pane.Friends, new FriendsPane(this));
+        addPane(Pane.Game, new GamePane(this));
+        addPane(Pane.Home, new HomePane(this));
+        addPane(Pane.Login, new LoginPane(this));
+        addPane(Pane.Profile, new ProfilePane(this));
+        addPane(Pane.Register, new RegisterPane(this));
+    }    
+    
     public MainController getMainController() {
         return mainController;
     }
 
-    public LoginFrame getLoginFrame() {
-        return loginFrame;
+    public JPanel getPane(Pane pane) {
+        return panes.get(pane);
     }
 
-    public void disposeOfLoginFrame() {
-        loginFrame.dispose();
-        loginFrame = null;
+    public JFrame getFrame() {
+        return frame;
     }
-    public void disposeOfMainFrame() {
-        mainFrame.dispose();
-        mainFrame = null;
+
+    public synchronized Pane getCurrentPane() {
+        return currentPane;
+    }
+
+    public void run() {
+        SwingUtilities.invokeLater(() -> createAndShowGUI());
+    }    
+    
+    public synchronized boolean showPane(Pane pane) throws PaneInitException {
+        boolean shown = frame.showPane(panes.get(pane));
+        if (shown)
+            currentPane = pane;
+        return shown;
     }
     
+    private void addPane(Pane name, CardPane pane) {
+        panes.put(name, pane);
+        frame.addPane(pane);
+    }
     
-    public void showRegisterFrame() {
-        registerFrame = new RegisterFrame(this);
-        registerFrame.setVisible(true);
-    }
-
-    public void showLoginFrame() {
-        loginFrame = new LoginFrame(this);
-        loginFrame.setVisible(true);
-    }
-
-    public void showMainFrame() {
-        mainFrame = new MainFrame(this);
-    }
-
-    public void showProfileFrame() {
-        profileFrame = new ProfileFrame(mainController);
-    }
-
-    public void showGameFrame() {
-        gameFrame = new GameFrame(this);
+    private void createAndShowGUI() {
+        frame.pack();
+        frame.setVisible(true);
+        frame.showPane(panes.get(Pane.Login));
     }
 }

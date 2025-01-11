@@ -5,11 +5,13 @@ import java.util.Optional;
 
 import javax.swing.JOptionPane;
 import edu.pw.ii.pap.z29.exception.NotLoggedInException;
-
+import edu.pw.ii.pap.z29.model.primitives.Password;
 import edu.pw.ii.pap.z29.model.primitives.User;
-import lombok.Data;
+import edu.pw.ii.pap.z29.model.primitives.Username;
+import edu.pw.ii.pap.z29.view.GUI;
+import edu.pw.ii.pap.z29.view.utility.CardPane.PaneInitException;
 
-@Data
+
 public class LoginController {
     MainController mainController;
     private User currentUser = null;
@@ -18,48 +20,56 @@ public class LoginController {
         this.mainController = mainController;
     }
 
-    public void checkLogin(String login, String password) {
-        boolean correct = false;
-        try {
-            Optional<User> userOpt = mainController.users.readByUsername(login);
-            if (userOpt.isPresent()) {
-                var user = userOpt.get();
-                correct = mainController.loginPasswords.checkCredentials(user.getUserId(), password);
-                currentUser = user;
-            }
-        } catch (SQLException e) {
-            mainController.sqlLogger.log(e);
-        }
-        if (correct) {
-            if(mainController.gui.getLoginFrame() != null){
-            mainController.gui.disposeOfLoginFrame();
-            }
-            mainController.gui.showMainFrame();
+    public void checkLogin(Username username, Password password) {
+        if (loginUser(username, password)) {
+            mainController.gui.showPane(GUI.Pane.Home);
         } else {
-            JOptionPane.showMessageDialog(mainController.gui.getLoginFrame(), "Try again!");
+            JOptionPane.showMessageDialog(mainController.gui.getFrame(), "Try again!");
         }
     }
 
-    public User getCurrentUser() {
+    public synchronized User getCurrentUser() {
         if (currentUser == null)
             throw new NotLoggedInException();
-        return currentUser;
+        return currentUser.toBuilder().build();
     }
 
     public void wantToRegister() {
-        mainController.gui.showRegisterFrame();
+        mainController.gui.showPane(GUI.Pane.Register);
     }
 
     public void wantToLogout() {
         currentUser = null;
-        mainController.gui.showLoginFrame();
+        mainController.gui.showPane(GUI.Pane.Login);
     }
 
     public void seeProfile() {
-        mainController.gui.showProfileFrame();
+        try {
+            mainController.gui.showPane(GUI.Pane.Profile);
+        } catch (PaneInitException e) {
+            JOptionPane.showMessageDialog(mainController.gui.getFrame(), "Couldn't show profile.");
+        }
     }
 
     public void wantToLogin() {
-        mainController.gui.showLoginFrame();
+        mainController.gui.showPane(GUI.Pane.Login);
+    }
+
+    private boolean loginUser(Username username, Password password) {
+        boolean is_correct = false;
+        try {
+            Optional<User> userOpt = mainController.users.read(username);
+            if (userOpt.isPresent()) {
+                var user = userOpt.get();
+                var login_passwd = mainController.loginPasswords.read(user.getUserId()).get();
+                is_correct = login_passwd.getPassword().equals(password);
+                synchronized(this) {
+                    currentUser = user;
+                }
+            }
+        } catch (SQLException e) {
+            mainController.sqlLogger.log(e);
+        }
+        return is_correct;
     }
 }

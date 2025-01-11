@@ -27,18 +27,12 @@ public class UsersTableTest {
 
     @BeforeEach
     void setUp() throws SQLException {
-        var user_to_delete = users.read(testUsername);
-        if (user_to_delete.isPresent()) {
-            users.delete(user_to_delete.get().getUserId());
-        }
+        users.delete(testUsername);
     }
 
     @AfterAll
     static void cleanUp() throws SQLException {
-        var user_to_delete = users.read(testUsername);
-        if (user_to_delete.isPresent()) {
-            users.delete(user_to_delete.get().getUserId());
-        }
+        users.delete(testUsername);
         UsersTableTest.db.close();
     }
     
@@ -58,8 +52,19 @@ public class UsersTableTest {
         }
     }
 
+    @Test void readUserByUsername() {
+        try {
+            var read_user = addUser(testUsername);
+            var read_by_username = users.read(testUsername).get();
+            assertEquals(read_user, read_by_username);
+        } catch (SQLException ex) {
+            new SQLLogger().log(ex);
+            assertTrue(false);
+        }
+    }
+
     @Test void createUserLongName() {
-        var long_name_arr = new char[41];   // in database, length limit is 40
+        var long_name_arr = new char[41];   // in the database, length limit is 40
         Arrays.fill(long_name_arr, 'a');
         var long_name = new String(long_name_arr);
         var username = new Username(long_name);

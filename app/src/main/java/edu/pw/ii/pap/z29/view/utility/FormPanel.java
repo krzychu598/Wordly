@@ -1,4 +1,4 @@
-package edu.pw.ii.pap.z29.view;
+package edu.pw.ii.pap.z29.view.utility;
 
 import javax.swing.JPanel;
 import javax.swing.JLabel;
@@ -7,15 +7,14 @@ import javax.swing.JTextField;
 import java.awt.Color;
 import javax.swing.BoxLayout;
 import javax.swing.Box;
-import java.awt.Dimension;
 
 
-class FormPanel extends JPanel {
-    JLabel label;
-    Component gap;
-    JTextField field;
+public class FormPanel extends JPanel {
+    public JLabel label;
+    public Component gap;
+    public JTextField field;
 
-    FormPanel(JTextField field, String name, Color panel_color) {
+    public FormPanel(JTextField field, String name, Color panel_color) {
         this.field = field;
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         setOpaque(false);
@@ -24,7 +23,7 @@ class FormPanel extends JPanel {
         label.setFont(field.getFont());
         label.setAlignmentX(Component.LEFT_ALIGNMENT);
         add(label);
-        gap = Box.createRigidArea(new Dimension(0, 10));
+        gap = Box.createVerticalStrut(10);
         add(gap);
         field.setAlignmentX(Component.LEFT_ALIGNMENT);
         add(field);
