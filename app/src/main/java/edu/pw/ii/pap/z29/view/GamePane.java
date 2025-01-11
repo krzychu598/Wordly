@@ -20,7 +20,7 @@ public class GamePane extends CardPane {
     JButton enterButton;
     InputMap inputs;
     ActionMap actions;
-    final static int MAX_IT = 3;
+    int MAX_IT;
 
     public GamePane(GUI gui){
         this.gui = gui;
@@ -34,6 +34,7 @@ public class GamePane extends CardPane {
         allLetterFields = new Vector<Vector<JTextField>>();
         focusedLine = 0;
         length = gui.getMainController().getGameController().getWordLength();
+        MAX_IT = gui.getMainController().getGameController().getMaxIt();
         addGuiParts();
         createFocusManager();
         allLetterFields.get(0).get(0).requestFocusInWindow();
@@ -147,6 +148,8 @@ public class GamePane extends CardPane {
         definitionLabel.setHorizontalAlignment(JLabel.CENTER);
         definitionLabel.setBorder(BorderFactory.createLineBorder(Color.YELLOW, 2, true));
         definitionLabel.setPreferredSize(new Dimension(200, 50));
+        definitionLabel.setText(gui.getMainController().getGameController().getDefinition());
+        definitionLabel.setVisible(false);
         return definitionLabel;
     }
     private JButton createDefinitionButton(JLabel definitionLabel){
@@ -156,8 +159,7 @@ public class GamePane extends CardPane {
         showButton.setForeground(GUI.MAIN_COLOR);
         showButton.setHorizontalAlignment(JButton.CENTER);
         showButton.addActionListener((ActionEvent e)->{
-            definitionLabel.setText(gui.getMainController().getGameController().getDefinition());
-
+            definitionLabel.setVisible(true);
         });
         return showButton;
     }

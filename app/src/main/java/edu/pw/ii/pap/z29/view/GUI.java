@@ -46,6 +46,7 @@ public class GUI {
         addPane(Pane.Profile, new ProfilePane(this));
         addPane(Pane.Register, new RegisterPane(this));
     }    
+    // addPane(Pane.GameSummary, new GameSummaryPane(this));
     
     public MainController getMainController() {
         return mainController;

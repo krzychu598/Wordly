@@ -11,7 +11,7 @@ import edu.pw.ii.pap.z29.view.utility.CardPane;
 
 public class HomePane extends CardPane {
     JButton playButton;
-
+    JPopupMenu pop;
     GUI gui;
 
     public HomePane(GUI gui) {
@@ -82,14 +82,15 @@ public class HomePane extends CardPane {
         playButton.setForeground(GUI.MAIN_COLOR);
         playButton.addActionListener(
             (ActionEvent e) -> {
-                JPopupMenu pop = new JPopupMenu("Settings");
+                pop = new JPopupMenu("Settings");
                 JSlider lengthSlider = new JSlider(4, 10, 7);
                 lengthSlider.setMajorTickSpacing(1);
                 lengthSlider.setPaintTicks(true);
                 lengthSlider.setPaintLabels(true);
                 JButton start = new JButton("Start");
                 start.addActionListener((ActionEvent f)->{
-                    gui.getMainController().newGame(lengthSlider.getValue());;
+                    gui.getMainController().newGame(lengthSlider.getValue());
+                    pop.setVisible(false);
                 });
                 pop.add(new JLabel("Word length:"));
                 pop.add(lengthSlider);

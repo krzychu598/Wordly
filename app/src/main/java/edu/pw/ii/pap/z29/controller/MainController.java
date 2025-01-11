@@ -47,7 +47,7 @@ public class MainController {
         }
         gui = new GUI(this);
         gui.run();
-        //gui.skipLogin();
+  
     }
 
     public void newGame(int wordLength){

@@ -2,11 +2,15 @@ package edu.pw.ii.pap.z29.controller;
 
 import java.util.*;
 
+import oracle.net.aso.f;
+
 
 public class GameController {
     MainController mainController;
     int wordLength;
     String word;
+    int score;
+    final static int MAX_IT = 3;
     /*TODO (implement functionality)
     | implement score system
     */
@@ -18,12 +22,16 @@ public class GameController {
         this.wordLength = wordLength;
         //System.out.println("before random word");
         this.word = ApiController.getRandomWord(wordLength);
+        score = wordLength * 10 + 30;
     }
 
     public int getWordLength(){
         return wordLength;
     }
 
+    public int getMaxIt(){
+        return MAX_IT;
+    }
 
     public String validateInput(String text){
         if (text.length() >= 1) {
@@ -61,7 +69,22 @@ public class GameController {
         return results;
     }
 
+    private String toHtml(String words){
+        if (words.length() < 80){
+            return words;
+        }
+        for (int i=65; i<words.length(); ++i){
+            if (words.charAt(i) == ' '){
+                words = words.substring(0, i) + "<br />" + toHtml(words.substring(i));
+                break;
+            }
+        }
+        return words;
+
+    }
     public String getDefinition(){
-        return ApiController.getDefinition(word);
+        score-=20;
+        String definition = ApiController.getDefinition(word);
+        return String.format("<html>%s</html>", toHtml(definition));
     }
 }
