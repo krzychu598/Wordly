@@ -25,7 +25,7 @@ public class GamePane extends CardPane {
     public GamePane(GUI gui){
         this.gui = gui;
         setName("GamePane");
-        setBackground(GUI.BLACK);
+        setBackground(gui.isDarkMode() ? GUI.MAIN_COLOR : GUI.WHITE);
         setLayout(new GridBagLayout());
     }
 
@@ -126,7 +126,11 @@ public class GamePane extends CardPane {
     private JPanel createCentralPanel(){
         var centralPanel = new JPanel();
         centralPanel.setBorder(BorderFactory.createEmptyBorder(50, 30, 50, 30));
-        centralPanel.setBackground(GUI.MAIN_COLOR);
+        if (gui.isDarkMode()) {
+            centralPanel.setBackground(GUI.MAIN_COLOR);
+        } else {
+            centralPanel.setBackground(GUI.WHITE);
+        }
         centralPanel.setLayout(new BoxLayout(centralPanel, BoxLayout.PAGE_AXIS));
         return centralPanel;
     }
@@ -142,8 +146,13 @@ public class GamePane extends CardPane {
     private JLabel createDefinitionLabel(){
         var definitionLabel = new JLabel();
         definitionLabel.setFont(new Font("Dialog", Font.BOLD, 10));
-        definitionLabel.setBackground(Color.WHITE);
-        definitionLabel.setForeground(GUI.SECONDARY_COLOR);
+        if (gui.isDarkMode()) {
+            definitionLabel.setBackground(GUI.MAIN_COLOR);
+            definitionLabel.setForeground(GUI.SECONDARY_COLOR);
+        } else {
+            definitionLabel.setBackground(GUI.SECONDARY_COLOR);
+            definitionLabel.setForeground(GUI.BLACK);
+        }
         definitionLabel.setHorizontalAlignment(JLabel.CENTER);
         definitionLabel.setBorder(BorderFactory.createLineBorder(Color.YELLOW, 2, true));
         definitionLabel.setPreferredSize(new Dimension(200, 50));
@@ -152,8 +161,13 @@ public class GamePane extends CardPane {
     private JButton createDefinitionButton(JLabel definitionLabel){
         var showButton = new JButton("Show Definition");
         showButton.setFont(new Font("Dialog", Font.BOLD, 10));
-        showButton.setBackground(GUI.SECONDARY_COLOR);
-        showButton.setForeground(GUI.MAIN_COLOR);
+        if (gui.isDarkMode()) {
+            showButton.setBackground(GUI.SECONDARY_COLOR);
+            showButton.setForeground(GUI.MAIN_COLOR);
+        } else {
+            showButton.setBackground(GUI.SECONDARY_COLOR);
+            showButton.setForeground(GUI.BLACK);
+        }
         showButton.setHorizontalAlignment(JButton.CENTER);
         showButton.addActionListener((ActionEvent e)->{
             definitionLabel.setText(gui.getMainController().getGameController().getDefinition());
@@ -164,8 +178,13 @@ public class GamePane extends CardPane {
     private void createEnterWordButton(){
         enterButton = new JButton("Enter");
         enterButton.setFont(new Font("Dialog", Font.BOLD, 25));
-        enterButton.setBackground(GUI.SECONDARY_COLOR);
-        enterButton.setForeground(GUI.MAIN_COLOR);
+        if (gui.isDarkMode()) {
+            enterButton.setBackground(GUI.SECONDARY_COLOR);
+            enterButton.setForeground(GUI.MAIN_COLOR);
+        } else {
+            enterButton.setBackground(GUI.SECONDARY_COLOR);
+            enterButton.setForeground(GUI.BLACK);
+        }
         enterButton.addActionListener(new EnterButtonListener());
     }
     private void createFocusManager(){
@@ -197,9 +216,11 @@ public class GamePane extends CardPane {
     }
     private void addGuiParts() {
         var centralPanel = createCentralPanel();
+        centralPanel.setOpaque(true);
         add(centralPanel);
 
         JLabel titleLabel = GUIHelper.createDefaultLabel("The Wordle Game", 40);
+        titleLabel.setForeground(GUI.SECONDARY_COLOR);
         centralPanel.add(titleLabel);
 
         JLabel definitionLabel = createDefinitionLabel();
@@ -210,7 +231,11 @@ public class GamePane extends CardPane {
 
         for (int j = 0; j < MAX_IT; ++j){
             var letterFieldsPanel = new JPanel();
-            letterFieldsPanel.setBackground(GUI.MAIN_COLOR);
+            if (gui.isDarkMode()) {
+                letterFieldsPanel.setBackground(GUI.MAIN_COLOR);
+            } else {
+                letterFieldsPanel.setBackground(GUI.WHITE);
+            }
             var letterFieldsVector = new Vector<JTextField>();
             for(int i = 0; i < length; ++i){
                 var letterField = createLetterField();
@@ -227,32 +252,7 @@ public class GamePane extends CardPane {
     }
 
     public void setDarkMode(boolean darkMode) {
-        if (darkMode) {
-            setBackground(GUI.MAIN_COLOR);
-            setAllForeground(this, GUI.SECONDARY_COLOR, GUI.SECONDARY_COLOR, java.awt.Color.BLACK);
-        } else {
-            setBackground(java.awt.Color.WHITE);
-            setAllForeground(this, GUI.BLUE, GUI.BLUE, java.awt.Color.BLACK);
-        }
         revalidate();
         repaint();
     }
-
-    private void setAllForeground(java.awt.Container container,
-                                  java.awt.Color defaultColor,
-                                  java.awt.Color buttonBgColor,
-                                  java.awt.Color buttonFontColor) {
-        for (java.awt.Component c : container.getComponents()) {
-            if (c instanceof JButton) {
-                c.setBackground(buttonBgColor);
-                c.setForeground(buttonFontColor);
-            } else {
-                c.setForeground(defaultColor);
-            }
-            if (c instanceof java.awt.Container) {
-                setAllForeground((java.awt.Container) c, defaultColor, buttonBgColor, buttonFontColor);
-            }
-        }
-    }
-
 }

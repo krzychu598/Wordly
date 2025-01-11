@@ -94,6 +94,10 @@ public class GUI {
         ((FriendsPane) panes.get(Pane.Friends)).setDarkMode(darkMode);
     }
 
+    public boolean isDarkMode() {
+        return darkMode;
+    }
+
     private void createAndShowGUI() {
         frame.pack();
         frame.setVisible(true);

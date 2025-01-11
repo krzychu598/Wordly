@@ -36,7 +36,11 @@ public class FriendsPane extends CardPane {
     public FriendsPane(GUI gui) {
         this.gui = gui;
         setName("FriendsPane");
-        setBackground(GUI.MAIN_COLOR);
+        if (gui.isDarkMode()) {
+            setBackground(GUI.MAIN_COLOR);
+        } else {
+            setBackground(GUI.WHITE);
+        }
         this.cardPanel = new MainPane();
         this.actualPane = new ActualFriendsPane(gui);
         this.receivedPane = new ReceivedInvitationsPane(gui);
@@ -114,7 +118,11 @@ public class FriendsPane extends CardPane {
 
         actualButton = GUIHelper.createDefaultButton("Friends", 16);
         actualButton.addActionListener(new ButtonListener(actualPane));
-        actualButton.setBackground(GUI.ORANGE);
+        if (gui.isDarkMode()) {
+            actualButton.setBackground(GUI.ORANGE);
+        } else {
+            actualButton.setBackground(GUI.SECONDARY_COLOR);
+        }
         navigationPanel.add(actualButton);
 
         receivedButton = GUIHelper.createDefaultButton("Received", 16);
@@ -136,7 +144,7 @@ public class FriendsPane extends CardPane {
             setAllForeground(this, GUI.SECONDARY_COLOR, GUI.SECONDARY_COLOR, java.awt.Color.BLACK);
         } else {
             setBackground(java.awt.Color.WHITE);
-            setAllForeground(this, GUI.BLUE, GUI.BLUE, java.awt.Color.BLACK);
+            setAllForeground(this, GUI.SECONDARY_COLOR, GUI.SECONDARY_COLOR, java.awt.Color.BLACK);
         }
         revalidate();
         repaint();
@@ -167,10 +175,10 @@ public class FriendsPane extends CardPane {
         }
 
         public void actionPerformed(ActionEvent e) {
-            actualButton.setBackground(GUI.SECONDARY_COLOR);
-            receivedButton.setBackground(GUI.SECONDARY_COLOR);
-            sentButton.setBackground(GUI.SECONDARY_COLOR);
-            ((Component)e.getSource()).setBackground(GUI.ORANGE);
+                actualButton.setBackground(GUI.SECONDARY_COLOR);
+                receivedButton.setBackground(GUI.SECONDARY_COLOR);
+                sentButton.setBackground(GUI.SECONDARY_COLOR);
+                ((Component)e.getSource()).setBackground(GUI.ORANGE);
             (new Thread(() -> cardPanel.showPane(paneToShow))).start();
         }
     }
