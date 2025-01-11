@@ -29,6 +29,7 @@ public class GUI {
         Login,
         Profile,
         Register,
+        GameHistory,
     }
 
     private MainController mainController;
@@ -45,6 +46,7 @@ public class GUI {
         addPane(Pane.Login, new LoginPane(this));
         addPane(Pane.Profile, new ProfilePane(this));
         addPane(Pane.Register, new RegisterPane(this));
+        addPane(Pane.GameHistory, new GameHistoryPane(this));
     }    
     
     public MainController getMainController() {

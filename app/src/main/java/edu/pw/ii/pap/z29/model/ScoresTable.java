@@ -18,22 +18,28 @@ public class ScoresTable {
         this.conn = conn;
     }
 
+
     public int insert(Score score) throws SQLException {
-        final var stmt_str = "INSERT INTO scores2 (user_id, score) VALUES (?, ?)";
+        final var stmt_str = "INSERT INTO scores2 (user_id, score, word, game_date) VALUES (?, ?, ?, ?)";
         int score_id = 0;
-        try (var stmt = conn.prepareStatement(stmt_str, new String[]{"id"})) {
+        try (var stmt = conn.prepareStatement(stmt_str, new String[]{"score_id"})) {
             stmt.setInt(1, score.getUserId());
             stmt.setInt(2, score.getScore());
+            stmt.setString(3, score.getWord());
+            stmt.setDate(4, java.sql.Date.valueOf(score.getDate()));
             stmt.executeUpdate();
             try (var rset = stmt.getGeneratedKeys()) {
-                score_id = rset.getInt(1);
+                if (rset.next()) {
+                    score_id = rset.getInt(1);
+                }
             }
         }
         return score_id;
     }
 
+
     public List<Score> readAllScores(int user_id) throws SQLException {
-        final var stmt_str = "SELECT score_id, score FROM scores2 WHERE user_id = ?";
+        final var stmt_str = "SELECT score_id, score, word, game_date FROM scores2 WHERE user_id = ?";
         List<Score> scores = new ArrayList<>();
         try (var stmt = conn.prepareStatement(stmt_str)) {
             stmt.setInt(1, user_id);
@@ -42,8 +48,9 @@ public class ScoresTable {
                     var score = new Score(
                         rset.getInt("score_id"),
                         user_id,
-                        rset.getInt("score")
-                    );
+                        rset.getInt("score"),
+                        rset.getString("word"),
+                        rset.getDate("game_date").toLocalDate());
                     scores.add(score);
                 }
             }
@@ -51,14 +58,15 @@ public class ScoresTable {
         return scores;
     }
 
+
     public boolean delete(int user_id) throws SQLException {
-        var update_str = new StringBuilder("DELETE FROM scores2 WHERE user_id = ?");
+        final var stmt_str = "DELETE FROM scores2 WHERE user_id = ?";
         boolean did_delete;
-        try (var update = conn.prepareStatement(update_str.toString())) {
-            update.setInt(1, user_id);
-            did_delete = update.executeUpdate() > 0;
+        try (var stmt = conn.prepareStatement(stmt_str)) {
+            stmt.setInt(1, user_id);
+            did_delete = stmt.executeUpdate() > 0;
         }
         return did_delete;
     }
-
 }
+

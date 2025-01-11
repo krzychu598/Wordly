@@ -114,6 +114,16 @@ public class ProfilePane extends CardPane {
         });
         centralPanel.add(friendsButton);
         centralPanel.add(Box.createVerticalStrut(50));
+
+        var historyButton = GUIHelper.createDefaultButton("Games history", 16);
+        historyButton.setBackground(new Color(200, 10, 10));
+        historyButton.addActionListener(e -> {
+            (new Thread(() ->
+            getProfileController().wantToSeeGameHistory())).start();
+        });
+        centralPanel.add(historyButton);
+        centralPanel.setMaximumSize(getPreferredSize());
+
         var deleteButton = GUIHelper.createDefaultButton("Delete account", 16);
         deleteButton.setBackground(new Color(200, 10, 10));
         deleteButton.addActionListener(e -> {
@@ -123,7 +133,7 @@ public class ProfilePane extends CardPane {
         centralPanel.add(deleteButton);
         centralPanel.setMaximumSize(getPreferredSize());
     }
-    
+
     public void updateUserData() {
         this.userData = getProfileController().readUserData();
         var max_score = userData.getScores().size() != 0 ?
