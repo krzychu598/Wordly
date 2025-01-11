@@ -159,31 +159,13 @@ public class ProfilePane extends CardPane {
     public void setDarkMode(boolean darkMode) {
         if (darkMode) {
             setBackground(GUI.MAIN_COLOR);
-            setAllForeground(this, GUI.SECONDARY_COLOR, GUI.SECONDARY_COLOR, java.awt.Color.BLACK);
         } else {
             setBackground(java.awt.Color.WHITE);
-            setAllForeground(this, GUI.BLUE, GUI.BLUE, java.awt.Color.BLACK);
         }
         revalidate();
         repaint();
     }
 
-    private void setAllForeground(java.awt.Container container,
-                                  java.awt.Color defaultColor,
-                                  java.awt.Color buttonBgColor,
-                                  java.awt.Color buttonFontColor) {
-        for (java.awt.Component c : container.getComponents()) {
-            if (c instanceof JButton) {
-                c.setBackground(buttonBgColor);
-                c.setForeground(buttonFontColor);
-            } else {
-                c.setForeground(defaultColor);
-            }
-            if (c instanceof java.awt.Container) {
-                setAllForeground((java.awt.Container) c, defaultColor, buttonBgColor, buttonFontColor);
-            }
-        }
-    }
 
     private class UsernameEditListener extends MouseAdapter {
         JLabel usernameLabel;
