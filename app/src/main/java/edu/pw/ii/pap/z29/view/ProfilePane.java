@@ -66,11 +66,11 @@ public class ProfilePane extends CardPane {
         add(backButton);
         layout.putConstraint(SpringLayout.WEST, backButton, 10, SpringLayout.WEST, this);
         layout.putConstraint(SpringLayout.NORTH, backButton, 10, SpringLayout.NORTH, this);
-        
+
         var strut = (JComponent)Box.createHorizontalStrut(400);
         strut.setAlignmentX(LEFT_ALIGNMENT);
         centralPanel.add(strut);
-        
+
         var listPanel = new ListPanel(50);
         listPanel.strut.setSize(new Dimension(50, 0));
 
@@ -78,7 +78,7 @@ public class ProfilePane extends CardPane {
         listPanel.fieldPanel.add(scoreFieldLabel);
         this.scoreLabel = GUIHelper.createDefaultLabel("", 20);
         listPanel.valuePanel.add(scoreLabel);
-        
+
         var usernameFieldLabel = GUIHelper.createDefaultLabel("Username:", 20);
         listPanel.fieldPanel.add(usernameFieldLabel);
         this.usernameLabel = GUIHelper.createDefaultLabel("", 20);
@@ -87,7 +87,7 @@ public class ProfilePane extends CardPane {
         usernameLabelParent.add(usernameLabel);
         usernameLabel.addMouseListener(new UsernameEditListener(usernameLabel));
         listPanel.valuePanel.add(usernameLabelParent);
-        
+
         this.passwordToggle = new JCheckBox("Show");
         passwordToggle.setForeground(GUI.SECONDARY_COLOR);
         passwordToggle.setOpaque(false);
@@ -104,7 +104,7 @@ public class ProfilePane extends CardPane {
         passwordValueRow.add(Box.createHorizontalStrut(10));
         passwordValueRow.add(passwordToggle);
         listPanel.valuePanel.add(passwordValueRow);
-        
+
         centralPanel.add(listPanel);
         centralPanel.add(Box.createVerticalStrut(30));
         var friendsButton = GUIHelper.createDefaultButton("Friends list", 16);
@@ -114,6 +114,14 @@ public class ProfilePane extends CardPane {
         });
         centralPanel.add(friendsButton);
         centralPanel.add(Box.createVerticalStrut(50));
+
+        var themeToggle = GUIHelper.createDefaultButton("Toggle dark mode", 16);
+        themeToggle.addActionListener(e -> {
+            gui.toggleTheme();
+        });
+        centralPanel.add(themeToggle);
+        centralPanel.add(Box.createVerticalStrut(40));
+
         var deleteButton = GUIHelper.createDefaultButton("Delete account", 16);
         deleteButton.setBackground(new Color(200, 10, 10));
         deleteButton.addActionListener(e -> {
@@ -123,7 +131,7 @@ public class ProfilePane extends CardPane {
         centralPanel.add(deleteButton);
         centralPanel.setMaximumSize(getPreferredSize());
     }
-    
+
     public void updateUserData() {
         this.userData = getProfileController().readUserData();
         var max_score = userData.getScores().size() != 0 ?
@@ -146,6 +154,35 @@ public class ProfilePane extends CardPane {
 
     private ProfileController getProfileController() {
         return gui.getMainController().getProfileController();
+    }
+
+    public void setDarkMode(boolean darkMode) {
+        if (darkMode) {
+            setBackground(GUI.MAIN_COLOR);
+            setAllForeground(this, GUI.SECONDARY_COLOR, GUI.SECONDARY_COLOR, java.awt.Color.BLACK);
+        } else {
+            setBackground(java.awt.Color.WHITE);
+            setAllForeground(this, GUI.BLUE, GUI.BLUE, java.awt.Color.BLACK);
+        }
+        revalidate();
+        repaint();
+    }
+
+    private void setAllForeground(java.awt.Container container,
+                                  java.awt.Color defaultColor,
+                                  java.awt.Color buttonBgColor,
+                                  java.awt.Color buttonFontColor) {
+        for (java.awt.Component c : container.getComponents()) {
+            if (c instanceof JButton) {
+                c.setBackground(buttonBgColor);
+                c.setForeground(buttonFontColor);
+            } else {
+                c.setForeground(defaultColor);
+            }
+            if (c instanceof java.awt.Container) {
+                setAllForeground((java.awt.Container) c, defaultColor, buttonBgColor, buttonFontColor);
+            }
+        }
     }
 
     private class UsernameEditListener extends MouseAdapter {
