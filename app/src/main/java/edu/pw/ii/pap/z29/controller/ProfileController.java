@@ -127,6 +127,10 @@ public class ProfileController {
         mainController.getGui().showPane(GUI.Pane.Friends);
     }
 
+    public void wantToSeeGameHistory() {
+        mainController.getGui().showPane(GUI.Pane.GameHistory);
+    }
+
     @Data
     static public class UserData {
         private User user;
