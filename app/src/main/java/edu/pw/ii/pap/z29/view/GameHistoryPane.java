@@ -32,7 +32,11 @@ public class GameHistoryPane extends CardPane {
     public GameHistoryPane(GUI gui) {
         this.gui = gui;
         setName("GameHistoryPane");
-        setBackground(GUI.MAIN_COLOR);
+        if (gui.isDarkMode()) {
+            setBackground(GUI.MAIN_COLOR);
+        } else {
+            setBackground(GUI.WHITE);
+        }
         this.cardPanel = new MainPane();
         setLayout(layout);
     }
@@ -92,10 +96,20 @@ public class GameHistoryPane extends CardPane {
         centralPanel.add(scoresPanel);
     }
 
+    public void setDarkMode(boolean darkMode) {
+        if (darkMode) {
+            setBackground(GUI.MAIN_COLOR);
+        } else {
+            setBackground(java.awt.Color.WHITE);
+        }
+        revalidate();
+        repaint();
+    }
+
 
     private class ButtonListener implements ActionListener {
         CardPane paneToShow;
-        
+
         public ButtonListener(CardPane paneToShow) {
             this.paneToShow = paneToShow;
         }

@@ -36,7 +36,11 @@ public class FriendsPane extends CardPane {
     public FriendsPane(GUI gui) {
         this.gui = gui;
         setName("FriendsPane");
-        setBackground(GUI.MAIN_COLOR);
+        if (gui.isDarkMode()) {
+            setBackground(GUI.MAIN_COLOR);
+        } else {
+            setBackground(GUI.WHITE);
+        }
         this.cardPanel = new MainPane();
         this.actualPane = new ActualFriendsPane(gui);
         this.receivedPane = new ReceivedInvitationsPane(gui);
@@ -108,13 +112,17 @@ public class FriendsPane extends CardPane {
         add(backButton);
         layout.putConstraint(SpringLayout.WEST, backButton, 10, SpringLayout.WEST, this);
         layout.putConstraint(SpringLayout.NORTH, backButton, 10, SpringLayout.NORTH, this);
-            
+
         var navigationPanel = GUIHelper.createContainerPanel();
         navigationPanel.setAlignmentX(LEFT_ALIGNMENT);
 
         actualButton = GUIHelper.createDefaultButton("Friends", 16);
         actualButton.addActionListener(new ButtonListener(actualPane));
-        actualButton.setBackground(GUI.ORANGE);
+        if (gui.isDarkMode()) {
+            actualButton.setBackground(GUI.ORANGE);
+        } else {
+            actualButton.setBackground(GUI.SECONDARY_COLOR);
+        }
         navigationPanel.add(actualButton);
 
         receivedButton = GUIHelper.createDefaultButton("Received", 16);
@@ -130,18 +138,47 @@ public class FriendsPane extends CardPane {
         centralPanel.add(cardPanel);
     }
 
+    public void setDarkMode(boolean darkMode) {
+        if (darkMode) {
+            setBackground(GUI.MAIN_COLOR);
+            setAllForeground(this, GUI.SECONDARY_COLOR, GUI.SECONDARY_COLOR, java.awt.Color.BLACK);
+        } else {
+            setBackground(java.awt.Color.WHITE);
+            setAllForeground(this, GUI.SECONDARY_COLOR, GUI.SECONDARY_COLOR, java.awt.Color.BLACK);
+        }
+        revalidate();
+        repaint();
+    }
+
+    private void setAllForeground(java.awt.Container container,
+                                  java.awt.Color defaultColor,
+                                  java.awt.Color buttonBgColor,
+                                  java.awt.Color buttonFontColor) {
+        for (java.awt.Component c : container.getComponents()) {
+            if (c instanceof JButton) {
+                c.setBackground(buttonBgColor);
+                c.setForeground(buttonFontColor);
+            } else {
+                c.setForeground(defaultColor);
+            }
+            if (c instanceof java.awt.Container) {
+                setAllForeground((java.awt.Container) c, defaultColor, buttonBgColor, buttonFontColor);
+            }
+        }
+    }
+
     private class ButtonListener implements ActionListener {
         CardPane paneToShow;
-        
+
         public ButtonListener(CardPane paneToShow) {
             this.paneToShow = paneToShow;
         }
 
         public void actionPerformed(ActionEvent e) {
-            actualButton.setBackground(GUI.SECONDARY_COLOR);
-            receivedButton.setBackground(GUI.SECONDARY_COLOR);
-            sentButton.setBackground(GUI.SECONDARY_COLOR);
-            ((Component)e.getSource()).setBackground(GUI.ORANGE);
+                actualButton.setBackground(GUI.SECONDARY_COLOR);
+                receivedButton.setBackground(GUI.SECONDARY_COLOR);
+                sentButton.setBackground(GUI.SECONDARY_COLOR);
+                ((Component)e.getSource()).setBackground(GUI.ORANGE);
             (new Thread(() -> cardPanel.showPane(paneToShow))).start();
         }
     }

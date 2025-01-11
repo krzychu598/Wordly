@@ -21,6 +21,9 @@ public class GUI {
     protected static final Color GREEN = Color.decode("#008000");
     protected static final Color YELLOW = Color.decode("#FFFF00");
     protected static final Color ORANGE = Color.decode("#FFBF00");
+    protected static final Color WHITE = Color.decode("#F0F8FF");
+    protected static final Color BLUE = Color.decode("#0077B3");
+
 
     public enum Pane {
         Friends,
@@ -32,11 +35,13 @@ public class GUI {
         GameHistory,
     }
 
+    private boolean darkMode = true;
+
     private MainController mainController;
     private HashMap<Pane, CardPane> panes = new HashMap<Pane, CardPane>();
     Pane currentPane;
     MainFrame frame;
-    
+
     public GUI(MainController mainController) {
         this.mainController = mainController;
         frame = new MainFrame(this);
@@ -47,8 +52,8 @@ public class GUI {
         addPane(Pane.Profile, new ProfilePane(this));
         addPane(Pane.Register, new RegisterPane(this));
         addPane(Pane.GameHistory, new GameHistoryPane(this));
-    }    
-    
+    }
+
     public MainController getMainController() {
         return mainController;
     }
@@ -67,20 +72,35 @@ public class GUI {
 
     public void run() {
         SwingUtilities.invokeLater(() -> createAndShowGUI());
-    }    
-    
+    }
+
     public synchronized boolean showPane(Pane pane) throws PaneInitException {
         boolean shown = frame.showPane(panes.get(pane));
         if (shown)
             currentPane = pane;
         return shown;
     }
-    
+
     private void addPane(Pane name, CardPane pane) {
         panes.put(name, pane);
         frame.addPane(pane);
     }
-    
+
+    public void toggleTheme() {
+        darkMode = !darkMode;
+        ((ProfilePane) panes.get(Pane.Profile)).setDarkMode(darkMode);
+        ((RegisterPane) panes.get(Pane.Register)).setDarkMode(darkMode);
+        ((LoginPane) panes.get(Pane.Login)).setDarkMode(darkMode);
+        ((HomePane) panes.get(Pane.Home)).setDarkMode(darkMode);
+        ((GamePane) panes.get(Pane.Game)).setDarkMode(darkMode);
+        ((FriendsPane) panes.get(Pane.Friends)).setDarkMode(darkMode);
+        ((GameHistoryPane) panes.get(Pane.GameHistory)).setDarkMode(darkMode);
+    }
+
+    public boolean isDarkMode() {
+        return darkMode;
+    }
+
     private void createAndShowGUI() {
         frame.pack();
         frame.setVisible(true);

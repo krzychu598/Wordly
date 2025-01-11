@@ -16,7 +16,7 @@ public class RegisterPane extends CardPane {
     JTextField usernameField;
     JPasswordField passwordField;
     GUI gui;
-    
+
     public RegisterPane(GUI gui) {
         this.gui = gui;
         setName("RegisterPane");
@@ -66,7 +66,7 @@ public class RegisterPane extends CardPane {
 
         centralPanel.add(Box.createVerticalStrut(40));
 
-        var buttonPanel = GUIHelper.createContainerPanel(new GridLayout());  
+        var buttonPanel = GUIHelper.createContainerPanel(new GridLayout());
         var registerButton = new JButton("Register");
         registerButton.setFont(new Font("Dialog", Font.BOLD, 25));
         registerButton.setBackground(GUI.SECONDARY_COLOR);
@@ -99,7 +99,36 @@ public class RegisterPane extends CardPane {
         LoginPanel.add(loginLabel);
         centralPanel.add(LoginPanel);
     }
-    
+
+    public void setDarkMode(boolean darkMode) {
+        if (darkMode) {
+            setBackground(GUI.MAIN_COLOR);
+            setAllForeground(this, GUI.SECONDARY_COLOR, GUI.SECONDARY_COLOR, java.awt.Color.BLACK);
+        } else {
+            setBackground(java.awt.Color.WHITE);
+            setAllForeground(this, GUI.BLUE, GUI.BLUE, java.awt.Color.BLACK);
+        }
+        revalidate();
+        repaint();
+    }
+
+    private void setAllForeground(java.awt.Container container,
+                                  java.awt.Color defaultColor,
+                                  java.awt.Color buttonBgColor,
+                                  java.awt.Color buttonFontColor) {
+        for (java.awt.Component c : container.getComponents()) {
+            if (c instanceof JButton) {
+                c.setBackground(buttonBgColor);
+                c.setForeground(buttonFontColor);
+            } else {
+                c.setForeground(defaultColor);
+            }
+            if (c instanceof java.awt.Container) {
+                setAllForeground((java.awt.Container) c, defaultColor, buttonBgColor, buttonFontColor);
+            }
+        }
+    }
+
 
 }
 

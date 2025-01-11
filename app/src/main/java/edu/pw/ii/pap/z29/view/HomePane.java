@@ -75,6 +75,17 @@ public class HomePane extends CardPane {
         return menu;
     }
 
+    public void setDarkMode(boolean darkMode) {
+        if (darkMode) {
+            setBackground(GUI.MAIN_COLOR);
+        } else {
+            setBackground(java.awt.Color.WHITE);
+        }
+        revalidate();
+        repaint();
+    }
+
+
     JButton createPlayButton() {
         JButton playButton = new JButton("Play");
         playButton.setFont(new Font("Dialog", Font.BOLD, 40));
