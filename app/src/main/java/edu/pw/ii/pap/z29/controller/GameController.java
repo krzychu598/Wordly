@@ -2,9 +2,6 @@ package edu.pw.ii.pap.z29.controller;
 
 import java.util.*;
 
-import oracle.net.aso.f;
-
-
 public class GameController {
     MainController mainController;
     int wordLength;
@@ -12,11 +9,12 @@ public class GameController {
     int score = 0;
     int guesssedLetters;
     boolean won = false;
-    final static int MAX_IT = 3;
+    int MAX_IT;
     public GameController(MainController mainController, int wordLength ) {
         this.mainController = mainController;
         this.wordLength = wordLength;
         this.word = ApiController.getRandomWord(wordLength);
+        MAX_IT = wordLength;
     }
 
     public int getWordLength(){
