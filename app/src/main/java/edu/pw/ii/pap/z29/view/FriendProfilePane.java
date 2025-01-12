@@ -1,17 +1,11 @@
 package edu.pw.ii.pap.z29.view;
 
 import java.awt.*;
-import java.awt.event.*;
-import java.lang.reflect.Field;
-
-import lombok.Data;
 import javax.swing.*;
 import edu.pw.ii.pap.z29.controller.ProfileController;
 import edu.pw.ii.pap.z29.controller.MainController;
-import edu.pw.ii.pap.z29.model.primitives.Password;
 import edu.pw.ii.pap.z29.model.primitives.Score;
 import edu.pw.ii.pap.z29.model.primitives.User;
-import edu.pw.ii.pap.z29.model.primitives.Username;
 import edu.pw.ii.pap.z29.view.utility.CardPane;
 import edu.pw.ii.pap.z29.view.utility.ListPanel;
 import edu.pw.ii.pap.z29.controller.ProfileController.UserData;
@@ -36,11 +30,11 @@ public class FriendProfilePane extends CardPane {
         setName("FriendProfilePane");
         this.layout = new SpringLayout();
         setLayout(layout);
-        setBackground(GUI.MAIN_COLOR);
     }
 
     @Override
     public void init() throws PaneInitException {
+        setBackground(GUI.getMainColor());
         addGuiParts();
         try {
             updateUserData(user);
@@ -103,7 +97,7 @@ public class FriendProfilePane extends CardPane {
 
 
         var historyButton = GUIHelper.createDefaultButton("Add Friend", 16);
-        historyButton.setBackground(GUI.SECONDARY_COLOR);
+        historyButton.setBackground(GUI.getSecondaryColor());
         historyButton.addActionListener(e -> {
             (new Thread(() ->
                 gui.getMainController().getFriendsController().addFriend(user.getUserId()))).start();
@@ -133,19 +127,5 @@ public class FriendProfilePane extends CardPane {
     private ProfileController getProfileController() {
         return gui.getMainController().getProfileController();
     }
-
-    public void setDarkMode(boolean darkMode) {
-        if (darkMode) {
-            setBackground(GUI.MAIN_COLOR);
-        } else {
-            setBackground(java.awt.Color.WHITE);
-        }
-        revalidate();
-        repaint();
-    }
-
-
-
-
 }
 
