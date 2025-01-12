@@ -24,6 +24,7 @@ public class MainController {
     GameController gameController;
     ProfileController profileController;
     FriendsController friendsController;
+    GameSummaryController gameSummaryController;
     GUI gui;
     @Getter(AccessLevel.PACKAGE) SQLLogger sqlLogger = new SQLLogger();
     @Getter(AccessLevel.NONE) Database database = new Database();
@@ -49,16 +50,19 @@ public class MainController {
         }
         gui = new GUI(this);
         gui.run();
-        //gui.skipLogin();
+  
     }
 
     public void newGame(int wordLength){
         gameController = new GameController(this, wordLength);
-        //System.out.println("created controller");
         gui.showPane(GUI.Pane.Game);
-        //System.out.println("shown frame");
     }
 
+    public void newSummary(int score){
+        gameSummaryController = new GameSummaryController(this, score);
+        gui.showPane(GUI.Pane.GameSummary);
+
+    }
     public boolean addUser(Username username, Password password) {
         try {
             User user = new User(username);
