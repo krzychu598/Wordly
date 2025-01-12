@@ -99,7 +99,15 @@ public class GameSummaryPane extends CardPane{
     }
     private JPanel createScoreInfoPanel(){
         scorePanel = new JPanel();
+        scorePanel.setBackground(GUI.BLACK);
+        scorePanel.setLayout(new BoxLayout(scorePanel, BoxLayout.Y_AXIS));
         infoLabel = new JLabel();
+        infoLabel.setFont(new Font("Dialog", Font.BOLD, 10));
+        infoLabel.setBackground(GUI.MAIN_COLOR);
+        infoLabel.setForeground(GUI.SECONDARY_COLOR);
+        infoLabel.setHorizontalAlignment(JLabel.CENTER);
+        infoLabel.setBorder(BorderFactory.createLineBorder(Color.YELLOW, 2, true));
+        infoLabel.setPreferredSize(new Dimension(200, 50));
         scorePanel.add(infoLabel);
         return scorePanel;
     }
