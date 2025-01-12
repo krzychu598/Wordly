@@ -16,7 +16,7 @@ public class GameSummaryPane extends CardPane{
     int score = 0;
     JPanel scorePanel;
     JLabel infoLabel;
-    JLabel image;
+    JLabel image = null;
     public GameSummaryPane(GUI gui){
         this.gui = gui;
         setName("GameSummaryPane");
@@ -89,10 +89,12 @@ public class GameSummaryPane extends CardPane{
         infoLabel.setText(scoreMessage);
         if (score > gui.getMainController().getGameSummaryController().getCurrentBestScore()){
             try {
-                Image highScoreImage = ImageIO.read(new File("app/src/images/high-score.png"));
-                highScoreImage = highScoreImage.getScaledInstance(100, 100, Image.SCALE_DEFAULT);
-                image = new JLabel(new ImageIcon(highScoreImage));
-                scorePanel.add(image);
+                if (image == null){
+                    Image highScoreImage = ImageIO.read(new File("app/src/images/high-score.png"));
+                    highScoreImage = highScoreImage.getScaledInstance(100, 100, Image.SCALE_DEFAULT);
+                    image = new JLabel(new ImageIcon(highScoreImage));
+                    scorePanel.add(image);
+                }
                 } catch (IOException e){
                     e.printStackTrace();
                 }
