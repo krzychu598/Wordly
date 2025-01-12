@@ -82,8 +82,9 @@ public class GamePane extends CardPane {
                 ++i;
             }
             if(vals.stream().distinct().limit(2).count() <= 1 && vals.get(0) == 0){
-                gui.getMainController().getGameController().scoreGuessedWord(focusedLine);
-                gui.showPane(GUI.Pane.GameSummary);
+                gui.getMainController().getGameController().updateScoreGuessed(focusedLine);
+                JOptionPane.showMessageDialog(GamePane.this, "Congratulations!!");
+                gui.getMainController().newSummary(gui.getMainController().getGameController().getScore());
                 return;
             }
             setFocus(focusedLine, false);
@@ -91,8 +92,10 @@ public class GamePane extends CardPane {
             if (focusedLine < MAX_IT){
                 setFocus(focusedLine, true);
             } else{
-                gui.getMainController().getGameController().scoreNotGuessed();
-                gui.showPane(GUI.Pane.GameSummary);
+                gui.getMainController().getGameController().updateScoreNotGuessed();
+                String loseInfo = String.format("You Lose!! Game's Word: %s", gui.getMainController().getGameController().getWord());
+                JOptionPane.showMessageDialog(GamePane.this, loseInfo);
+                gui.getMainController().newSummary(gui.getMainController().getGameController().getScore());
             }
             });
 
@@ -107,9 +110,11 @@ public class GamePane extends CardPane {
                     JTextField letterField = (JTextField) e.getDocument().getProperty("SOURCE");
                     String text = letterField.getText();
                     String validatedText = gui.getMainController().getGameController().validateInput(text);
-                    letterField.setText(validatedText);
-                    
-                    if((a = allLetterFields.get(focusedLine).indexOf(letterField) + 1) < length && !text.equals(validatedText) && validatedText != null){
+                    if (!text.equals(validatedText)){
+                        letterField.setText(validatedText);
+                        return;
+                    }
+                    if((a = allLetterFields.get(focusedLine).indexOf(letterField) + 1) < length && validatedText != null){
                         allLetterFields.get(focusedLine).get(a).requestFocusInWindow();
 
                     }
@@ -149,7 +154,6 @@ public class GamePane extends CardPane {
         definitionLabel.setHorizontalAlignment(JLabel.CENTER);
         definitionLabel.setBorder(BorderFactory.createLineBorder(Color.YELLOW, 2, true));
         definitionLabel.setPreferredSize(new Dimension(200, 50));
-        definitionLabel.setText(gui.getMainController().getGameController().getDefinition());
         definitionLabel.setVisible(false);
         return definitionLabel;
     }
@@ -160,8 +164,8 @@ public class GamePane extends CardPane {
         showButton.setForeground(GUI.MAIN_COLOR);
         showButton.setHorizontalAlignment(JButton.CENTER);
         showButton.addActionListener((ActionEvent e)->{
+            definitionLabel.setText(gui.getMainController().getGameController().getDefinition());
             definitionLabel.setVisible(true);
-            gui.getMainController().getGameController().scoreShownDefinition();
         });
         return showButton;
     }

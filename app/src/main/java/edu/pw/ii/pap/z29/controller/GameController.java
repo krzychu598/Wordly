@@ -11,38 +11,39 @@ public class GameController {
     String word;
     int score = 0;
     int guesssedLetters;
+    boolean won = false;
     final static int MAX_IT = 3;
-    /*TODO (implement functionality)
-    | implement score system
-    */
     public GameController(MainController mainController, int wordLength ) {
-        /*TODO (potential bug)
-        code sometimes gets stuck here. Probably api issue
-        */
         this.mainController = mainController;
         this.wordLength = wordLength;
-        //System.out.println("before random word");
         this.word = ApiController.getRandomWord(wordLength);
     }
 
     public int getWordLength(){
         return wordLength;
     }
-
+    public String getWord(){
+        return word;
+    }
     public int getMaxIt(){
         return MAX_IT;
     }
-    public void scoreGuessedWord(int turn){
+    public void updateScoreGuessed(int turn){
+        //TODO possibly update score system so it makes more sense
         score += Math.max(wordLength * 10 - (int)( 10 * turn / (MAX_IT-1)), 0);
+        won = true;
     }
-    public void scoreNotGuessed(){
+    public void updateScoreNotGuessed(){
         score = Math.max(score+5*guesssedLetters, 0);
     }
-    public void scoreShownDefinition(){
+    private void updateScoreShownDefinition(){
         score -= 20; 
     }
     public int getScore(){
         return score;
+    }
+    public boolean haveWon(){
+        return won;
     }
     public String validateInput(String text){
         if (text.length() >= 1) {
@@ -97,6 +98,7 @@ public class GameController {
     }
     public String getDefinition(){
         String definition = ApiController.getDefinition(word);
+        updateScoreShownDefinition();
         return String.format("<html>%s</html>", toHtml(definition));
     }
 }

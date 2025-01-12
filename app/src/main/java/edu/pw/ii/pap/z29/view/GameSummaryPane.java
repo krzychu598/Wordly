@@ -2,15 +2,20 @@ package edu.pw.ii.pap.z29.view;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.font.*;
-import java.util.Vector;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import edu.pw.ii.pap.z29.view.utility.CardPane;
 
 public class GameSummaryPane extends CardPane{
     GUI gui;
+    int score = 0;
+    JPanel scorePanel;
+    JLabel infoLabel;
     public GameSummaryPane(GUI gui){
         this.gui = gui;
         setName("GameSummaryPane");
@@ -18,7 +23,9 @@ public class GameSummaryPane extends CardPane{
         setLayout(new GridBagLayout());
         addGuiParts();
     }
-    @Override public void init() {}
+    @Override public void init() {
+        updateInfo();
+    }
 
     @Override public void cleanup() {}
 
@@ -28,6 +35,10 @@ public class GameSummaryPane extends CardPane{
         centralPanel.setBackground(GUI.MAIN_COLOR);
         centralPanel.setLayout(new BoxLayout(centralPanel, BoxLayout.PAGE_AXIS));
         return centralPanel;
+    }
+    private void updateInfo(){
+        score = gui.getMainController().getGameSummaryController().getScore();
+        updatePanelInfo();
     }
 
     private void addGuiParts(){
@@ -48,12 +59,48 @@ public class GameSummaryPane extends CardPane{
     }
 
     private JButton createPlayAgainButton(){
-
+        var playAgainButton = new JButton("Play Again"); 
+        playAgainButton.setFont(new Font("Dialog", Font.BOLD, 10));
+        playAgainButton.setBackground(GUI.SECONDARY_COLOR);
+        playAgainButton.setForeground(GUI.MAIN_COLOR);
+        playAgainButton.setHorizontalAlignment(JButton.CENTER);
+        playAgainButton.addActionListener((ActionEvent e)->{
+            gui.getMainController().newGame(gui.getMainController().getGameController().getWordLength());
+        });
+        return playAgainButton;
     }
     private JButton createExitToMainMenuButton(){
+        var exitButton = new JButton("Exit");
+        exitButton.setFont(new Font("Dialog", Font.BOLD, 10));
+        exitButton.setBackground(GUI.SECONDARY_COLOR);
+        exitButton.setForeground(GUI.MAIN_COLOR);
+        exitButton.setHorizontalAlignment(JButton.CENTER);
+        exitButton.addActionListener((ActionEvent e)->{
+            gui.showPane(GUI.Pane.Home);
+
+        });
+        return exitButton;
+    }
+    
+    private void updatePanelInfo(){
+        //TODO fix imsge size, prettify
+        String scoreMessage = String.format("Score: %d", score);
+        infoLabel.setText(scoreMessage);
+        if (score > gui.getMainController().getGameSummaryController().getCurrentHighScore()){
+            try {
+                BufferedImage highScore = ImageIO.read(new File("app/src/images/high-score.png"));
+                JLabel image = new JLabel(new ImageIcon(highScore));
+                scorePanel.add(image);
+                } catch (IOException e){
+                    e.printStackTrace();
+                }
+        }
 
     }
-    private JLabel createScoreInfoPanel(){
-
+    private JPanel createScoreInfoPanel(){
+        scorePanel = new JPanel();
+        infoLabel = new JLabel();
+        scorePanel.add(infoLabel);
+        return scorePanel;
     }
 }
