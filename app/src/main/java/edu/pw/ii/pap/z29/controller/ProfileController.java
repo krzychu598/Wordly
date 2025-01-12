@@ -173,7 +173,6 @@ public class ProfileController {
         return scores;
     }
 
-
     @Data
     static public class UserData {
         private User user;
