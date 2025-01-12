@@ -1,23 +1,36 @@
 package edu.pw.ii.pap.z29.view;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 
 import java.util.List;
 
+import edu.pw.ii.pap.z29.controller.FriendsController;
 import edu.pw.ii.pap.z29.exception.UserDataException;
 import edu.pw.ii.pap.z29.model.primitives.Friendship;
+import edu.pw.ii.pap.z29.model.primitives.User;
+import edu.pw.ii.pap.z29.model.primitives.Username;
 import edu.pw.ii.pap.z29.view.friends.*;
 import edu.pw.ii.pap.z29.view.utility.CardPane;
 import edu.pw.ii.pap.z29.view.utility.MainPane;
 
 import java.awt.Component;
+import java.util.Optional;
+import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.sql.SQLException;
+import java.awt.event.FocusAdapter;
 
 
 public class FriendsPane extends CardPane {
@@ -113,6 +126,8 @@ public class FriendsPane extends CardPane {
         layout.putConstraint(SpringLayout.WEST, backButton, 10, SpringLayout.WEST, this);
         layout.putConstraint(SpringLayout.NORTH, backButton, 10, SpringLayout.NORTH, this);
 
+        JPanel findFriendsPanel = createFindFriendsPanel();
+        centralPanel.add(findFriendsPanel);
         var navigationPanel = GUIHelper.createContainerPanel();
         navigationPanel.setAlignmentX(LEFT_ALIGNMENT);
 
@@ -137,6 +152,83 @@ public class FriendsPane extends CardPane {
         cardPanel.setAlignmentX(LEFT_ALIGNMENT);
         centralPanel.add(cardPanel);
     }
+
+    private JPanel createFindFriendsPanel() {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+        panel.setOpaque(false);
+
+        panel.add(Box.createRigidArea(new Dimension(0, 5)));
+
+        JPanel inputPanel = new JPanel();
+        inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.LINE_AXIS));
+        inputPanel.setOpaque(false);
+        inputPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        var usernameField = new JTextField();
+        usernameField.setMaximumSize(new Dimension(200, 30));
+        usernameField.setText("Type username here...");
+        usernameField.setForeground(GUI.BLACK);
+        usernameField.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (usernameField.getText().equals("Type username here...")) {
+                    usernameField.setText("");
+                    usernameField.setForeground(GUI.BLACK);
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (usernameField.getText().isEmpty()) {
+                    usernameField.setForeground(GUI.BLACK);
+                    usernameField.setText("Type username here...");
+                }
+            }
+        });
+        inputPanel.add(usernameField);
+
+        inputPanel.add(Box.createRigidArea(new Dimension(10, 0)));
+
+
+        var findFriendsButton = createFindFriendsButton(usernameField);
+        inputPanel.add(findFriendsButton);
+
+        panel.add(inputPanel);
+
+        return panel;
+    }
+
+
+    private JButton createFindFriendsButton(JTextField usernameField) {
+        JButton button = GUIHelper.createDefaultButton("Find Friend", 16);
+        Dimension fixedSize = new Dimension(120, 30);
+        button.setPreferredSize(fixedSize);
+        button.setMinimumSize(fixedSize);
+        button.setMaximumSize(fixedSize);
+        button.addActionListener((e) -> {
+                String input = usernameField.getText().trim();
+                if (input.isEmpty() || input.equals("Type username here...")) {
+                    JOptionPane.showMessageDialog(this, "Please enter a username.", "Input Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                Username username = new Username(input);
+                try {
+                    User user = gui.getMainController().getFriendsController().readUser(username);
+                    var pane = (FriendProfilePane)gui.getPane(GUI.Pane.FriendProfilePane);
+                    pane.setUser(user);
+                    gui.showPane(GUI.Pane.FriendProfilePane);
+                }
+                catch (UserDataException e1) {
+                    JOptionPane.showMessageDialog(this, "User not found.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+        });
+        return button;
+    }
+
+
 
     public void setDarkMode(boolean darkMode) {
         if (darkMode) {
