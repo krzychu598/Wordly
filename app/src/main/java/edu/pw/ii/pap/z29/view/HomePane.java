@@ -11,6 +11,7 @@ import edu.pw.ii.pap.z29.view.utility.CardPane;
 
 public class HomePane extends CardPane {
     JButton playButton;
+    JButton helpButton;
 
     GUI gui;
 
@@ -53,6 +54,19 @@ public class HomePane extends CardPane {
         playButton = createPlayButton();
         buttonPanel.add(playButton);
         centralPanel.add(buttonPanel);
+
+        var helpButton = GUIHelper.createDefaultButton("Help", 10);
+        helpButton.addActionListener((
+            (ActionEvent e) -> {
+                JOptionPane.showMessageDialog(this, "The Wordle Game\n\n" +
+                    "The Wordle Game is a word-guessing game where you have to guess a word of a given length.\n" +
+                    "You have as many attempts to guess as the length of the word.\n" +
+                    "After each guess, you will be given feedback on how many letters are correct and in the right position.\n" +
+                    "Good luck!", "Help", JOptionPane.INFORMATION_MESSAGE);
+            }
+                ));
+        helpButton.setAlignmentX(CENTER_ALIGNMENT);
+        centralPanel.add(helpButton);
     }
 
     private JPanel createCentralPanel() {
