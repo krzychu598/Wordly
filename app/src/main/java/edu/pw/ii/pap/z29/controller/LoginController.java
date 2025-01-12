@@ -43,14 +43,6 @@ public class LoginController {
         mainController.gui.showPane(GUI.Pane.Login);
     }
 
-    public void seeProfile() {
-        try {
-            mainController.gui.showPane(GUI.Pane.Profile);
-        } catch (PaneInitException e) {
-            JOptionPane.showMessageDialog(mainController.gui.getFrame(), "Couldn't show profile.");
-        }
-    }
-
     public void wantToLogin() {
         mainController.gui.showPane(GUI.Pane.Login);
     }

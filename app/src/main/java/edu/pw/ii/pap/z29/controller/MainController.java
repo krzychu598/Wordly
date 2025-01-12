@@ -1,10 +1,12 @@
 package edu.pw.ii.pap.z29.controller;
 
 import java.sql.SQLException;
-import java.time.LocalDate;
 
+import javax.swing.JOptionPane;
+import java.time.LocalDate;
 import edu.pw.ii.pap.z29.Database;
 import edu.pw.ii.pap.z29.view.GUI;
+import edu.pw.ii.pap.z29.view.utility.CardPane.PaneInitException;
 import lombok.Getter;
 import lombok.experimental.StandardException;
 import lombok.AccessLevel;
@@ -27,6 +29,7 @@ public class MainController {
     GameController gameController;
     ProfileController profileController;
     FriendsController friendsController;
+    SettingsController settingsController;
     GameSummaryController gameSummaryController;
     GUI gui;
     @Getter(AccessLevel.PACKAGE) SQLLogger sqlLogger = new SQLLogger();
@@ -41,6 +44,7 @@ public class MainController {
         profileController = new ProfileController(this);
         loginController = new LoginController(this);
         friendsController = new FriendsController(this);
+        settingsController = new SettingsController(this);
         try {
             var conn = database.getConnection();
             users = new UsersTable(conn);
@@ -79,6 +83,14 @@ public class MainController {
             return false;
         } catch (SQLException e) {
             return false;
+        }
+    }
+
+    public void seePane(GUI.Pane pane) {
+        try {
+            gui.showPane(pane);
+        } catch (PaneInitException e) {
+            JOptionPane.showMessageDialog(gui.getFrame(), "Couldn't show Pane.");
         }
     }
 

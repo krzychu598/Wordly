@@ -2,7 +2,6 @@ package edu.pw.ii.pap.z29.view;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.sql.SQLException;
 
 import javax.swing.*;
 

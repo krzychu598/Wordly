@@ -1,13 +1,16 @@
 package edu.pw.ii.pap.z29.view;
 
 import javax.swing.JTextField;
+import javax.swing.SpringLayout;
 import javax.swing.text.AttributeSet.FontAttribute;
 import javax.swing.text.StyleConstants.FontConstants;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.LayoutManager;
+import java.awt.event.ActionListener;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.FlowLayout;
 
 import javax.swing.BorderFactory;
@@ -72,5 +75,15 @@ public class GUIHelper {
         valuePanel.setLayout(new BoxLayout(valuePanel, BoxLayout.PAGE_AXIS));
         listPanel.add(valuePanel);
         return listPanel;
+    }
+
+    public static JButton addBackButton(Container con, SpringLayout layout,
+                                        ActionListener listener) {
+        var backButton = GUIHelper.createDefaultButton("Back", 16);
+        backButton.addActionListener(listener);
+        con.add(backButton);
+        layout.putConstraint(SpringLayout.WEST, backButton, 10, SpringLayout.WEST, con);
+        layout.putConstraint(SpringLayout.NORTH, backButton, 10, SpringLayout.NORTH, con);
+        return backButton;
     }
 }
