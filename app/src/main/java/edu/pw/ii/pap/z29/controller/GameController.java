@@ -29,8 +29,7 @@ public class GameController {
         return MAX_IT;
     }
     public void updateScoreGuessed(int turn){
-        //TODO possibly update score system so it makes more sense
-        score += Math.max(wordLength * 10 - (int)( 10 * turn / (MAX_IT-1)), 0);
+        score += Math.max(wordLength * 100 - (int)( 50 * turn / (MAX_IT-1)), 0);
         won = true;
     }
     public void updateScoreNotGuessed(){

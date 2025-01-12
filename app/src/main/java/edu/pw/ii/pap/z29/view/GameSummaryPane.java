@@ -16,6 +16,7 @@ public class GameSummaryPane extends CardPane{
     int score = 0;
     JPanel scorePanel;
     JLabel infoLabel;
+    JLabel image = null;
     public GameSummaryPane(GUI gui){
         this.gui = gui;
         setName("GameSummaryPane");
@@ -42,8 +43,6 @@ public class GameSummaryPane extends CardPane{
     }
 
     private void addGuiParts(){
-        //TODO project GameSummaryPane
-        //You win/you lose, score, new best, play again, exit, new user score
         var centralPanel = createCentralPanel();
         add(centralPanel);
 
@@ -51,11 +50,14 @@ public class GameSummaryPane extends CardPane{
         var scoreInfoPanel = createScoreInfoPanel();
         var playAgainButton = createPlayAgainButton();
         var exitToMainMenuButton = createExitToMainMenuButton();
+        var buttonsPanel = new JPanel();
+        buttonsPanel.setBackground(GUI.MAIN_COLOR);
+        buttonsPanel.add(playAgainButton);
+        buttonsPanel.add(exitToMainMenuButton);
 
         centralPanel.add(titleLabel);
         centralPanel.add(scoreInfoPanel);
-        centralPanel.add(playAgainButton);
-        centralPanel.add(exitToMainMenuButton);
+        centralPanel.add(buttonsPanel);
     }
 
     private JButton createPlayAgainButton(){
@@ -83,17 +85,24 @@ public class GameSummaryPane extends CardPane{
     }
     
     private void updatePanelInfo(){
-        //TODO fix imsge size, prettify
         String scoreMessage = String.format("Score: %d", score);
         infoLabel.setText(scoreMessage);
-        if (score > gui.getMainController().getGameSummaryController().getCurrentHighScore()){
+        if (score > gui.getMainController().getGameSummaryController().getCurrentBestScore()){
             try {
-                BufferedImage highScore = ImageIO.read(new File("app/src/images/high-score.png"));
-                JLabel image = new JLabel(new ImageIcon(highScore));
-                scorePanel.add(image);
+                if (image == null){
+                    Image highScoreImage = ImageIO.read(new File("app/src/images/high-score.png"));
+                    highScoreImage = highScoreImage.getScaledInstance(100, 100, Image.SCALE_DEFAULT);
+                    image = new JLabel(new ImageIcon(highScoreImage));
+                    scorePanel.add(image);
+                }
                 } catch (IOException e){
                     e.printStackTrace();
                 }
+        } else{
+            if (image !=null){
+                scorePanel.remove(image);
+                image = null;
+            }
         }
 
     }
@@ -103,10 +112,10 @@ public class GameSummaryPane extends CardPane{
         scorePanel.setLayout(new BoxLayout(scorePanel, BoxLayout.Y_AXIS));
         infoLabel = new JLabel();
         infoLabel.setFont(new Font("Dialog", Font.BOLD, 10));
-        infoLabel.setBackground(GUI.MAIN_COLOR);
+        infoLabel.setBackground(GUI.SECONDARY_COLOR);
         infoLabel.setForeground(GUI.SECONDARY_COLOR);
         infoLabel.setHorizontalAlignment(JLabel.CENTER);
-        infoLabel.setBorder(BorderFactory.createLineBorder(Color.YELLOW, 2, true));
+        infoLabel.setBorder(BorderFactory.createLineBorder(GUI.MAIN_COLOR, 2, true));
         infoLabel.setPreferredSize(new Dimension(200, 50));
         scorePanel.add(infoLabel);
         return scorePanel;
