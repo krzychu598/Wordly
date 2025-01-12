@@ -59,14 +59,10 @@ public class ProfilePane extends CardPane {
         0, SpringLayout.HORIZONTAL_CENTER, this);
         layout.putConstraint(SpringLayout.VERTICAL_CENTER, centralPanel,
         0, SpringLayout.VERTICAL_CENTER, this);
-        var backButton = GUIHelper.createDefaultButton("Back", 16);
-        backButton.addActionListener(e -> {
+        GUIHelper.addBackButton(this, layout, e -> {
             (new Thread(() ->
                 getProfileController().goBack())).start();
-            });
-        add(backButton);
-        layout.putConstraint(SpringLayout.WEST, backButton, 10, SpringLayout.WEST, this);
-        layout.putConstraint(SpringLayout.NORTH, backButton, 10, SpringLayout.NORTH, this);
+        });
 
         var strut = (JComponent)Box.createHorizontalStrut(400);
         strut.setAlignmentX(LEFT_ALIGNMENT);
@@ -119,15 +115,6 @@ public class ProfilePane extends CardPane {
             getProfileController().wantToSeeFriends())).start();
         });
         centralPanel.add(friendsButton);
-        centralPanel.add(Box.createVerticalStrut(50));
-
-        var themeToggle = GUIHelper.createDefaultButton("Toggle dark mode", 16);
-        themeToggle.addActionListener(e -> {
-            gui.toggleTheme();
-        });
-        centralPanel.add(themeToggle);
-        centralPanel.add(Box.createVerticalStrut(40));
-
 
         var historyButton = GUIHelper.createDefaultButton("Games history", 16);
         historyButton.setBackground(GUI.SECONDARY_COLOR);
@@ -137,6 +124,7 @@ public class ProfilePane extends CardPane {
         });
         centralPanel.add(historyButton);
         centralPanel.setMaximumSize(getPreferredSize());
+        centralPanel.add(Box.createVerticalStrut(50));
 
         var deleteButton = GUIHelper.createDefaultButton("Delete account", 16);
         deleteButton.setBackground(new Color(200, 10, 10));

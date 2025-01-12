@@ -87,6 +87,9 @@ public class HomePane extends CardPane {
         var seeProfileAction = new SeeProfileAction();
         seeProfileAction.putValue(Action.NAME, "See Profile");
         menu.add(seeProfileAction);
+        var SeeSettingsAction = new SeeSettingsAction();
+        SeeSettingsAction.putValue(Action.NAME, "Settings");
+        menu.add(SeeSettingsAction);
         return menu;
     }
 
@@ -134,7 +137,13 @@ public class HomePane extends CardPane {
 
     private class SeeProfileAction extends AbstractAction {
         public void actionPerformed(ActionEvent e) {
-            gui.getMainController().getLoginController().seeProfile();
+            gui.getMainController().seePane(GUI.Pane.Profile);
+        }
+    }
+
+    private class SeeSettingsAction extends AbstractAction {
+        public void actionPerformed(ActionEvent e) {
+            gui.getMainController().seePane(GUI.Pane.Settings);
         }
     }
 }

@@ -11,6 +11,8 @@ import java.util.HashMap;
 import edu.pw.ii.pap.z29.controller.MainController;
 import edu.pw.ii.pap.z29.view.utility.CardPane;
 import edu.pw.ii.pap.z29.view.utility.CardPane.PaneInitException;
+import lombok.Getter;
+import lombok.Setter;
 
 
 public class GUI {
@@ -24,36 +26,36 @@ public class GUI {
     protected static final Color WHITE = Color.decode("#F0F8FF");
     protected static final Color BLUE = Color.decode("#0077B3");
 
-
     public enum Pane {
         Friends,
         Game,
+        GameHistory,
         Home,
         Login,
         Profile,
         Register,
-        GameHistory,
+        Settings,
         GameSummary,
         FriendProfilePane
     }
-
-    private boolean darkMode = true;
-
-    private MainController mainController;
+    @Getter @Setter private boolean darkMode = true;
+    @Getter @Setter private boolean privateProfile = true;
+    @Getter private MainController mainController;
     private HashMap<Pane, CardPane> panes = new HashMap<Pane, CardPane>();
     Pane currentPane;
-    MainFrame frame;
+    @Getter MainFrame frame;
 
     public GUI(MainController mainController) {
         this.mainController = mainController;
         frame = new MainFrame(this);
         addPane(Pane.Friends, new FriendsPane(this));
         addPane(Pane.Game, new GamePane(this));
+        addPane(Pane.GameHistory, new GameHistoryPane(this));
         addPane(Pane.Home, new HomePane(this));
         addPane(Pane.Login, new LoginPane(this));
         addPane(Pane.Profile, new ProfilePane(this));
         addPane(Pane.Register, new RegisterPane(this));
-        addPane(Pane.GameHistory, new GameHistoryPane(this));
+        addPane(Pane.Settings, new SettingsPane(this));
         addPane(Pane.GameSummary, new GameSummaryPane(this));
         addPane(Pane.FriendProfilePane, new FriendProfilePane(this));
     }
@@ -64,10 +66,6 @@ public class GUI {
 
     public JPanel getPane(Pane pane) {
         return panes.get(pane);
-    }
-
-    public JFrame getFrame() {
-        return frame;
     }
 
     public synchronized Pane getCurrentPane() {
@@ -90,8 +88,7 @@ public class GUI {
         frame.addPane(pane);
     }
 
-    public void toggleTheme() {
-        darkMode = !darkMode;
+    public void updateTheme() {
         ((ProfilePane) panes.get(Pane.Profile)).setDarkMode(darkMode);
         ((RegisterPane) panes.get(Pane.Register)).setDarkMode(darkMode);
         ((LoginPane) panes.get(Pane.Login)).setDarkMode(darkMode);
@@ -99,6 +96,7 @@ public class GUI {
         ((GamePane) panes.get(Pane.Game)).setDarkMode(darkMode);
         ((FriendsPane) panes.get(Pane.Friends)).setDarkMode(darkMode);
         ((GameHistoryPane) panes.get(Pane.GameHistory)).setDarkMode(darkMode);
+        ((SettingsPane) panes.get(Pane.Settings)).setDarkMode(darkMode);
         ((GameHistoryPane) panes.get(Pane.GameSummary)).setDarkMode(darkMode);
     }
 
