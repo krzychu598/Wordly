@@ -2,9 +2,6 @@ package edu.pw.ii.pap.z29.view;
 
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
-import javax.swing.text.AttributeSet.FontAttribute;
-import javax.swing.text.StyleConstants.FontConstants;
-
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.LayoutManager;
@@ -12,7 +9,6 @@ import java.awt.event.ActionListener;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.FlowLayout;
-
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -35,15 +31,15 @@ public class GUIHelper {
 
     public static JLabel createDefaultLabel(String text, int font_size) {
         var label = new JLabel(text);
-        label.setForeground(GUI.SECONDARY_COLOR);
+        label.setForeground(GUI.getSecondaryColor());
         label.setFont(new Font("Dialog", Font.PLAIN, font_size));
         return label;
     }
 
     public static JButton createDefaultButton(String text, int font_size) {
         var button = new JButton(text);
-        button.setBackground(GUI.SECONDARY_COLOR);
-        button.setForeground(GUI.MAIN_COLOR);
+        button.setBackground(GUI.getSecondaryColor());
+        button.setForeground(GUI.getMainColor());
         button.setFont(new Font("Dialog", Font.PLAIN, font_size));
         return button;
     }

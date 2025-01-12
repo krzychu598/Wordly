@@ -19,20 +19,23 @@ public class GameSummaryPane extends CardPane{
     public GameSummaryPane(GUI gui){
         this.gui = gui;
         setName("GameSummaryPane");
-        setBackground(GUI.MAIN_COLOR);
         setLayout(new GridBagLayout());
-        addGuiParts();
     }
+
     @Override public void init() {
+        setBackground(GUI.getMainColor());
+        addGuiParts();
         updateInfo();
     }
 
-    @Override public void cleanup() {}
+    @Override public void cleanup() {
+        removeAll();
+    }
 
     private JPanel createCentralPanel(){
         var centralPanel = new JPanel();
         centralPanel.setBorder(BorderFactory.createEmptyBorder(50, 30, 50, 30));
-        centralPanel.setBackground(GUI.MAIN_COLOR);
+        centralPanel.setBackground(GUI.getMainColor());
         centralPanel.setLayout(new BoxLayout(centralPanel, BoxLayout.PAGE_AXIS));
         return centralPanel;
     }
@@ -50,7 +53,7 @@ public class GameSummaryPane extends CardPane{
         var playAgainButton = createPlayAgainButton();
         var exitToMainMenuButton = createExitToMainMenuButton();
         var buttonsPanel = new JPanel();
-        buttonsPanel.setBackground(GUI.MAIN_COLOR);
+        buttonsPanel.setBackground(GUI.getMainColor());
         buttonsPanel.add(playAgainButton);
         buttonsPanel.add(exitToMainMenuButton);
 
@@ -62,8 +65,8 @@ public class GameSummaryPane extends CardPane{
     private JButton createPlayAgainButton(){
         var playAgainButton = new JButton("Play Again"); 
         playAgainButton.setFont(new Font("Dialog", Font.BOLD, 10));
-        playAgainButton.setBackground(GUI.SECONDARY_COLOR);
-        playAgainButton.setForeground(GUI.MAIN_COLOR);
+        playAgainButton.setBackground(GUI.getSecondaryColor());
+        playAgainButton.setForeground(GUI.getMainColor());
         playAgainButton.setHorizontalAlignment(JButton.CENTER);
         playAgainButton.addActionListener((ActionEvent e)->{
             gui.getMainController().newGame(gui.getMainController().getGameController().getWordLength());
@@ -73,8 +76,8 @@ public class GameSummaryPane extends CardPane{
     private JButton createExitToMainMenuButton(){
         var exitButton = new JButton("Exit");
         exitButton.setFont(new Font("Dialog", Font.BOLD, 10));
-        exitButton.setBackground(GUI.SECONDARY_COLOR);
-        exitButton.setForeground(GUI.MAIN_COLOR);
+        exitButton.setBackground(GUI.getSecondaryColor());
+        exitButton.setForeground(GUI.getMainColor());
         exitButton.setHorizontalAlignment(JButton.CENTER);
         exitButton.addActionListener((ActionEvent e)->{
             gui.showPane(GUI.Pane.Home);
@@ -107,14 +110,14 @@ public class GameSummaryPane extends CardPane{
     }
     private JPanel createScoreInfoPanel(){
         scorePanel = new JPanel();
-        scorePanel.setBackground(GUI.MAIN_COLOR);
+        scorePanel.setBackground(GUI.getMainColor());
         scorePanel.setLayout(new BoxLayout(scorePanel, BoxLayout.Y_AXIS));
         infoLabel = new JLabel();
         infoLabel.setFont(new Font("Dialog", Font.BOLD, 10));
-        infoLabel.setBackground(GUI.SECONDARY_COLOR);
-        infoLabel.setForeground(GUI.SECONDARY_COLOR);
+        infoLabel.setBackground(GUI.getSecondaryColor());
+        infoLabel.setForeground(GUI.getSecondaryColor());
         infoLabel.setHorizontalAlignment(JLabel.CENTER);
-        infoLabel.setBorder(BorderFactory.createLineBorder(GUI.MAIN_COLOR, 2, true));
+        infoLabel.setBorder(BorderFactory.createLineBorder(GUI.getMainColor(), 2, true));
         infoLabel.setPreferredSize(new Dimension(200, 50));
         scorePanel.add(infoLabel);
         return scorePanel;

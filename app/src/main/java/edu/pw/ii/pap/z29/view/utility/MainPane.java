@@ -43,4 +43,10 @@ public class MainPane extends JPanel {
         layout.show(this, "null");
         currentPane = null;
     }
+
+    public synchronized boolean refresh() {
+        var pane = currentPane;
+        clear();
+        return showPane(pane);
+    }
 }

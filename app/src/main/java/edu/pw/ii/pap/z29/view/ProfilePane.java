@@ -31,11 +31,11 @@ public class ProfilePane extends CardPane {
         setName("ProfilePane");
         this.layout = new SpringLayout();
         setLayout(layout);
-        setBackground(GUI.MAIN_COLOR);
     }
 
     @Override
     public void init() throws PaneInitException {
+        setBackground(GUI.getMainColor());
         addGuiParts();
         try {
             updateUserData();
@@ -91,7 +91,7 @@ public class ProfilePane extends CardPane {
         listPanel.valuePanel.add(usernameLabelParent);
 
         this.passwordToggle = new JCheckBox("Show");
-        passwordToggle.setForeground(GUI.SECONDARY_COLOR);
+        passwordToggle.setForeground(GUI.getSecondaryColor());
         passwordToggle.setOpaque(false);
         passwordToggle.addActionListener(e -> {
             updatePasswordLabel();
@@ -117,7 +117,7 @@ public class ProfilePane extends CardPane {
         centralPanel.add(friendsButton);
 
         var historyButton = GUIHelper.createDefaultButton("Games history", 16);
-        historyButton.setBackground(GUI.SECONDARY_COLOR);
+        historyButton.setBackground(GUI.getSecondaryColor());
         historyButton.addActionListener(e -> {
             (new Thread(() ->
             getProfileController().wantToSeeGameHistory())).start();
@@ -163,7 +163,7 @@ public class ProfilePane extends CardPane {
 
     public void setDarkMode(boolean darkMode) {
         if (darkMode) {
-            setBackground(GUI.MAIN_COLOR);
+            setBackground(GUI.getMainColor());
         } else {
             setBackground(java.awt.Color.WHITE);
         }
@@ -179,7 +179,7 @@ public class ProfilePane extends CardPane {
         UsernameEditListener(JLabel usernameLabel) {
             this.usernameLabel = usernameLabel;
             this.hiddenField = GUIHelper.formatTextField(
-                new JTextField(), GUI.SECONDARY_COLOR, GUI.MAIN_COLOR, GUI.PLAIN_FONT);
+                new JTextField(), GUI.getSecondaryColor(), GUI.getMainColor(), GUI.PLAIN_FONT);
             hiddenField.addActionListener(e -> {
                 var newUsername = new Username(hiddenField.getText());
                 var parent = hiddenField.getParent();

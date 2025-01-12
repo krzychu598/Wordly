@@ -4,16 +4,11 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
-
 import java.util.List;
-
-import edu.pw.ii.pap.z29.controller.FriendsController;
 import edu.pw.ii.pap.z29.exception.UserDataException;
 import edu.pw.ii.pap.z29.model.primitives.Friendship;
 import edu.pw.ii.pap.z29.model.primitives.User;
@@ -23,13 +18,10 @@ import edu.pw.ii.pap.z29.view.utility.CardPane;
 import edu.pw.ii.pap.z29.view.utility.MainPane;
 
 import java.awt.Component;
-import java.util.Optional;
 import java.awt.Dimension;
-import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
-import java.sql.SQLException;
 import java.awt.event.FocusAdapter;
 
 
@@ -49,11 +41,6 @@ public class FriendsPane extends CardPane {
     public FriendsPane(GUI gui) {
         this.gui = gui;
         setName("FriendsPane");
-        if (gui.isDarkMode()) {
-            setBackground(GUI.MAIN_COLOR);
-        } else {
-            setBackground(GUI.WHITE);
-        }
         this.cardPanel = new MainPane();
         this.actualPane = new ActualFriendsPane(gui);
         this.receivedPane = new ReceivedInvitationsPane(gui);
@@ -66,6 +53,7 @@ public class FriendsPane extends CardPane {
 
     @Override
     public void init() throws PaneInitException {
+        setBackground(GUI.getMainColor());
         try {
             friendships = gui.getMainController().getProfileController().readFriendships();
         } catch (UserDataException e) {
@@ -136,7 +124,7 @@ public class FriendsPane extends CardPane {
         if (gui.isDarkMode()) {
             actualButton.setBackground(GUI.ORANGE);
         } else {
-            actualButton.setBackground(GUI.SECONDARY_COLOR);
+            actualButton.setBackground(GUI.getSecondaryColor());
         }
         navigationPanel.add(actualButton);
 
@@ -228,37 +216,6 @@ public class FriendsPane extends CardPane {
         return button;
     }
 
-
-
-    public void setDarkMode(boolean darkMode) {
-        if (darkMode) {
-            setBackground(GUI.MAIN_COLOR);
-            setAllForeground(this, GUI.SECONDARY_COLOR, GUI.SECONDARY_COLOR, java.awt.Color.BLACK);
-        } else {
-            setBackground(java.awt.Color.WHITE);
-            setAllForeground(this, GUI.SECONDARY_COLOR, GUI.SECONDARY_COLOR, java.awt.Color.BLACK);
-        }
-        revalidate();
-        repaint();
-    }
-
-    private void setAllForeground(java.awt.Container container,
-                                  java.awt.Color defaultColor,
-                                  java.awt.Color buttonBgColor,
-                                  java.awt.Color buttonFontColor) {
-        for (java.awt.Component c : container.getComponents()) {
-            if (c instanceof JButton) {
-                c.setBackground(buttonBgColor);
-                c.setForeground(buttonFontColor);
-            } else {
-                c.setForeground(defaultColor);
-            }
-            if (c instanceof java.awt.Container) {
-                setAllForeground((java.awt.Container) c, defaultColor, buttonBgColor, buttonFontColor);
-            }
-        }
-    }
-
     private class ButtonListener implements ActionListener {
         CardPane paneToShow;
 
@@ -267,9 +224,9 @@ public class FriendsPane extends CardPane {
         }
 
         public void actionPerformed(ActionEvent e) {
-                actualButton.setBackground(GUI.SECONDARY_COLOR);
-                receivedButton.setBackground(GUI.SECONDARY_COLOR);
-                sentButton.setBackground(GUI.SECONDARY_COLOR);
+                actualButton.setBackground(GUI.getSecondaryColor());
+                receivedButton.setBackground(GUI.getSecondaryColor());
+                sentButton.setBackground(GUI.getSecondaryColor());
                 ((Component)e.getSource()).setBackground(GUI.ORANGE);
             (new Thread(() -> cardPanel.showPane(paneToShow))).start();
         }
