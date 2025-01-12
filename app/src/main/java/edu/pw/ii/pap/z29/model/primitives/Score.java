@@ -1,7 +1,10 @@
 package edu.pw.ii.pap.z29.model.primitives;
 
 import lombok.Data;
+import java.util.Collections;
+import java.util.List;
 import java.time.LocalDate;
+
 
 @Data
 public class Score {
@@ -18,5 +21,9 @@ public class Score {
         this.score = score;
         this.word = word;
         this.date = date;
+    }
+
+    public static int total_score(List<Score> scores) {
+        return scores.stream().mapToInt(Score::getScore).sum();
     }
 }
