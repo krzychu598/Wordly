@@ -87,10 +87,8 @@ public class MainController {
     }
 
     public void insertScore(int score){
-        //TODO change scoreID
-        int scoreID = 0;
-
-        Score scoreT = new Score(scoreID, getUserId(), score, getGameController().getWord(), LocalDate.now());
+        //scoreID is useless i put 0 for now
+        Score scoreT = new Score(0, getUserId(), score, getGameController().getWord(), LocalDate.now());
         try{
             scores.insert(scoreT);
         } catch (SQLException e){

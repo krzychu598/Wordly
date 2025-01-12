@@ -63,7 +63,7 @@ public class LevelsTable {
     }
 
     public Optional<Level> readHighestLevel() throws SQLException {
-        var stmt_str = "SELECT level_nr, low_score, high_score FROM levels"
+        var stmt_str = "SELECT level_nr, low_score, high_score FROM levels "
             + "WHERE level_nr = (SELECT MAX(level_nr) FROM levels)";
         var level_opt = Optional.<Level>empty();
         try(var stmt = conn.createStatement()) {
