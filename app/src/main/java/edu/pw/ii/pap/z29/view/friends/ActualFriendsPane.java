@@ -20,7 +20,7 @@ import javax.swing.Box;
 public class ActualFriendsPane extends CardPane {
     private GUI gui;
     private ArrayList<Integer> friends = new ArrayList<Integer>();
-    
+
     public ActualFriendsPane(GUI gui) {
         this.gui = gui;
         setName("ActualFriendsPane");
@@ -66,11 +66,11 @@ public class ActualFriendsPane extends CardPane {
 
     class RemoveListener implements ActionListener {
         int userId;
-    
+
         public RemoveListener(int userId) {
             this.userId = userId;
         }
-    
+
         public void actionPerformed(ActionEvent e) {
             gui.getMainController().getFriendsController().removeFriend(userId);
             friends.remove(Integer.valueOf(userId));

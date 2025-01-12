@@ -34,6 +34,7 @@ public class GUI {
         Register,
         GameHistory,
         GameSummary,
+        FriendProfilePane
     }
 
     private boolean darkMode = true;
@@ -54,8 +55,9 @@ public class GUI {
         addPane(Pane.Register, new RegisterPane(this));
         addPane(Pane.GameHistory, new GameHistoryPane(this));
         addPane(Pane.GameSummary, new GameSummaryPane(this));
-    }    
-    
+        addPane(Pane.FriendProfilePane, new FriendProfilePane(this));
+    }
+
     public MainController getMainController() {
         return mainController;
     }
