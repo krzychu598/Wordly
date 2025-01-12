@@ -14,17 +14,11 @@ public class GameSummaryController {
     public GameSummaryController(MainController mainController, int score) {
         this.mainController = mainController;
         this.score = score;
+        /* TODO  get current score, level, highscore*/
         this.currentHighScore = 20;
-        //TODO update table, get high score, how to get user id?, how to generate scoreID?
-        /* currentHighScore = mainController.getScores().getHighScore();
-        int scoreID = 0;
-        int userID = 0;
-        Score scoreT = new Score(scoreID, userID, score);
-        try{
-            mainController.getScores().insert(scoreT);
-        } catch (SQLException e){
-            mainController.sqlLogger.log(e);
-        }
-            */
+        mainController.insertScore(score);
+        /* TODO  get it again*/
+
+
     }
 }

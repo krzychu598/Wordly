@@ -99,7 +99,7 @@ public class GameSummaryPane extends CardPane{
     }
     private JPanel createScoreInfoPanel(){
         scorePanel = new JPanel();
-        scorePanel.setBackground(GUI.BLACK);
+        scorePanel.setBackground(GUI.MAIN_COLOR);
         scorePanel.setLayout(new BoxLayout(scorePanel, BoxLayout.Y_AXIS));
         infoLabel = new JLabel();
         infoLabel.setFont(new Font("Dialog", Font.BOLD, 10));

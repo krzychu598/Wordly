@@ -158,7 +158,7 @@ public class GamePane extends CardPane {
             definitionLabel.setForeground(GUI.SECONDARY_COLOR);
         } else {
             definitionLabel.setBackground(GUI.SECONDARY_COLOR);
-            definitionLabel.setForeground(GUI.BLACK);
+            definitionLabel.setForeground(GUI.MAIN_COLOR);
         }
         definitionLabel.setHorizontalAlignment(JLabel.CENTER);
         definitionLabel.setBorder(BorderFactory.createLineBorder(Color.YELLOW, 2, true));
@@ -174,7 +174,7 @@ public class GamePane extends CardPane {
             showButton.setForeground(GUI.MAIN_COLOR);
         } else {
             showButton.setBackground(GUI.SECONDARY_COLOR);
-            showButton.setForeground(GUI.BLACK);
+            showButton.setForeground(GUI.MAIN_COLOR);
         }
         showButton.setHorizontalAlignment(JButton.CENTER);
         showButton.addActionListener((ActionEvent e)->{
@@ -191,7 +191,7 @@ public class GamePane extends CardPane {
             enterButton.setForeground(GUI.MAIN_COLOR);
         } else {
             enterButton.setBackground(GUI.SECONDARY_COLOR);
-            enterButton.setForeground(GUI.BLACK);
+            enterButton.setForeground(GUI.MAIN_COLOR);
         }
         enterButton.addActionListener(new EnterButtonListener());
     }

@@ -1,6 +1,8 @@
 package edu.pw.ii.pap.z29.controller;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
+
 import edu.pw.ii.pap.z29.Database;
 import edu.pw.ii.pap.z29.view.GUI;
 import lombok.Getter;
@@ -9,6 +11,7 @@ import lombok.AccessLevel;
 import edu.pw.ii.pap.z29.model.SQLLogger;
 import edu.pw.ii.pap.z29.model.ScoresTable;
 import edu.pw.ii.pap.z29.model.UsersTable;
+import edu.pw.ii.pap.z29.model.primitives.Score;
 import edu.pw.ii.pap.z29.model.primitives.User;
 import edu.pw.ii.pap.z29.model.primitives.Username;
 import edu.pw.ii.pap.z29.model.primitives.LoginPassword;
@@ -83,6 +86,17 @@ public class MainController {
         return loginController.getCurrentUser().getUserId();
     }
 
+    public void insertScore(int score){
+        //TODO change scoreID
+        int scoreID = 0;
+
+        Score scoreT = new Score(scoreID, getUserId(), score, getGameController().getWord(), LocalDate.now());
+        try{
+            scores.insert(scoreT);
+        } catch (SQLException e){
+            sqlLogger.log(e);
+        }
+    }
     @StandardException
     static public class UserDataException extends RuntimeException {}
 }

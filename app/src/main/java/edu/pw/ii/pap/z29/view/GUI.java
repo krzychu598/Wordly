@@ -97,6 +97,7 @@ public class GUI {
         ((GamePane) panes.get(Pane.Game)).setDarkMode(darkMode);
         ((FriendsPane) panes.get(Pane.Friends)).setDarkMode(darkMode);
         ((GameHistoryPane) panes.get(Pane.GameHistory)).setDarkMode(darkMode);
+        ((GameHistoryPane) panes.get(Pane.GameSummary)).setDarkMode(darkMode);
     }
 
     public boolean isDarkMode() {
