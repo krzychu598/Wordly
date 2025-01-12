@@ -9,6 +9,7 @@ import edu.pw.ii.pap.z29.view.GUI;
 import edu.pw.ii.pap.z29.view.GUIHelper;
 import edu.pw.ii.pap.z29.view.ProfilePane;
 import edu.pw.ii.pap.z29.model.primitives.Score;
+import edu.pw.ii.pap.z29.model.primitives.Level;
 import edu.pw.ii.pap.z29.exception.UserDataException;
 
 import java.sql.SQLException;
@@ -33,6 +34,8 @@ public class ProfileController {
             var loginPassword = mainController.getLoginPasswords().read(user_id).get();
             user_data.password = loginPassword.getPassword();
             user_data.scores = mainController.getScores().readAllScores(user_id);
+            user_data.level = mainController.getLevels().readByScore(
+                Score.total_score(user_data.scores)).get();
         } catch (SQLException e) {
             mainController.getSqlLogger().log(e);
             throw new UserDataException(e);
@@ -43,7 +46,7 @@ public class ProfileController {
     }
 
     public List<Friendship> readFriendships() throws UserDataException {
-        int user_id = mainController.getLoginController().getCurrentUser().getUserId();
+        int user_id = mainController.getUserId();
         List<Friendship> friendships;
         try {
             friendships = mainController.getFriendships().read_friends(user_id);
@@ -100,7 +103,7 @@ public class ProfileController {
     }
 
     public boolean updatePassword(Password newPassword) {
-        var user_id = mainController.getLoginController().getCurrentUser().getUserId();
+        var user_id = mainController.getUserId();
         var did_update = false;
         try {
             var loginPassword = mainController.getLoginPasswords().read(user_id).get();
@@ -127,6 +130,34 @@ public class ProfileController {
         mainController.getGui().showPane(GUI.Pane.Friends);
     }
 
+    public int getTotalScore() {
+        int user_id = mainController.getUserId();
+        int score = 0;
+        try {
+            score =  mainController.getScores().readTotalScore(user_id);
+        } catch (SQLException e) {
+            mainController.getSqlLogger().log(e);
+        }
+        return score;
+    }
+
+    public Level getLevel() {
+        var score = getTotalScore();
+        Level level = null;
+        try {
+            var level_opt = mainController.getLevels().readByScore(score);
+            if (level_opt.isEmpty())
+                level = mainController.getLevels().readHighestLevel().get();
+            else
+                level = level_opt.get();
+        } catch (SQLException e) {
+            mainController.getSqlLogger().log(e);
+            throw new UserDataException(e);
+        }
+        return level;
+    
+    }
+
     public void wantToSeeGameHistory() {
         mainController.getGui().showPane(GUI.Pane.GameHistory);
     }
@@ -136,6 +167,7 @@ public class ProfileController {
         private User user;
         private Password password;
         private List<Score> scores;
+        private Level level;
 
         public UserData() {}
 

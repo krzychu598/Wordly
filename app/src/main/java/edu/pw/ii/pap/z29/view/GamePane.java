@@ -20,7 +20,7 @@ public class GamePane extends CardPane {
     JButton enterButton;
     InputMap inputs;
     ActionMap actions;
-    final static int MAX_IT = 3;
+    int MAX_IT;
 
     public GamePane(GUI gui){
         this.gui = gui;
@@ -34,6 +34,7 @@ public class GamePane extends CardPane {
         allLetterFields = new Vector<Vector<JTextField>>();
         focusedLine = 0;
         length = gui.getMainController().getGameController().getWordLength();
+        MAX_IT = gui.getMainController().getGameController().getMaxIt();
         addGuiParts();
         createFocusManager();
         allLetterFields.get(0).get(0).requestFocusInWindow();
@@ -81,7 +82,9 @@ public class GamePane extends CardPane {
                 ++i;
             }
             if(vals.stream().distinct().limit(2).count() <= 1 && vals.get(0) == 0){
+                gui.getMainController().getGameController().updateScoreGuessed(focusedLine);
                 JOptionPane.showMessageDialog(GamePane.this, "Congratulations!!");
+                gui.getMainController().newSummary(gui.getMainController().getGameController().getScore());
                 return;
             }
             setFocus(focusedLine, false);
@@ -89,8 +92,10 @@ public class GamePane extends CardPane {
             if (focusedLine < MAX_IT){
                 setFocus(focusedLine, true);
             } else{
-                JOptionPane.showMessageDialog(GamePane.this, "You lose!!");
-
+                gui.getMainController().getGameController().updateScoreNotGuessed();
+                String loseInfo = String.format("You Lose!! Game's Word: %s", gui.getMainController().getGameController().getWord());
+                JOptionPane.showMessageDialog(GamePane.this, loseInfo);
+                gui.getMainController().newSummary(gui.getMainController().getGameController().getScore());
             }
             });
 
@@ -105,9 +110,11 @@ public class GamePane extends CardPane {
                     JTextField letterField = (JTextField) e.getDocument().getProperty("SOURCE");
                     String text = letterField.getText();
                     String validatedText = gui.getMainController().getGameController().validateInput(text);
-                    letterField.setText(validatedText);
-
-                    if((a = allLetterFields.get(focusedLine).indexOf(letterField) + 1) < length && !text.equals(validatedText) && validatedText != null){
+                    if (!text.equals(validatedText)){
+                        letterField.setText(validatedText);
+                        return;
+                    }
+                    if((a = allLetterFields.get(focusedLine).indexOf(letterField) + 1) < length && validatedText != null){
                         allLetterFields.get(focusedLine).get(a).requestFocusInWindow();
 
                     }
@@ -151,11 +158,12 @@ public class GamePane extends CardPane {
             definitionLabel.setForeground(GUI.SECONDARY_COLOR);
         } else {
             definitionLabel.setBackground(GUI.SECONDARY_COLOR);
-            definitionLabel.setForeground(GUI.BLACK);
+            definitionLabel.setForeground(GUI.MAIN_COLOR);
         }
         definitionLabel.setHorizontalAlignment(JLabel.CENTER);
         definitionLabel.setBorder(BorderFactory.createLineBorder(Color.YELLOW, 2, true));
         definitionLabel.setPreferredSize(new Dimension(200, 50));
+        definitionLabel.setVisible(false);
         return definitionLabel;
     }
     private JButton createDefinitionButton(JLabel definitionLabel){
@@ -166,12 +174,12 @@ public class GamePane extends CardPane {
             showButton.setForeground(GUI.MAIN_COLOR);
         } else {
             showButton.setBackground(GUI.SECONDARY_COLOR);
-            showButton.setForeground(GUI.BLACK);
+            showButton.setForeground(GUI.MAIN_COLOR);
         }
         showButton.setHorizontalAlignment(JButton.CENTER);
         showButton.addActionListener((ActionEvent e)->{
             definitionLabel.setText(gui.getMainController().getGameController().getDefinition());
-
+            definitionLabel.setVisible(true);
         });
         return showButton;
     }
@@ -183,7 +191,7 @@ public class GamePane extends CardPane {
             enterButton.setForeground(GUI.MAIN_COLOR);
         } else {
             enterButton.setBackground(GUI.SECONDARY_COLOR);
-            enterButton.setForeground(GUI.BLACK);
+            enterButton.setForeground(GUI.MAIN_COLOR);
         }
         enterButton.addActionListener(new EnterButtonListener());
     }
