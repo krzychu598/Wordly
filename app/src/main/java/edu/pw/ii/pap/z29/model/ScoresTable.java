@@ -1,12 +1,9 @@
 package edu.pw.ii.pap.z29.model;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import edu.pw.ii.pap.z29.model.primitives.Score;
 
@@ -58,6 +55,18 @@ public class ScoresTable {
         return scores;
     }
 
+    public int readTotalScore(int user_id) throws SQLException {
+        final var stmt_str = "SELECT SUM(score) AS total FROM scores2 WHERE user_id = ?";
+        int score = 0;
+        try (var stmt = conn.prepareStatement(stmt_str)) {
+            stmt.setInt(1, user_id);
+            try (var rset = stmt.executeQuery()) {
+                rset.next();
+                score = rset.getInt("total");
+            }
+        }
+        return score;
+    }
 
     public boolean delete(int user_id) throws SQLException {
         final var stmt_str = "DELETE FROM scores2 WHERE user_id = ?";

@@ -21,6 +21,7 @@ public class ProfilePane extends CardPane {
     private SpringLayout layout;
     private UserData userData;
     private JLabel scoreLabel;
+    private JLabel levelLabel;
     private JLabel usernameLabel;
     private JLabel passwordLabel;
     private JCheckBox passwordToggle;
@@ -74,11 +75,16 @@ public class ProfilePane extends CardPane {
         var listPanel = new ListPanel(50);
         listPanel.strut.setSize(new Dimension(50, 0));
 
-        var scoreFieldLabel = GUIHelper.createDefaultLabel("Score:", 20);
+        var scoreFieldLabel = GUIHelper.createDefaultLabel("Max score:", 20);
         listPanel.fieldPanel.add(scoreFieldLabel);
         this.scoreLabel = GUIHelper.createDefaultLabel("", 20);
         listPanel.valuePanel.add(scoreLabel);
 
+        var levelFieldLabel = GUIHelper.createDefaultLabel("Level:", 20);
+        listPanel.fieldPanel.add(levelFieldLabel);
+        this.levelLabel = GUIHelper.createDefaultLabel("", 20);
+        listPanel.valuePanel.add(levelLabel);
+        
         var usernameFieldLabel = GUIHelper.createDefaultLabel("Username:", 20);
         listPanel.fieldPanel.add(usernameFieldLabel);
         this.usernameLabel = GUIHelper.createDefaultLabel("", 20);
@@ -151,6 +157,7 @@ public class ProfilePane extends CardPane {
                 return s1.getScore() < s2.getScore() ? -1 : 1;
             }).getScore() : 0;
         scoreLabel.setText("" + max_score);
+        levelLabel.setText("" + userData.getLevel().getLevelNr());
         usernameLabel.setText(userData.getUser().getUsername().getUsername());
         updatePasswordLabel();
     }

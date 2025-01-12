@@ -10,11 +10,11 @@ import edu.pw.ii.pap.z29.model.SQLLogger;
 import edu.pw.ii.pap.z29.model.ScoresTable;
 import edu.pw.ii.pap.z29.model.UsersTable;
 import edu.pw.ii.pap.z29.model.primitives.User;
-import java.util.Optional;
 import edu.pw.ii.pap.z29.model.primitives.Username;
 import edu.pw.ii.pap.z29.model.primitives.LoginPassword;
 import edu.pw.ii.pap.z29.model.primitives.Password;
 import edu.pw.ii.pap.z29.model.FriendshipsTable;
+import edu.pw.ii.pap.z29.model.LevelsTable;
 import edu.pw.ii.pap.z29.model.LoginPasswordTable;
 
 
@@ -31,6 +31,7 @@ public class MainController {
     @Getter(AccessLevel.PACKAGE) LoginPasswordTable loginPasswords;
     @Getter(AccessLevel.PACKAGE) ScoresTable scores;
     @Getter(AccessLevel.PACKAGE) FriendshipsTable friendships;
+    @Getter(AccessLevel.PACKAGE) LevelsTable levels;
 
     public void run() {
         profileController = new ProfileController(this);
@@ -42,6 +43,7 @@ public class MainController {
             loginPasswords = new LoginPasswordTable(conn);
             scores = new ScoresTable(conn);
             friendships = new FriendshipsTable(conn);
+            levels = new LevelsTable(conn);
         } catch (SQLException e) {
             sqlLogger.log(e);
         }
@@ -71,6 +73,10 @@ public class MainController {
         } catch (SQLException e) {
             return false;
         }
+    }
+
+    int getUserId() {
+        return loginController.getCurrentUser().getUserId();
     }
 
     @StandardException
