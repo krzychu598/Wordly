@@ -131,6 +131,18 @@ public class ProfileController {
         mainController.getGui().showPane(GUI.Pane.GameHistory);
     }
 
+    public List<Score> readScores(int user_id) {
+        List<Score> scores;
+        try {
+            scores = mainController.getScores().readAllScores(user_id);
+        } catch (SQLException e) {
+            mainController.getSqlLogger().log(e);
+            scores = List.of();
+        }
+        return scores;
+    }
+
+
     @Data
     static public class UserData {
         private User user;
