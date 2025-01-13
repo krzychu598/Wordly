@@ -13,7 +13,8 @@ public class SettingsController {
 
     public void setPrivateProfile(boolean privProfile) {
         try {
-            mainController.getSettings().update(mainController.getUserId(), privProfile);
+            if (!mainController.getSettings().update(mainController.getUserId(), privProfile))
+                mainController.getSettings().create(mainController.getUserId(), privProfile);
         } catch (SQLException e) {
             mainController.getSqlLogger().log(e);
         }

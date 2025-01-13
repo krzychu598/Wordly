@@ -17,6 +17,15 @@ public class SettingsTable {
         this.conn = conn;
     }
 
+    public void create(int user_id, boolean priv_profile) throws SQLException {
+        final var stmt_str = "INSERT INTO user_settings (user_id, priv_profile) VALUES (?, ?)";
+        try (var stmt = conn.prepareStatement(stmt_str)) {
+            stmt.setInt(1, user_id);
+            stmt.setInt(2, priv_profile ? 1 : 0);
+            stmt.executeUpdate();
+        }
+    }
+
     public boolean read(int user_id) throws SQLException {
         var query_str = new String("SELECT user_id, private_profile FROM user_settings WHERE user_id = ?");
         boolean priv_profile = true;
@@ -33,13 +42,14 @@ public class SettingsTable {
         return priv_profile;
     }
 
-
-    public void update(int user_id, boolean priv_profile) throws SQLException {
-        final var stmt_str = "{call update_user_settings(?, ?)}";
+    public boolean update(int user_id, boolean priv_profile) throws SQLException {
+        final var stmt_str = "UPDATE user_settings SET private_profile = ? WHERE user_id = ?;";
+        boolean updated = false;
         try (var stmt = conn.prepareCall(stmt_str)) {
-            stmt.setInt(1, user_id);
-            stmt.setInt(2, priv_profile ? 1 : 0);
-            stmt.execute();
+            stmt.setInt(1, priv_profile ? 1 : 0);
+            stmt.setInt(2, user_id);
+            updated = stmt.executeUpdate() == 1;
         }
+        return updated;
     }
 }
