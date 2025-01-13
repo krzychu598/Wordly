@@ -46,6 +46,7 @@ public class GameHistoryPane extends CardPane {
     }
 
     private void addGuiParts(List<Score> scores) {
+        //TODO add scroll
         var centralPanel = new JPanel();
         centralPanel.setBorder(BorderFactory.createEmptyBorder(50, 30, 50, 30));
         centralPanel.setOpaque(false);
