@@ -45,7 +45,7 @@ public class ProfileController {
         }
         return user_data;
     }
-    public int maxScore() {
+    public int getMaxScore() {
         int userID = mainController.getUserId();
         var scores = readScores(userID);
         var max_score = scores.size() != 0 ?
