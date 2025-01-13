@@ -20,16 +20,19 @@ public class RegisterPane extends CardPane {
         this.gui = gui;
         setName("RegisterPane");
         setLayout(new GridBagLayout());
-        setBackground(GUI.MAIN_COLOR);
-        addGuiParts();
+        
     }
 
     @Override public void init() {
+        setBackground(GUI.getMainColor());
+        addGuiParts();
         usernameField.setText("");
         passwordField.setText("");
     }
 
-    @Override public void cleanup() {}
+    @Override public void cleanup() {
+        removeAll();
+    }
 
     private void addGuiParts() {
         var centralPanel = new JPanel();
@@ -50,16 +53,16 @@ public class RegisterPane extends CardPane {
         centralPanel.add(Box.createVerticalStrut(30));
 
         usernameField = GUIHelper.formatTextField(
-            new JTextField(), GUI.SECONDARY_COLOR, GUI.MAIN_COLOR, GUI.PLAIN_FONT);
-        var usernamePanel = new FormPanel(usernameField, "Username", GUI.MAIN_COLOR);
+            new JTextField(), GUI.getSecondaryColor(), GUI.getMainColor(), GUI.PLAIN_FONT);
+        var usernamePanel = new FormPanel(usernameField, "Username", GUI.getMainColor());
         usernamePanel.setBorder(BorderFactory.createEmptyBorder(0, 15, 0, 15));
         centralPanel.add(usernamePanel);
 
         centralPanel.add(Box.createVerticalStrut(20));
 
         passwordField = (JPasswordField)GUIHelper.formatTextField(
-            new JPasswordField(), GUI.SECONDARY_COLOR, GUI.MAIN_COLOR, GUI.PLAIN_FONT);
-        var passwordPanel = new FormPanel(passwordField, "Password", GUI.MAIN_COLOR);
+            new JPasswordField(), GUI.getSecondaryColor(), GUI.getMainColor(), GUI.PLAIN_FONT);
+        var passwordPanel = new FormPanel(passwordField, "Password", GUI.getMainColor());
         passwordPanel.setBorder(BorderFactory.createEmptyBorder(0, 15, 0, 15));
         centralPanel.add(passwordPanel);
 
@@ -68,8 +71,8 @@ public class RegisterPane extends CardPane {
         var buttonPanel = GUIHelper.createContainerPanel(new GridLayout());
         var registerButton = new JButton("Register");
         registerButton.setFont(new Font("Dialog", Font.BOLD, 25));
-        registerButton.setBackground(GUI.SECONDARY_COLOR);
-        registerButton.setForeground(GUI.MAIN_COLOR);
+        registerButton.setBackground(GUI.getSecondaryColor());
+        registerButton.setForeground(GUI.getMainColor());
         registerButton.addActionListener(
             (ActionEvent e) -> {
                 Username username = new Username(usernameField.getText());
@@ -88,7 +91,7 @@ public class RegisterPane extends CardPane {
 
         var LoginPanel = GUIHelper.createContainerPanel();
         var loginLabel = new JLabel("<HTML><U>Have an account already? Login</U></HTML>");
-        loginLabel.setForeground(GUI.SECONDARY_COLOR);
+        loginLabel.setForeground(GUI.getSecondaryColor());
         loginLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -98,37 +101,6 @@ public class RegisterPane extends CardPane {
         LoginPanel.add(loginLabel);
         centralPanel.add(LoginPanel);
     }
-
-    public void setDarkMode(boolean darkMode) {
-        if (darkMode) {
-            setBackground(GUI.MAIN_COLOR);
-            setAllForeground(this, GUI.SECONDARY_COLOR, GUI.SECONDARY_COLOR, java.awt.Color.BLACK);
-        } else {
-            setBackground(java.awt.Color.WHITE);
-            setAllForeground(this, GUI.BLUE, GUI.BLUE, java.awt.Color.BLACK);
-        }
-        revalidate();
-        repaint();
-    }
-
-    private void setAllForeground(java.awt.Container container,
-                                  java.awt.Color defaultColor,
-                                  java.awt.Color buttonBgColor,
-                                  java.awt.Color buttonFontColor) {
-        for (java.awt.Component c : container.getComponents()) {
-            if (c instanceof JButton) {
-                c.setBackground(buttonBgColor);
-                c.setForeground(buttonFontColor);
-            } else {
-                c.setForeground(defaultColor);
-            }
-            if (c instanceof java.awt.Container) {
-                setAllForeground((java.awt.Container) c, defaultColor, buttonBgColor, buttonFontColor);
-            }
-        }
-    }
-
-
 }
 
 

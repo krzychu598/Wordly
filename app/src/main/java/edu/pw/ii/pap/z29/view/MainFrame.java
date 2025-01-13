@@ -1,6 +1,5 @@
 package edu.pw.ii.pap.z29.view;
 
-import java.awt.*;
 import javax.swing.*;
 
 import edu.pw.ii.pap.z29.view.utility.CardPane;
@@ -29,10 +28,17 @@ public class MainFrame extends JFrame {
     }
 
     public synchronized boolean showPane(CardPane pane) throws PaneInitException {
-        return contentPane.showPane(pane);
+        var success = contentPane.showPane(pane);
+        setMinimumSize(getSize());
+        pack();
+        return success;
     }
 
     public synchronized void clear() {
         contentPane.clear();
+    }
+
+    public boolean refresh() {
+        return contentPane.refresh();
     }
 }

@@ -1,7 +1,6 @@
 package edu.pw.ii.pap.z29.model.primitives;
 
 import lombok.Data;
-import java.util.Collections;
 import java.util.List;
 import java.time.LocalDate;
 

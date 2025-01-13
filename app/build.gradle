@@ -44,6 +44,14 @@ application {
     mainClass = 'edu.pw.ii.pap.z29.App'
 }
 
+jar {
+  manifest {
+    attributes(
+      'Main-Class': 'edu.pw.ii.pap.z29.App'
+    )
+  }
+}
+
 tasks.named('test') {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()

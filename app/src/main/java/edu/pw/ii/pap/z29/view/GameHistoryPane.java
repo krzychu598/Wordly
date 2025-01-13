@@ -2,22 +2,17 @@ package edu.pw.ii.pap.z29.view;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.SpringLayout;
 
 import java.util.List;
 
 import edu.pw.ii.pap.z29.controller.ProfileController.UserData;
-import edu.pw.ii.pap.z29.exception.UserDataException;
-import edu.pw.ii.pap.z29.model.primitives.Friendship;
-import edu.pw.ii.pap.z29.view.friends.*;
 import edu.pw.ii.pap.z29.view.utility.CardPane;
 import edu.pw.ii.pap.z29.view.utility.MainPane;
 import edu.pw.ii.pap.z29.model.primitives.Score;
 
 import java.awt.Component;
-import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JLabel;
@@ -32,17 +27,13 @@ public class GameHistoryPane extends CardPane {
     public GameHistoryPane(GUI gui) {
         this.gui = gui;
         setName("GameHistoryPane");
-        if (gui.isDarkMode()) {
-            setBackground(GUI.MAIN_COLOR);
-        } else {
-            setBackground(GUI.WHITE);
-        }
         this.cardPanel = new MainPane();
         setLayout(layout);
     }
 
     @Override
     public void init() throws PaneInitException {
+        setBackground(GUI.getMainColor());
         this.userData = gui.getMainController().getProfileController().readUserData();
         List<Score> scores = userData.getScores();
         addGuiParts(scores);
@@ -81,13 +72,13 @@ public class GameHistoryPane extends CardPane {
 
         if (scores.isEmpty()) {
             var noScoresLabel = new JLabel("No game history available.");
-            noScoresLabel.setForeground(GUI.SECONDARY_COLOR);
+            noScoresLabel.setForeground(GUI.getSecondaryColor());
             noScoresLabel.setAlignmentX(LEFT_ALIGNMENT);
             scoresPanel.add(noScoresLabel);
         } else {
             for (Score score : scores) {
                 var scoreLabel = new JLabel("Score: " + score.getScore() + " | Word: " + score.getWord() + " | Date: " + score.getDate());
-                scoreLabel.setForeground(GUI.SECONDARY_COLOR);
+                scoreLabel.setForeground(GUI.getSecondaryColor());
                 scoreLabel.setAlignmentX(LEFT_ALIGNMENT);
                 scoresPanel.add(scoreLabel);
             }
@@ -95,17 +86,6 @@ public class GameHistoryPane extends CardPane {
 
         centralPanel.add(scoresPanel);
     }
-
-    public void setDarkMode(boolean darkMode) {
-        if (darkMode) {
-            setBackground(GUI.MAIN_COLOR);
-        } else {
-            setBackground(java.awt.Color.WHITE);
-        }
-        revalidate();
-        repaint();
-    }
-
 
     private class ButtonListener implements ActionListener {
         CardPane paneToShow;

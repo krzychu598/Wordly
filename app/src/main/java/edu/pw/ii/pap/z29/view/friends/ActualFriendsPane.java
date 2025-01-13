@@ -1,20 +1,16 @@
 package edu.pw.ii.pap.z29.view.friends;
 
 import edu.pw.ii.pap.z29.view.utility.CardPane;
-import edu.pw.ii.pap.z29.view.utility.ListPanel;
 import edu.pw.ii.pap.z29.view.utility.ListPanelVertical;
 import edu.pw.ii.pap.z29.view.GUI;
 import edu.pw.ii.pap.z29.view.GUIHelper;
 import edu.pw.ii.pap.z29.exception.UserDataException;
 import edu.pw.ii.pap.z29.model.primitives.User;
-
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.Box;
 
 
 public class ActualFriendsPane extends CardPane {

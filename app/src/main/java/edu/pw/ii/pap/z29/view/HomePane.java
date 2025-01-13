@@ -19,9 +19,7 @@ public class HomePane extends CardPane {
     public HomePane(GUI gui) {
         this.gui = gui;
         setName("HomePane");
-        setBackground(GUI.MAIN_COLOR);
         setLayout(new GridBagLayout());
-        addGuiParts();
     }
 
     @Override
@@ -30,11 +28,14 @@ public class HomePane extends CardPane {
         var profileMenu = createProfileMenu();
         menuBar.add(profileMenu);
         gui.getFrame().setJMenuBar(menuBar);
+        setBackground(GUI.getMainColor());
+        addGuiParts();
     }
 
     @Override
     public void cleanup() {
         gui.getFrame().setJMenuBar(null);
+        removeAll();
     }
 
     private void addGuiParts() {
@@ -56,6 +57,7 @@ public class HomePane extends CardPane {
         buttonPanel.add(playButton);
         centralPanel.add(buttonPanel);
 
+        centralPanel.add(Box.createVerticalStrut(5));
         var helpButton = GUIHelper.createDefaultButton("Help", 10);
         helpButton.addActionListener((
             (ActionEvent e) -> {
@@ -65,7 +67,7 @@ public class HomePane extends CardPane {
                     "After each guess, you will be given feedback on how many letters are correct and in the right position.\n" +
                     "Good luck!", "Help", JOptionPane.INFORMATION_MESSAGE);
             }
-                ));
+        ));
         helpButton.setAlignmentX(CENTER_ALIGNMENT);
         centralPanel.add(helpButton);
     }
@@ -73,7 +75,7 @@ public class HomePane extends CardPane {
     private JPanel createCentralPanel() {
         var centralPanel = new JPanel();
         centralPanel.setBorder(BorderFactory.createEmptyBorder(50, 30, 50, 30));
-        centralPanel.setBackground(GUI.MAIN_COLOR);
+        centralPanel.setBackground(GUI.getMainColor());
         centralPanel.setOpaque(false);
         centralPanel.setLayout(new BoxLayout(centralPanel, BoxLayout.PAGE_AXIS));
         return centralPanel;
@@ -95,7 +97,7 @@ public class HomePane extends CardPane {
 
     public void setDarkMode(boolean darkMode) {
         if (darkMode) {
-            setBackground(GUI.MAIN_COLOR);
+            setBackground(GUI.getMainColor());
         } else {
             setBackground(java.awt.Color.WHITE);
         }
@@ -107,8 +109,8 @@ public class HomePane extends CardPane {
     JButton createPlayButton() {
         JButton playButton = new JButton("Play");
         playButton.setFont(new Font("Dialog", Font.BOLD, 40));
-        playButton.setBackground(GUI.SECONDARY_COLOR);
-        playButton.setForeground(GUI.MAIN_COLOR);
+        playButton.setBackground(GUI.getSecondaryColor());
+        playButton.setForeground(GUI.getMainColor());
         playButton.addActionListener(
             (ActionEvent e) -> {
                 pop = new JPopupMenu("Settings");

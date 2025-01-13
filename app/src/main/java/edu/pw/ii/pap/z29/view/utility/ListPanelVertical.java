@@ -5,7 +5,6 @@ import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import java.awt.Component;
 
-import edu.pw.ii.pap.z29.view.GUIHelper;
 
 public class ListPanelVertical extends JPanel {
     public ListPanelVertical() {

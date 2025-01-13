@@ -18,10 +18,10 @@ public class SettingsPane extends CardPane {
         setName("SettingsPanel");
         this.layout = new SpringLayout();
         setLayout(layout);
-        setBackground(GUI.MAIN_COLOR);
     }
 
     @Override public void init() {
+        setBackground(GUI.getMainColor());
         addGuiParts();
     }
 
@@ -54,67 +54,31 @@ public class SettingsPane extends CardPane {
 
         var darkModeLabel = GUIHelper.createDefaultLabel("Dark mode", 20);
         this.darkModeBox = new JCheckBox();
+        darkModeBox.setSelected(gui.isDarkMode());
         var darkModePanel = checkBoxPanel(darkModeBox, darkModeLabel, e -> {
-            (new Thread(() -> updateDarkMode())).start();
+            (new Thread(() -> gui.setDarkMode(darkModeBox.isSelected()))).start();
         });
         centralPanel.add(darkModePanel);
 
         var privProfileLabel = GUIHelper.createDefaultLabel("Private Profile", 20);
         this.privProfileBox = new JCheckBox();
+        privProfileBox.setSelected(gui.isPrivateProfile());
         var privProfilePanel = checkBoxPanel(privProfileBox, privProfileLabel, e -> {
-            (new Thread(() -> updatePrivateProfile())).start();
+            (new Thread(() -> gui.setPrivateProfile(privProfileBox.isSelected()))).start();
         });
         centralPanel.add(privProfilePanel);
-    }
-
-    private void updateDarkMode() {
-        gui.setDarkMode(darkModeBox.isSelected());
-        gui.updateTheme();
-    }
-
-    private void updatePrivateProfile() {
-        gui.setPrivateProfile(privProfileBox.isSelected());
+        setPreferredSize(centralPanel.getPreferredSize());
     }
 
     private SettingsController getSettingsController() {
         return gui.getMainController().getSettingsController();
     }
 
-    public void setDarkMode(boolean darkMode) {
-        if (darkMode) {
-            setBackground(GUI.MAIN_COLOR);
-            setAllForeground(this, GUI.SECONDARY_COLOR, GUI.SECONDARY_COLOR, java.awt.Color.BLACK);
-        } else {
-            setBackground(java.awt.Color.WHITE);
-            setAllForeground(this, GUI.BLUE, GUI.BLUE, java.awt.Color.BLACK);
-        }
-        revalidate();
-        repaint();
-    }
-
-    private void setAllForeground(java.awt.Container container,
-                                  java.awt.Color defaultColor,
-                                  java.awt.Color buttonBgColor,
-                                  java.awt.Color buttonFontColor) {
-        for (java.awt.Component c : container.getComponents()) {
-            if (c instanceof JButton) {
-                c.setBackground(buttonBgColor);
-                c.setForeground(buttonFontColor);
-            } else {
-                c.setForeground(defaultColor);
-            }
-            if (c instanceof java.awt.Container) {
-                setAllForeground((java.awt.Container) c, defaultColor, buttonBgColor, buttonFontColor);
-            }
-        }
-    }
-
     private JPanel checkBoxPanel(JCheckBox cbox, JLabel label, ActionListener listener) {
         var panel = GUIHelper.createContainerPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.LINE_AXIS)); 
-        cbox.setForeground(GUI.SECONDARY_COLOR);
+        cbox.setForeground(GUI.getSecondaryColor());
         cbox.setOpaque(false);
-        cbox.setSelected(true);
         cbox.addActionListener(listener);
         panel.add(label);
         panel.add(Box.createHorizontalGlue());

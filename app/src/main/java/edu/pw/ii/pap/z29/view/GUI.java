@@ -1,7 +1,5 @@
 package edu.pw.ii.pap.z29.view;
 
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import java.awt.Color;
@@ -38,7 +36,7 @@ public class GUI {
         GameSummary,
         FriendProfilePane
     }
-    @Getter @Setter private boolean darkMode = true;
+    static private boolean darkMode = true;
     @Getter @Setter private boolean privateProfile = true;
     @Getter private MainController mainController;
     private HashMap<Pane, CardPane> panes = new HashMap<Pane, CardPane>();
@@ -58,10 +56,6 @@ public class GUI {
         addPane(Pane.Settings, new SettingsPane(this));
         addPane(Pane.GameSummary, new GameSummaryPane(this));
         addPane(Pane.FriendProfilePane, new FriendProfilePane(this));
-    }
-
-    public MainController getMainController() {
-        return mainController;
     }
 
     public JPanel getPane(Pane pane) {
@@ -88,24 +82,24 @@ public class GUI {
         frame.addPane(pane);
     }
 
-    public void updateTheme() {
-        ((ProfilePane) panes.get(Pane.Profile)).setDarkMode(darkMode);
-        ((RegisterPane) panes.get(Pane.Register)).setDarkMode(darkMode);
-        ((LoginPane) panes.get(Pane.Login)).setDarkMode(darkMode);
-        ((HomePane) panes.get(Pane.Home)).setDarkMode(darkMode);
-        ((GamePane) panes.get(Pane.Game)).setDarkMode(darkMode);
-        ((FriendsPane) panes.get(Pane.Friends)).setDarkMode(darkMode);
-        ((GameHistoryPane) panes.get(Pane.GameHistory)).setDarkMode(darkMode);
-        ((SettingsPane) panes.get(Pane.Settings)).setDarkMode(darkMode);
-        // ((GameSummaryPane) panes.get(Pane.GameSummary)).setDarkMode(darkMode);
+    public static Color getMainColor() {
+        return darkMode ? MAIN_COLOR : WHITE;
+    }
+
+    public static Color getSecondaryColor() {
+        return darkMode ? SECONDARY_COLOR : BLUE;
     }
 
     public boolean isDarkMode() {
-        return darkMode;
+        return GUI.darkMode;
+    }
+
+    public void setDarkMode(boolean darkMode) {
+        GUI.darkMode = darkMode;
+        frame.refresh();
     }
 
     private void createAndShowGUI() {
-        frame.pack();
         frame.setVisible(true);
         frame.showPane(panes.get(Pane.Login));
     }
