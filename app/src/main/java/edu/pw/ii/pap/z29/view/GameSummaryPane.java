@@ -13,9 +13,11 @@ import edu.pw.ii.pap.z29.view.utility.CardPane;
 public class GameSummaryPane extends CardPane{
     GUI gui;
     int score = 0;
+    JPanel imagesPanel;
     JPanel scorePanel;
     JLabel infoLabel;
     JLabel image = null;
+    JLabel image2 = null;
     public GameSummaryPane(GUI gui){
         this.gui = gui;
         setName("GameSummaryPane");
@@ -45,7 +47,6 @@ public class GameSummaryPane extends CardPane{
     }
 
     private void addGuiParts(){
-        //TODO add level up info, photo
         var centralPanel = createCentralPanel();
         add(centralPanel);
 
@@ -88,15 +89,23 @@ public class GameSummaryPane extends CardPane{
     }
     
     private void updatePanelInfo(){
-        String scoreMessage = String.format("Score: %d", score);
+        int newLevel = gui.getMainController().getGameSummaryController().getNewLevel();
+        int level = gui.getMainController().getGameSummaryController().getLevel();
+        boolean isHighScore = gui.getMainController().getGameSummaryController().getCurrentBestScore() < score;
+        String scoreMessage = String.format("Score: %d  Your Level: %d", score, level);
+
+        if (newLevel > level){
+            scoreMessage += String.format("---> %d", newLevel);
+        }
         infoLabel.setText(scoreMessage);
-        if (score > gui.getMainController().getGameSummaryController().getCurrentBestScore()){
+
+        if (isHighScore){
             try {
                 Image highScoreImage = ImageIO.read(new File("src/images/high-score.png"));
                 if (image == null){
                     highScoreImage = highScoreImage.getScaledInstance(100, 100, Image.SCALE_DEFAULT);
                     image = new JLabel(new ImageIcon(highScoreImage));
-                    scorePanel.add(image);
+                    imagesPanel.add(image);
                 }
                 } catch (IOException e){
                     try{
@@ -104,7 +113,7 @@ public class GameSummaryPane extends CardPane{
                     if (image == null){
                         highScoreImage = highScoreImage.getScaledInstance(100, 100, Image.SCALE_DEFAULT);
                         image = new JLabel(new ImageIcon(highScoreImage));
-                        scorePanel.add(image);
+                        imagesPanel.add(image);
                     }
                 } catch (Exception y){
                     e.printStackTrace();
@@ -113,8 +122,36 @@ public class GameSummaryPane extends CardPane{
                 }
         } else{
             if (image !=null){
-                scorePanel.remove(image);
+                imagesPanel.remove(image);
                 image = null;
+            }
+        }
+        if (newLevel > level){
+
+            try {
+                Image newLevelImage = ImageIO.read(new File("src/images/level-up.png"));
+                if (image2 == null){
+                    newLevelImage = newLevelImage.getScaledInstance(100, 100, Image.SCALE_DEFAULT);
+                    image2 = new JLabel(new ImageIcon(newLevelImage));
+                    imagesPanel.add(image2);
+                }
+                } catch (IOException e){
+                    try{
+                    Image newLevelImage = ImageIO.read(new File("app/src/images/level-up.png"));
+                    if (image2 == null){
+                        newLevelImage = newLevelImage.getScaledInstance(100, 100, Image.SCALE_DEFAULT);
+                        image2 = new JLabel(new ImageIcon(newLevelImage));
+                        imagesPanel.add(image2);
+                    }
+                } catch (Exception y){
+                    e.printStackTrace();
+                    y.printStackTrace();
+                }
+                }
+        }else{
+            if (image2 !=null){
+                imagesPanel.remove(image2);
+                image2 = null;
             }
         }
 
@@ -127,10 +164,14 @@ public class GameSummaryPane extends CardPane{
         infoLabel.setFont(new Font("Dialog", Font.BOLD, 10));
         infoLabel.setBackground(GUI.getSecondaryColor());
         infoLabel.setForeground(GUI.getSecondaryColor());
-        infoLabel.setHorizontalAlignment(JLabel.CENTER);
+        // infoLabel.setHorizontalAlignment(JLabel.CENTER);
         infoLabel.setBorder(BorderFactory.createLineBorder(GUI.getMainColor(), 2, true));
         infoLabel.setPreferredSize(new Dimension(200, 50));
         scorePanel.add(infoLabel);
+        imagesPanel = new JPanel();
+        imagesPanel.setBackground(GUI.getMainColor());
+        imagesPanel.setLayout(new FlowLayout());
+        scorePanel.add(imagesPanel);
         return scorePanel;
     }
 }

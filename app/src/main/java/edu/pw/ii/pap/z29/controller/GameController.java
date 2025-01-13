@@ -7,7 +7,7 @@ public class GameController {
     int wordLength;
     String word;
     int score = 0;
-    int guesssedLetters;
+    int guesssedLetters = 0;
     boolean won = false;
     int MAX_IT;
     public GameController(MainController mainController, int wordLength ) {
@@ -28,14 +28,15 @@ public class GameController {
         return MAX_IT;
     }
     public void updateScoreGuessed(int turn){
-        score += Math.max(wordLength * 100 - (int)( 50 * turn / (MAX_IT-1)), 0);
+        score += Math.max(wordLength * (wordLength+10) - (int)( wordLength * turn), 0);
+        score+= guesssedLetters;
         won = true;
     }
     public void updateScoreNotGuessed(){
-        score = Math.max(score+5*guesssedLetters, 0);
+        score = Math.max(score+guesssedLetters, 0);
     }
     private void updateScoreShownDefinition(){
-        score -= 20; 
+        score -= wordLength*2; 
     }
     public int getScore(){
         return score;
@@ -56,7 +57,6 @@ public class GameController {
         return text.toUpperCase();
     }
     public ArrayList<Integer> check(String givenWord){
-        guesssedLetters = 0;
         givenWord = givenWord.toLowerCase();
         var results = new ArrayList<Integer>();
         if(givenWord.length() != word.length()){
