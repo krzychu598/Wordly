@@ -92,14 +92,24 @@ public class GameSummaryPane extends CardPane{
         infoLabel.setText(scoreMessage);
         if (score > gui.getMainController().getGameSummaryController().getCurrentBestScore()){
             try {
+                Image highScoreImage = ImageIO.read(new File("src/images/high-score.png"));
                 if (image == null){
-                    Image highScoreImage = ImageIO.read(new File("app/src/images/high-score.png"));
                     highScoreImage = highScoreImage.getScaledInstance(100, 100, Image.SCALE_DEFAULT);
                     image = new JLabel(new ImageIcon(highScoreImage));
                     scorePanel.add(image);
                 }
                 } catch (IOException e){
+                    try{
+                    Image highScoreImage = ImageIO.read(new File("app/src/images/high-score.png"));
+                    if (image == null){
+                        highScoreImage = highScoreImage.getScaledInstance(100, 100, Image.SCALE_DEFAULT);
+                        image = new JLabel(new ImageIcon(highScoreImage));
+                        scorePanel.add(image);
+                    }
+                } catch (Exception y){
                     e.printStackTrace();
+                    y.printStackTrace();
+                }
                 }
         } else{
             if (image !=null){
