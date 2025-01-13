@@ -13,6 +13,7 @@ import edu.pw.ii.pap.z29.model.primitives.Level;
 import edu.pw.ii.pap.z29.exception.UserDataException;
 
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -44,7 +45,17 @@ public class ProfileController {
         }
         return user_data;
     }
-
+    public int maxScore() {
+        int userID = mainController.getUserId();
+        var scores = readScores(userID);
+        var max_score = scores.size() != 0 ?
+            Collections.max(scores, (Score s1, Score s2) -> {
+                if (s1.getScore() == s2.getScore())
+                    return 0;
+                return s1.getScore() < s2.getScore() ? -1 : 1;
+            }).getScore() : 0;
+            return max_score;
+    }
     public List<Friendship> readFriendships() throws UserDataException {
         int user_id = mainController.getUserId();
         List<Friendship> friendships;
