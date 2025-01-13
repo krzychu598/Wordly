@@ -2,8 +2,6 @@ package edu.pw.ii.pap.z29.view;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.lang.reflect.Field;
-
 import javax.swing.*;
 import edu.pw.ii.pap.z29.controller.ProfileController;
 import edu.pw.ii.pap.z29.model.primitives.Password;
@@ -59,6 +57,7 @@ public class ProfilePane extends CardPane {
         0, SpringLayout.HORIZONTAL_CENTER, this);
         layout.putConstraint(SpringLayout.VERTICAL_CENTER, centralPanel,
         0, SpringLayout.VERTICAL_CENTER, this);
+
         GUIHelper.addBackButton(this, layout, e -> {
             (new Thread(() ->
                 getProfileController().goBack())).start();
@@ -133,7 +132,7 @@ public class ProfilePane extends CardPane {
             getProfileController().wantToDeleteAccount())).start();
         });
         centralPanel.add(deleteButton);
-        centralPanel.setMaximumSize(getPreferredSize());
+        setPreferredSize(centralPanel.getPreferredSize());
     }
 
     public void updateUserData() {

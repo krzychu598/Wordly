@@ -8,13 +8,9 @@ import edu.pw.ii.pap.z29.Database;
 import edu.pw.ii.pap.z29.model.primitives.User;
 import edu.pw.ii.pap.z29.model.primitives.Username;
 import edu.pw.ii.pap.z29.model.primitives.Friendship;
-import edu.pw.ii.pap.z29.model.FriendshipsTable;
-import edu.pw.ii.pap.z29.model.UsersTable;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.sql.SQLException;
-import java.util.Arrays;
 
 
 public class FriendshipsTableTest {

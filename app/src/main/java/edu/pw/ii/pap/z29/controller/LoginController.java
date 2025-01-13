@@ -9,7 +9,6 @@ import edu.pw.ii.pap.z29.model.primitives.Password;
 import edu.pw.ii.pap.z29.model.primitives.User;
 import edu.pw.ii.pap.z29.model.primitives.Username;
 import edu.pw.ii.pap.z29.view.GUI;
-import edu.pw.ii.pap.z29.view.utility.CardPane.PaneInitException;
 
 
 public class LoginController {

@@ -64,9 +64,11 @@ public class SettingsPane extends CardPane {
         this.privProfileBox = new JCheckBox();
         privProfileBox.setSelected(gui.isPrivateProfile());
         var privProfilePanel = checkBoxPanel(privProfileBox, privProfileLabel, e -> {
-            (new Thread(() -> gui.setPrivateProfile(privProfileBox.isSelected()))).start();
+            (new Thread(() -> gui.getMainController().getSettingsController()
+                .setPrivateProfile(privProfileBox.isSelected()))).start();
         });
         centralPanel.add(privProfilePanel);
+        setPreferredSize(centralPanel.getPreferredSize());
     }
 
     private SettingsController getSettingsController() {

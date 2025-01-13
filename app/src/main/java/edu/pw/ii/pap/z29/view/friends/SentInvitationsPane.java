@@ -1,7 +1,6 @@
 package edu.pw.ii.pap.z29.view.friends;
 
 import edu.pw.ii.pap.z29.view.utility.CardPane;
-import edu.pw.ii.pap.z29.view.utility.ListPanel;
 import edu.pw.ii.pap.z29.view.utility.ListPanelVertical;
 import edu.pw.ii.pap.z29.view.GUI;
 import edu.pw.ii.pap.z29.view.GUIHelper;

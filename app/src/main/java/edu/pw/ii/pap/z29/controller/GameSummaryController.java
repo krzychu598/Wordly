@@ -2,9 +2,6 @@ package edu.pw.ii.pap.z29.controller;
 
 import lombok.Getter;
 
-import java.sql.SQLException;
-
-import edu.pw.ii.pap.z29.model.primitives.Score;
 
 public class GameSummaryController {
     MainController mainController;

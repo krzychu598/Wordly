@@ -57,6 +57,7 @@ public class HomePane extends CardPane {
         buttonPanel.add(playButton);
         centralPanel.add(buttonPanel);
 
+        centralPanel.add(Box.createVerticalStrut(5));
         var helpButton = GUIHelper.createDefaultButton("Help", 10);
         helpButton.addActionListener((
             (ActionEvent e) -> {
@@ -66,7 +67,7 @@ public class HomePane extends CardPane {
                     "After each guess, you will be given feedback on how many letters are correct and in the right position.\n" +
                     "Good luck!", "Help", JOptionPane.INFORMATION_MESSAGE);
             }
-                ));
+        ));
         helpButton.setAlignmentX(CENTER_ALIGNMENT);
         centralPanel.add(helpButton);
     }

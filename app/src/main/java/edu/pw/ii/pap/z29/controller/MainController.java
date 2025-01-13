@@ -12,6 +12,7 @@ import lombok.experimental.StandardException;
 import lombok.AccessLevel;
 import edu.pw.ii.pap.z29.model.SQLLogger;
 import edu.pw.ii.pap.z29.model.ScoresTable;
+import edu.pw.ii.pap.z29.model.SettingsTable;
 import edu.pw.ii.pap.z29.model.UsersTable;
 import edu.pw.ii.pap.z29.model.primitives.Score;
 import edu.pw.ii.pap.z29.model.primitives.User;
@@ -39,6 +40,7 @@ public class MainController {
     @Getter(AccessLevel.PACKAGE) ScoresTable scores;
     @Getter(AccessLevel.PACKAGE) FriendshipsTable friendships;
     @Getter(AccessLevel.PACKAGE) LevelsTable levels;
+    @Getter(AccessLevel.PACKAGE) SettingsTable settings;
 
     public void run() {
         profileController = new ProfileController(this);
@@ -52,6 +54,7 @@ public class MainController {
             scores = new ScoresTable(conn);
             friendships = new FriendshipsTable(conn);
             levels = new LevelsTable(conn);
+            settings = new SettingsTable(conn);
         } catch (SQLException e) {
             sqlLogger.log(e);
         }

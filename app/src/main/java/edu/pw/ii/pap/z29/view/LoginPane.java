@@ -2,17 +2,12 @@ package edu.pw.ii.pap.z29.view;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.font.*;
 import javax.swing.*;
-
 import edu.pw.ii.pap.z29.model.primitives.Username;
 import edu.pw.ii.pap.z29.view.utility.CardPane;
 import edu.pw.ii.pap.z29.view.utility.FormPanel;
 import edu.pw.ii.pap.z29.model.primitives.Password;
-
 import java.lang.Thread;
-import java.util.Map;
-
 
 
 public class LoginPane extends CardPane {

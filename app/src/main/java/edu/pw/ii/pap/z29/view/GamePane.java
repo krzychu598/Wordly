@@ -133,11 +133,7 @@ public class GamePane extends CardPane {
     private JPanel createCentralPanel(){
         var centralPanel = new JPanel();
         centralPanel.setBorder(BorderFactory.createEmptyBorder(50, 30, 50, 30));
-        if (gui.isDarkMode()) {
-            centralPanel.setBackground(GUI.getMainColor());
-        } else {
-            centralPanel.setBackground(GUI.WHITE);
-        }
+        centralPanel.setBackground(GUI.getMainColor());
         centralPanel.setLayout(new BoxLayout(centralPanel, BoxLayout.PAGE_AXIS));
         return centralPanel;
     }
@@ -164,13 +160,8 @@ public class GamePane extends CardPane {
     private JButton createDefinitionButton(JLabel definitionLabel){
         var showButton = new JButton("Show Definition");
         showButton.setFont(new Font("Dialog", Font.BOLD, 10));
-        if (gui.isDarkMode()) {
-            showButton.setBackground(GUI.getSecondaryColor());
-            showButton.setForeground(GUI.getMainColor());
-        } else {
-            showButton.setBackground(GUI.getSecondaryColor());
-            showButton.setForeground(GUI.getMainColor());
-        }
+        showButton.setBackground(GUI.getSecondaryColor());
+        showButton.setForeground(GUI.getMainColor());
         showButton.setHorizontalAlignment(JButton.CENTER);
         showButton.addActionListener((ActionEvent e)->{
             definitionLabel.setText(gui.getMainController().getGameController().getDefinition());
@@ -181,13 +172,8 @@ public class GamePane extends CardPane {
     private void createEnterWordButton(){
         enterButton = new JButton("Enter");
         enterButton.setFont(new Font("Dialog", Font.BOLD, 25));
-        if (gui.isDarkMode()) {
-            enterButton.setBackground(GUI.getSecondaryColor());
-            enterButton.setForeground(GUI.getMainColor());
-        } else {
-            enterButton.setBackground(GUI.getSecondaryColor());
-            enterButton.setForeground(GUI.getMainColor());
-        }
+        enterButton.setBackground(GUI.getSecondaryColor());
+        enterButton.setForeground(GUI.getMainColor());
         enterButton.addActionListener(new EnterButtonListener());
     }
     private void createFocusManager(){
@@ -234,11 +220,7 @@ public class GamePane extends CardPane {
 
         for (int j = 0; j < MAX_IT; ++j){
             var letterFieldsPanel = new JPanel();
-            if (gui.isDarkMode()) {
-                letterFieldsPanel.setBackground(GUI.getMainColor());
-            } else {
-                letterFieldsPanel.setBackground(GUI.WHITE);
-            }
+            letterFieldsPanel.setBackground(GUI.getMainColor());
             var letterFieldsVector = new Vector<JTextField>();
             for(int i = 0; i < length; ++i){
                 var letterField = createLetterField();
