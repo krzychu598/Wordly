@@ -62,7 +62,7 @@ public class SettingsPane extends CardPane {
 
         var privProfileLabel = GUIHelper.createDefaultLabel("Private Profile", 20);
         this.privProfileBox = new JCheckBox();
-        privProfileBox.setSelected(gui.isPrivateProfile());
+        privProfileBox.setSelected(gui.getMainController().getSettingsController().isPrivate());
         var privProfilePanel = checkBoxPanel(privProfileBox, privProfileLabel, e -> {
             (new Thread(() -> gui.getMainController().getSettingsController()
                 .setPrivateProfile(privProfileBox.isSelected()))).start();
@@ -77,7 +77,7 @@ public class SettingsPane extends CardPane {
 
     private JPanel checkBoxPanel(JCheckBox cbox, JLabel label, ActionListener listener) {
         var panel = GUIHelper.createContainerPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.LINE_AXIS)); 
+        panel.setLayout(new BoxLayout(panel, BoxLayout.LINE_AXIS));
         cbox.setForeground(GUI.getSecondaryColor());
         cbox.setOpaque(false);
         cbox.addActionListener(listener);
