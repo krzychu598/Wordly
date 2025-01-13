@@ -37,7 +37,6 @@ public class GUI {
         FriendProfilePane
     }
     static private boolean darkMode = true;
-    @Getter @Setter private boolean privateProfile = true;
     @Getter private MainController mainController;
     private HashMap<Pane, CardPane> panes = new HashMap<Pane, CardPane>();
     Pane currentPane;

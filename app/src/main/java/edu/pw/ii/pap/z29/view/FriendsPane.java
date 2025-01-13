@@ -206,7 +206,7 @@ public class FriendsPane extends CardPane {
                     User user = gui.getMainController().getFriendsController().readUser(username);
                     var pane = (FriendProfilePane)gui.getPane(GUI.Pane.FriendProfilePane);
                     pane.setUser(user);
-                    if (gui.getMainController().getSettingsController().isPrivate()) {
+                    if (gui.getMainController().getSettingsController().isPrivate(user.getUserId())) {
                         JOptionPane.showMessageDialog(this, "User has a private profile.", "Error", JOptionPane.ERROR_MESSAGE);
                     }
                     else {

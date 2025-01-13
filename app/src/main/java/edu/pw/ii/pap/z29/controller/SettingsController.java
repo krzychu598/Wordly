@@ -13,7 +13,8 @@ public class SettingsController {
 
     public void setPrivateProfile(boolean privProfile) {
         try {
-            mainController.getSettings().update(mainController.getUserId(), privProfile);
+            if (!mainController.getSettings().update(mainController.getUserId(), privProfile))
+                mainController.getSettings().create(mainController.getUserId(), privProfile);
         } catch (SQLException e) {
             mainController.getSqlLogger().log(e);
         }
@@ -23,9 +24,9 @@ public class SettingsController {
         mainController.getGui().showPane(GUI.Pane.Home);
     }
 
-    public boolean isPrivate() {
+    public boolean isPrivate(int user_id) {
         try {
-            return mainController.getSettings().read(mainController.getUserId());
+            return mainController.getSettings().read(user_id);
         } catch (SQLException e) {
             mainController.getSqlLogger().log(e);
             return false;
