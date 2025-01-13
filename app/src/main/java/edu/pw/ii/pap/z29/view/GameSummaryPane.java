@@ -45,6 +45,7 @@ public class GameSummaryPane extends CardPane{
     }
 
     private void addGuiParts(){
+        //TODO add level up info
         var centralPanel = createCentralPanel();
         add(centralPanel);
 

@@ -13,6 +13,7 @@ public class GameController {
     public GameController(MainController mainController, int wordLength ) {
         this.mainController = mainController;
         this.wordLength = wordLength;
+        //TODO get word asynchronously - maybe it will shorten waiting time
         this.word = ApiController.getRandomWord(wordLength);
         MAX_IT = wordLength;
     }
