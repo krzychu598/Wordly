@@ -153,13 +153,8 @@ public class GamePane extends CardPane {
     private JLabel createDefinitionLabel(){
         var definitionLabel = new JLabel();
         definitionLabel.setFont(new Font("Dialog", Font.BOLD, 10));
-        if (gui.isDarkMode()) {
-            definitionLabel.setBackground(GUI.getMainColor());
-            definitionLabel.setForeground(GUI.getSecondaryColor());
-        } else {
-            definitionLabel.setBackground(GUI.getSecondaryColor());
-            definitionLabel.setForeground(GUI.getMainColor());
-        }
+        definitionLabel.setBackground(GUI.getMainColor());
+        definitionLabel.setForeground(GUI.getSecondaryColor());
         definitionLabel.setHorizontalAlignment(JLabel.CENTER);
         definitionLabel.setBorder(BorderFactory.createLineBorder(Color.YELLOW, 2, true));
         definitionLabel.setPreferredSize(new Dimension(200, 50));
