@@ -60,7 +60,7 @@ public class MainController {
         }
         gui = new GUI(this);
         gui.run();
-  
+
     }
 
     public void newGame(int wordLength){
@@ -97,7 +97,7 @@ public class MainController {
         }
     }
 
-    int getUserId() {
+    public int getUserId() {
         return loginController.getCurrentUser().getUserId();
     }
 
