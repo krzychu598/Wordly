@@ -15,7 +15,7 @@ public class GameSummaryController {
     public GameSummaryController(MainController mainController, int score) {
         this.mainController = mainController;
         this.score = score;
-        currentBestScore = mainController.getProfileController().maxScore(); 
+        currentBestScore = mainController.getProfileController().getMaxScore(); 
         level = mainController.getProfileController().getLevel().getLevelNr();
         lowScore = mainController.getProfileController().getLevel().getLowScore();
         highScore = mainController.getProfileController().getLevel().getHighScore();
