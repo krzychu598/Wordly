@@ -22,4 +22,14 @@ public class SettingsController {
     public void goBack() {
         mainController.getGui().showPane(GUI.Pane.Home);
     }
+
+    public boolean isPrivate() {
+        try {
+            return mainController.getSettings().read(mainController.getUserId());
+        } catch (SQLException e) {
+            mainController.getSqlLogger().log(e);
+            return false;
+        }
+    }
 }
+
